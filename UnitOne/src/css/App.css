@@ -1,0 +1,48 @@
+.App {
+    font-family: 'Baloo Tamma 2', cursive;
+    --primary: #f2b705;
+    --secondary: #2f1544;
+    --light: #f4f4f4;
+}
+
+.my-purple {
+    color: var(--secondary) !important;
+}
+
+.my-yellow {
+    color: var(--primary)
+}
+
+.choice-card {
+    border-color: var(--secondary);
+    border-radius: 30px;
+}
+
+.control-btn {
+  color: var(--light);
+  background-color: var(--secondary);
+  border: 1px solid var(--light);
+  border-radius: 0.5rem;
+}
+
+.side-title {
+  color: var(--secondary);
+  background-color: var(--primary);
+  border: 1px solid var(--secondary);
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+}
+
+.my-title {
+  color: var(--secondary);
+  background-color: var(--primary);
+  border: 1px solid var(--secondary);
+  border-radius: 0.5rem;
+}
+
+.my-slider {
+  orientation: 'vertical';
+}
+

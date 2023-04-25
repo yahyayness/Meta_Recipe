@@ -249,7 +249,7 @@ export default function Control(props) {
         setIngredients({ ...ingredients, [cat]: c })
 
     }
-
+    console.log(aromas , envImpact , envImpactAvgMetaReicpe , tastes , ingredients )
     return (
         <div className="container-fluid ">
 

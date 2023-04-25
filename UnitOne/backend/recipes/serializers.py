@@ -1,8 +1,12 @@
 from math import ceil
 from pprint import pprint
 
+from django.http import JsonResponse
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
+
 from .models import *
+from .validators import SingleRecipeIngredientValidator
 
 WATER_FACTOR = 0.1
 
@@ -43,18 +47,20 @@ class SingleRecipeIngredientSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             # 'ingredient recipe number': {'source': 'id'},
             # 'single_recipe': {'write_only': True},
+            # 'category' : {'required': True}
         }
+    def validate(self,data):
+       return SingleRecipeIngredientValidator(self,data)
 
     def get_aromas(self, ing):
-        # return "aroma data..."
-        aroma = Aroma.objects.filter(entity_id=ing.entity_id).first()
-        return aroma  # [0]  because filter return array
+        aroma = Aroma.objects.filter(entity_id=ing.entity_id).values()
+        return aroma.first() # aroma  # [0]  because filter return array
 
     def get_env_impact(self, ing):
         # return "land use data..."
         env_impact = EnvironmentalImpact.objects.filter(entity_id=ing.entity_id).values()
         if env_impact:
-            return env_impact[0]
+            return env_impact.first()
         else:
             return []
 
@@ -62,13 +68,19 @@ class SingleRecipeIngredientSerializer(serializers.ModelSerializer):
         # return "taste data..."
         tastes = Taste.objects.filter(entity_id=ing.entity_id).values()
         if tastes:
-            return tastes[0]
+            return tastes.first()
         else:
             return []
 
     def get_category(self, ing):
-        data = Ingredient.objects.get(pk=ing.entity_id)
-        return data.category
+        try:
+            data = Ingredient.objects.get(pk=ing.entity_id)
+            return data.category
+        except:
+            request = self.context.get('request')
+            if request and request.method == 'POST':
+                raise ValidationError("Invalid entity_id")
+            return ""
 
 
 class SingleRecipeSerializer(serializers.ModelSerializer):
@@ -90,6 +102,7 @@ class SingleRecipeSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
+        # print(response["ingredients"])
         response["ingredients"] = sorted(response["ingredients"], key=lambda x: x["category"])
         return response
 
@@ -121,6 +134,7 @@ class MetaRecipeSerializer(serializers.ModelSerializer):
 
     def get_env_impact_avg(self, metarecipe):
         single_recipes_by_metarecipe = self.get_recipes(metarecipe)
+        print(single_recipes_by_metarecipe)
         try:
             avg_factor = 1 / len(single_recipes_by_metarecipe)
         except ZeroDivisionError as error:
@@ -134,15 +148,18 @@ class MetaRecipeSerializer(serializers.ModelSerializer):
         }
 
         for recipe in single_recipes_by_metarecipe:
+
             #  score for each scale by ingredient
             for ing in recipe['ingredients']:
                 val = ing['value']
                 factor = noramlize_value(val, ing['min'], ing['max'])
                 env_impact = ing['env_impact']
-                if val > 0:
+                # print('here we go')
+                #Actuvally,we don't need to walk throgh this callculation if I did not have env_impact
+
+                if val > 0 & len(env_impact) > 0:
                     convertor = ing['unit_convertor_g']
-                    metarecipe_env_impact_avg['land_use'] += env_impact_score(env_impact['land_use'], factor,
-                                                                              convertor) * avg_factor
+                    metarecipe_env_impact_avg['land_use'] += env_impact_score(env_impact['land_use'], factor, convertor) * avg_factor
                     metarecipe_env_impact_avg['ghg'] += env_impact_score(env_impact['ghg_emissions'], factor,
                                                                          convertor) * avg_factor
 
@@ -173,7 +190,7 @@ class MetaRecipeSerializer(serializers.ModelSerializer):
                 val = ing['value']
                 factor = noramlize_value(val, ing['min'], ing['max'])
                 env_impact = ing['env_impact']
-                if val > 0:
+                if val > 0 & len(env_impact) > 0:
                     convertor = ing['unit_convertor_g']
                     recipe_count += env_impact_score(env_impact['freshwater_withdrawals'], factor,
                                                      convertor) * WATER_FACTOR
@@ -195,25 +212,29 @@ class MetaRecipeSerializer(serializers.ModelSerializer):
             #  score for each scale by ingredient
             for ing in recipe['ingredients']:
                 factor = noramlize_value(ing['value'], ing['min'], ing['max'])
-                aroma_intensities = {k: v for k, v in ing['aromas'].items() if
-                                   not k.startswith(('entity_id', 'entity_alias_readable'))}
-                for category, intensity in aroma_intensities.items():
-                    if category in aromas_avg:
-                        aromas_avg[category] += (intensity * factor )
-                    else:
-                        aromas_avg[category] = (intensity * factor )
-
-            recipe_aroma = max(aromas_avg.values())
+                if ing['aromas']:
+                    aroma_intensities = {k: v for k, v in ing['aromas'].items() if
+                                       not k.startswith(('entity_id', 'entity_alias_readable'))}
+                    for category, intensity in aroma_intensities.items():
+                        if category in aromas_avg:
+                            aromas_avg[category] += (intensity * factor )
+                        else:
+                            aromas_avg[category] = (intensity * factor )
+            aromas_avg = {}
+            recipe_aroma = max(aromas_avg.values()) if len(aromas_avg.values()) > 0 else 0
             if recipe_aroma > max_aroma:
                 max_aroma = recipe_aroma * avg_factor
 
         return ceil(max_aroma)
 
-    """
-        this function calculates the avg factor 
-        according to the given length off ingredients  
-    """
     def calculate_avg_factor(self , ingredients_length):
+        """
+        this function calculates the avg factor
+        according to the given length off ingredients
+        :param ingredients_length:
+        :return:
+        @author Amr
+        """
         try:
             return 1 / ingredients_length
         except ZeroDivisionError as error:
@@ -229,16 +250,17 @@ class MetaRecipeSerializer(serializers.ModelSerializer):
             tastes_avg = {}
             #  score for each scale by ingredient
             for ing in recipe['ingredients']:
-                factor = noramlize_value(ing['value'], ing['min'], ing['max'])
-                taste_intensities = {k: v for k, v in ing['tastes'].items() if
-                                     not k.startswith(('entity_id', 'taste_name'))}
-                for category, intensity in taste_intensities.items():
-                    if category in tastes_avg:
-                        tastes_avg[category] += (intensity * 0.1 * factor)
-                    else:
-                        tastes_avg[category] = (intensity * 0.1 * factor)
+                if ing['tastes']:
+                    factor = noramlize_value(ing['value'], ing['min'], ing['max'])
+                    taste_intensities = {k: v for k, v in ing['tastes'].items() if
+                                         not k.startswith(('entity_id', 'taste_name'))}
+                    for category, intensity in taste_intensities.items():
+                        if category in tastes_avg:
+                            tastes_avg[category] += (intensity * 0.1 * factor)
+                        else:
+                            tastes_avg[category] = (intensity * 0.1 * factor)
 
-            recipe_taste = max(tastes_avg.values())
+            recipe_taste = max(tastes_avg.values()) if len(tastes_avg.values()) > 0 > 0 else 0
             if recipe_taste > max_taste:
                 max_taste = recipe_taste * avg_factor
 

@@ -32,6 +32,7 @@ class SingleRecipeView(viewsets.ModelViewSet):
 
 
 class SingleRecipeIngredientView(viewsets.ModelViewSet):
+    # SingleRecipeIngredient.objects.all().delete()
     queryset = SingleRecipeIngredient.objects.all()
     serializer_class = SingleRecipeIngredientSerializer
 

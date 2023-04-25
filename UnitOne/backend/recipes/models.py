@@ -1,5 +1,10 @@
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.postgres.fields import JSONField
 from django.db import models
+from rest_framework.exceptions import ValidationError
+
+from recipes.core.Exceptions.InvalidImportedDataException import InvalidImportedDataException
 
 
 class Ingredient(models.Model):
@@ -58,7 +63,13 @@ class SingleRecipe(models.Model):
     metarecipe = models.ForeignKey(MetaRecipe, related_name='single_recipe', blank=True, null=True, default=None,
                                    on_delete=models.SET_NULL)
 
-    # ingredient
+    def import_data(data = {}):
+        """
+        custom function that imports that data of the current model
+        """
+        data['metarecipe'] = MetaRecipe.objects.get(id = data['metarecipe'])
+        return data
+
     # instruction
     def __str__(self):
         return str(self.id) + ": " + self.diet
@@ -76,6 +87,16 @@ class SingleRecipeIngredient(models.Model):
     UNIT_CHOICES = [('kg', 'kg'), ('g', 'g'), ('l', 'l'), ('ml', 'ml')]
     unit = models.CharField(max_length=8, choices=UNIT_CHOICES, default='G')
     unit_convertor_g = models.FloatField(default=0.001)
+
+
+    def import_data(data={}):
+        """
+        custom function that imports that data of the current model
+        """
+        if data['single_recipe'] == None:
+            raise InvalidImportedDataException()
+        data['single_recipe'] = SingleRecipe.objects.get(id=data['single_recipe'])
+        return data
 
 
 """

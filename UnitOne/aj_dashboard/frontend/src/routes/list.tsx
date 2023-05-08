@@ -4,29 +4,36 @@ const routes: Array<RouteType> = [
     {
         path: '/projects',
         component: React.lazy(() => import('../pages/projects')),
-        state: {
-            breadcrumbs: [
-                {
-                    label: 'Projects',
-                    name:'all-projects'
-                }
-            ]
-        },
         children: [
             {
                 path: "/",
                 component: React.lazy(() => import('../pages/projects')),
                 name: 'all-projects',
-                label: 'Projects',
-                state: {
-                    breadcrumbs: [
-                        {
-                            label: 'Projects',
-                            name:'all-projects'
-                        }
-                    ]
-                },
-
+                label: 'Projects'
+            },
+            {
+                path: "/create",
+                component: React.lazy(() => import('../pages/projects/create_edit')),
+                name: 'create_project',
+                label: 'Projects'
+            }
+        ]
+    },
+    {
+        path: '/users',
+        component: React.lazy(() => import('../pages/users')),
+        children: [
+            {
+                path: "/",
+                component: React.lazy(() => import('../pages/users')),
+                name: 'all-users',
+                label: 'Users'
+            },
+            {
+                path: "/create",
+                component: React.lazy(() => import('../pages/users/create_edit')),
+                name: 'create_project',
+                label: 'Users'
             }
         ]
     }

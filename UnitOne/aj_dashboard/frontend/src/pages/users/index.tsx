@@ -12,33 +12,33 @@ import {MouseEventHandler} from "react";
 const rows = [
     {
         id:1,
-        name: 'product',
-        date: '10-10-2023'
+        name: 'Ali',
+        email: 'ali@hotmail.com'
     },
     {
         id:2,
-        name: 'product',
-        date: '10-10-2023'
+        name: 'Ali',
+        email: 'ali@hotmail.com'
     },
     {
         id:3,
-        name: 'product',
-        date: '10-10-2023'
+        name: 'Ali',
+        email: 'ali@hotmail.com'
     },
     {
         id:4,
-        name: 'product',
-        date: '10-10-2023'
+        name: 'Ali',
+        email: 'ali@hotmail.com'
     },
     {
         id:5,
-        name: 'product',
-        date: '10-10-2023'
+        name: 'Ali',
+        email: 'ali@hotmail.com'
     },
     {
         id:6,
-        name: 'product',
-        date: '10-10-2023'
+        name: 'Ali',
+        email: 'ali@hotmail.com'
     }
 ];
 const Projects:React.FC = () => {
@@ -58,8 +58,8 @@ const Projects:React.FC = () => {
      */
     useBreadcrumb([
         {
-            label: 'Projects',
-            path: "/projects"
+            label: 'Users',
+            path: "/users"
         }])
 
     return (

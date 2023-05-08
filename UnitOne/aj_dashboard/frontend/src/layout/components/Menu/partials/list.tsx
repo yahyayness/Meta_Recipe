@@ -39,7 +39,8 @@ const items: MenuItem[] = [
     {
         label: 'Users',
         key: 3,
-        icon: UsersIcon
+        icon: UsersIcon,
+        route: getRoute('all-users')
     },
     {
         label: 'Setup',

@@ -13,7 +13,7 @@ export const actions = (navigator:any)=> [
         label: 'Create new',
         extra: {
             onClick : ()=>{
-                navigator("/projects/create");
+                navigator("/users/create");
             }
         }
     },

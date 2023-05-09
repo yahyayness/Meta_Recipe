@@ -49,12 +49,13 @@ const AppLayout: React.FC = () => {
                 className='app-container'
                 component="main"
                 sx={{flexGrow: 1, bgcolor: 'background.default', p: 3}}
+
             >
 
                 <Toolbar>
                     <Breadcrumbs/>
                 </Toolbar>
-                <Container maxWidth="xl">
+                <Container maxWidth="xl" >
                     <Outlet/>
                 </Container>
                 <AppRoutes/>

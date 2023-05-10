@@ -1,0 +1,36 @@
+@import "src/variables";
+.file-uploader-container {
+  cursor: pointer;
+  display: flex;
+
+  padding: 0px;
+  gap: 2.88px;
+  height: 34.59px;
+  border: 1px solid #4285F4;
+  background: #FFFFFF;
+  border-radius: 5.76552px;
+  margin-left: 8px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  //margin-top: 11px;
+  &-text {
+    text-align: center;
+    font-size: $fontSize;
+  }
+
+  &-icon {
+    height: 18px;
+
+    svg {
+      font-size: 17.61px;
+      color: #4285F4;
+    }
+  }
+}
+
+.file-uploader-label{
+  font-size: $fontSize;
+  margin-left: 8px;
+
+}

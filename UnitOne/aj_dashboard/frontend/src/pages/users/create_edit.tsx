@@ -35,25 +35,19 @@ const ProductAddEdit: React.FC = () => {
         }
     ])
 
+    /**
+     * form's handler
+     * @param values
+     * @author Amr
+     */
     const onSubmit = (values:any)=>{
         console.log(JSON.stringify(values, null, 2));
     }
-
+    /**
+     * initialize page's form
+     */
     let { formik } = useForm(form(),onSubmit)
 
-
-    //
-    // const [showPassword, setShowPassword] = React.useState(false);
-    //
-    //
-    // const handleClickShowPassword = () => setShowPassword((show) => !show);
-    //
-    // const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-    //     event.preventDefault();
-    // };
-
-
-    // const classes = useStyles();
     return (
         <Box
             component="form"

@@ -19,3 +19,11 @@ interface FormikConfigurationType {
 }
 
 type onSubmitFormType = (values:any)=> void
+
+type FileHandler = (files:any)=> any
+interface FileUploaderType {
+    label:string,
+    message:string,
+    field:string,
+    fileHandler? : FileHandler
+}

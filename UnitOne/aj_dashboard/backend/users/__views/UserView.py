@@ -34,11 +34,13 @@ class UserView(GenericAPIView):
         serializer = UserSerializer(user)
         return Response({"payload": serializer.data}, status=status.HTTP_200_OK)
 
-    def patch(self, request, user_id, *args, **kwargs):
+    def put(self, request, user_id, *args, **kwargs):
         try:
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
-            return None
+            return Response({
+                "payload": "Invalid user",
+            }, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = UserSerializer(instance=user, data=request.data, partial=True)
         if serializer.is_valid():

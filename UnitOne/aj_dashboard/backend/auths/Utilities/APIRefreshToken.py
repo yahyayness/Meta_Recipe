@@ -1,9 +1,9 @@
 from django.conf import settings
 from rest_framework_simplejwt.settings import api_settings
+from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 from rest_framework_simplejwt.tokens import RefreshToken, BlacklistMixin, Token
 from rest_framework_simplejwt.utils import datetime_from_epoch
 from django.utils import timezone
-from auths.models import CustomOutstandingToken, CustomBlacklistedToken
 
 
 class CustomRefreshToken(RefreshToken):
@@ -16,7 +16,7 @@ class CustomRefreshToken(RefreshToken):
 
         jti = token[api_settings.JTI_CLAIM]
 
-        CustomOutstandingToken.objects.create(
+        OutstandingToken.objects.create(
             user=user,
             jti=jti,
             token=str(token),
@@ -50,7 +50,7 @@ class CustomRefreshToken(RefreshToken):
         exp = self.payload["exp"]
 
         # Ensure outstanding token exists with given jti
-        token, _ = CustomOutstandingToken.objects.get_or_create(
+        token, _ = OutstandingToken.objects.get_or_create(
             jti=jti,
             defaults={
                 "token": str(self),
@@ -58,5 +58,5 @@ class CustomRefreshToken(RefreshToken):
             },
         )
 
-        return CustomBlacklistedToken.objects.get_or_create(token=token)
+        return BlacklistedToken.objects.get_or_create(token=token)
 

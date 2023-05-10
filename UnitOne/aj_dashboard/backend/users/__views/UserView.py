@@ -30,7 +30,9 @@ class UserView(GenericAPIView):
         try:
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
-            return None
+            return Response({
+                "payload": "Invalid user",
+            }, status=status.HTTP_400_BAD_REQUEST)
         serializer = UserSerializer(user)
         return Response({"payload": serializer.data}, status=status.HTTP_200_OK)
 
@@ -52,7 +54,9 @@ class UserView(GenericAPIView):
         try:
             user = User.objects.filter(id=user_id)
         except User.DoesNotExist:
-            return None
+            return Response({
+                "payload": "Invalid user",
+            }, status=status.HTTP_400_BAD_REQUEST)
         user.delete()
         return Response(
             {"payload": "User deleted!"},

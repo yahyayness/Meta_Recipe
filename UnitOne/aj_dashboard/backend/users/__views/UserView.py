@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication, JWTTokenUserAuthentication
 
+from common.utilities.Pagination import CustomPagination
 from users.__serializers.UserSerializer import UserSerializer
 from users.models import User
 
@@ -13,6 +14,7 @@ class UserView(GenericAPIView):
     authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
     serializer_class = UserSerializer
+    pagination_class = CustomPagination
 
     def post(self, request, *args, **kwargs):
         try:
@@ -37,10 +39,12 @@ class UserView(GenericAPIView):
             serializer = UserSerializer(user)
             return Response({"payload": serializer.data}, status=status.HTTP_200_OK)
         else:
-            data = User.objects.all()
-            serializer = UserSerializer(data, many=True)
+            queryset = User.objects.all()
+            paginator = self.pagination_class()
+            result_page = paginator.paginate_queryset(queryset, request)
+            serializer = UserSerializer(result_page, many=True)
 
-            return Response({"payload": serializer.data}, status=status.HTTP_200_OK)
+            return paginator.get_paginated_response(serializer.data)
 
     def put(self, request, user_id, *args, **kwargs):
         try:

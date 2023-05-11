@@ -25,6 +25,7 @@ urlpatterns = [
     # path('admin/', admin.site.urls),
     path('auth/', include('auths.urls')),
     path('api/users/', include('users.urls')),
+    path('api/meta_recipe/', include('meta_recipe.urls')),
     path('admin/', admin.site.urls),
     path('', include("ingredients.urls")),
 ]

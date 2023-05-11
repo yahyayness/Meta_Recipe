@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'auths',
     'users',
+    'meta_recipe'
 ]
 
 MIDDLEWARE = [

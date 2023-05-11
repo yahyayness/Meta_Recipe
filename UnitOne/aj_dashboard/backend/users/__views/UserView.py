@@ -74,7 +74,7 @@ class UserView(GenericAPIView):
 
     def delete(self, request, user_id, *args, **kwargs):
         try:
-            user = User.objects.filter(id=user_id)
+            user = User.objects.get(id=user_id)
         except User.DoesNotExist:
             return Response({
                 'status': 'error', 'code': status.HTTP_400_BAD_REQUEST, 'message': 'Invalid user',

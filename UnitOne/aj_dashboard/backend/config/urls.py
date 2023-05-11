@@ -27,6 +27,7 @@ urlpatterns = [
     path('api/users/', include('users.urls')),
     path('admin/', admin.site.urls),
     path('', include("ingredients.urls")),
+    path('', include("molecules.urls")),
 ]
 
 if settings.DEBUG:

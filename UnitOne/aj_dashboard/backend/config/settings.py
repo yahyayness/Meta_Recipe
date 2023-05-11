@@ -130,7 +130,10 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
-    )
+    ),
+    'EXCEPTION_HANDLER': 'common.utilities.ExceptionHandler.custom_exception_handler',
+    'DEFAULT_PAGINATION_CLASS': 'common.utilities.Pagination.CustomPagination',
+    'PAGE_SIZE': 10,
 
 }
 

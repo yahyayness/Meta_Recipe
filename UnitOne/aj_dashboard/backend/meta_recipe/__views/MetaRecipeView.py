@@ -75,7 +75,6 @@ class MetaRecipeView(GenericAPIView):
     def delete(self, request, meta_recipe_id=None, *args, **kwargs):
         try:
             meta_recipe = MetaRecipe.objects.get(id=meta_recipe_id)
-            print(meta_recipe)
         except MetaRecipe.DoesNotExist:
             return Response({
                 'status': 'error', 'code': status.HTTP_400_BAD_REQUEST, 'message': 'Invalid meta recipe',

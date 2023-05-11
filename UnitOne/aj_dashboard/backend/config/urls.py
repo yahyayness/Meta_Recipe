@@ -28,6 +28,7 @@ urlpatterns = [
     path('api/meta_recipe/', include('meta_recipe.urls')),
     path('admin/', admin.site.urls),
     path('', include("ingredients.urls")),
+    path('', include("molecules.urls")),
 ]
 
 if settings.DEBUG:

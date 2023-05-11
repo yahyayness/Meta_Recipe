@@ -26,15 +26,21 @@ class UserView(GenericAPIView):
         except Exception as e:
             raise ValidationError({"payload": str(e)})
 
-    def get(self, request, user_id, *args, **kwargs):
-        try:
-            user = User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            return Response({
-                "payload": "Invalid user",
-            }, status=status.HTTP_400_BAD_REQUEST)
-        serializer = UserSerializer(user)
-        return Response({"payload": serializer.data}, status=status.HTTP_200_OK)
+    def get(self, request, user_id=None, *args, **kwargs):
+        if user_id:
+            try:
+                user = User.objects.get(id=user_id)
+            except User.DoesNotExist:
+                return Response({
+                    "payload": "Invalid user",
+                }, status=status.HTTP_400_BAD_REQUEST)
+            serializer = UserSerializer(user)
+            return Response({"payload": serializer.data}, status=status.HTTP_200_OK)
+        else:
+            data = User.objects.all()
+            serializer = UserSerializer(data, many=True)
+
+            return Response({"payload": serializer.data}, status=status.HTTP_200_OK)
 
     def put(self, request, user_id, *args, **kwargs):
         try:

@@ -22,11 +22,15 @@ class UserView(GenericAPIView):
             serializer.is_valid()
             if serializer.is_valid():
                 serializer.save()
-                return Response({"payload": serializer.data}, status=status.HTTP_200_OK)
+                return Response(
+                    {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': serializer.data},
+                    status=status.HTTP_200_OK)
             else:
-                return Response({"payload": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'status': 'error', 'code': status.HTTP_400_BAD_REQUEST, 'message': 'error',
+                                 'payload': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            raise ValidationError({"payload": str(e)})
+            raise ValidationError(
+                {'status': 'error', 'code': status.HTTP_400_BAD_REQUEST, 'message': str(e), 'payload': {}})
 
     def get(self, request, user_id=None, *args, **kwargs):
         if user_id:
@@ -34,10 +38,13 @@ class UserView(GenericAPIView):
                 user = User.objects.get(id=user_id)
             except User.DoesNotExist:
                 return Response({
-                    "payload": "Invalid user",
+                    'status': 'error', 'code': status.HTTP_400_BAD_REQUEST, 'message': 'Invalid user',
+                    'payload': {},
                 }, status=status.HTTP_400_BAD_REQUEST)
             serializer = UserSerializer(user)
-            return Response({"payload": serializer.data}, status=status.HTTP_200_OK)
+            return Response(
+                {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': serializer.data},
+                status=status.HTTP_200_OK)
         else:
             queryset = User.objects.all()
             paginator = self.pagination_class()
@@ -51,24 +58,30 @@ class UserView(GenericAPIView):
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
             return Response({
-                "payload": "Invalid user",
+                'status': 'error', 'code': status.HTTP_400_BAD_REQUEST, 'message': 'Invalid user',
+                'payload': {},
             }, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = UserSerializer(instance=user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response({"payload": serializer.data}, status=status.HTTP_200_OK)
-        return Response({"payload": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': serializer.data},
+                status=status.HTTP_200_OK)
+        return Response(
+            {'status': 'error', 'code': status.HTTP_400_BAD_REQUEST, 'message': 'error', 'payload': serializer.errors},
+            status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, user_id, *args, **kwargs):
         try:
             user = User.objects.filter(id=user_id)
         except User.DoesNotExist:
             return Response({
-                "payload": "Invalid user",
+                'status': 'error', 'code': status.HTTP_400_BAD_REQUEST, 'message': 'Invalid user',
+                'payload': {},
             }, status=status.HTTP_400_BAD_REQUEST)
         user.delete()
         return Response(
-            {"payload": "User deleted!"},
+            {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'User deleted!', 'payload': {}},
             status=status.HTTP_200_OK
         )

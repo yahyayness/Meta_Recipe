@@ -4,3 +4,8 @@ interface Product<TaleRow>{
     date:string,
     [key:string] : [value:any]
 }
+
+interface AuthType {
+    refresh:string,
+    access:string
+}

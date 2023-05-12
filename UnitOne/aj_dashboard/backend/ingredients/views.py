@@ -37,7 +37,7 @@ def IngredientNodeF(request):
          return Response(serializer_class.data,status=status.HTTP_400_BAD_REQUEST )
 
 #GET PUT DELETE 
-@api_view(['GET', 'DELETE','PUT'])
+@api_view(['GET', 'DELETE','PATCH'])
 def IngredientNodeItem(request,pk):
     
     try:
@@ -51,7 +51,7 @@ def IngredientNodeItem(request,pk):
         return Response(serializer_class.data)
         
     #PUT
-    elif request.method=='PUT':
+    elif request.method=='PATCH':
          serializer_class=IngredientNodesCreateSerilizer(ingredientNode,data=request.data)
          if serializer_class.is_valid():
              serializer_class.save()

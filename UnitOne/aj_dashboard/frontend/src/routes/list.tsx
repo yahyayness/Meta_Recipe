@@ -2,6 +2,18 @@ import React from "react";
 
 const routes: Array<RouteType> = [
     {
+        path: '/auth',
+        component: React.lazy(() => import('../pages/auth/index')),
+        children: [
+            {
+                path: "/login",
+                component: React.lazy(() => import('../pages/auth/index')),
+                name: 'auth-login',
+                label: 'auth-login'
+            }
+        ]
+    },
+    {
         path: '/projects',
         component: React.lazy(() => import('../pages/projects')),
         children: [

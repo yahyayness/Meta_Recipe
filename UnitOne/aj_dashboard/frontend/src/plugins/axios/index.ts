@@ -4,6 +4,7 @@ import {useEffect} from "react";
 import {getEndpoint} from "../../common/http";
 import {getLocalAttribute} from "../../common/helpers";
 import {useNavigator} from "../../common/routes";
+import {AlertTypes} from "../../types/Enums";
 
 const axiosInstance: AxiosInstance = axios.create({
     baseURL: 'http://127.0.0.1:8000/',
@@ -34,16 +35,14 @@ axiosInstance.interceptors.response.use(function (response) {
 }, function (error) {
     // Do something with response error
     if (error.response.status === 401 && !dontBindToken.includes( error?.config.url ?? '')) {
-        const {navigator} = useNavigator();
         // Handle unauthorized access
         // Redirect user to login page
-        navigator('/auth/login');
+        window.location.href = '/auth/login'
     }
     return Promise.reject(error);
 });
 
-export const http = <T>(endpoint: EndpointType, payload: {}) => {
-    console.log('httpEnd', endpoint)
+export const http = <T>(endpoint: EndpointType, payload: {} = {}) => {
     const url = endpoint.url.charAt(0) == '/' ? endpoint.url : 'api/' + endpoint.url;
     const method = endpoint.method;
     return axiosInstance[method]<T>(url, payload);

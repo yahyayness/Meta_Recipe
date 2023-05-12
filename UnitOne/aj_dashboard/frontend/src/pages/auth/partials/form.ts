@@ -6,6 +6,9 @@ import {http} from "../../../plugins/axios";
 import {getEndpoint} from "../../../common/http";
 import {setLocalAttribute} from "../../../common/helpers";
 import {useForm} from "../../../common/hooks/form";
+import {AuthResponseType} from "../../../types/HttpTypes";
+import {AuthType} from "../../../types/ModelTypes";
+import {ResponseType} from "../../../types/HttpTypes";
 
 export const form = (): Array<FormFields> => [
 
@@ -49,7 +52,7 @@ export const useOnSubmitLoginForm = (toLink:string ) => {
      */
     const onSubmit = (values: any) => {
         setValidationMessage('');
-        http<AuthType>(getEndpoint('login'), values).then((response) => {
+        http<ResponseType<AuthType>>(getEndpoint('login'), values).then((response) => {
             const tokens = response?.data
             //save tokens inside the localStorage
             setLocalAttribute('aj_tokens', tokens, true)

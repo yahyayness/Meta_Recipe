@@ -2,7 +2,7 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import React, {useEffect, useState} from "react";
 import config from "../../partials/config";
-import {IconButton, Menu, MenuItem} from "@mui/material";
+import {IconButton, LinearProgress, Menu, MenuItem} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {AccountCircle} from "@mui/icons-material";
 import MenuIcon from '@mui/icons-material/Menu';
@@ -10,6 +10,7 @@ import {http} from "../../../plugins/axios";
 import {getEndpoint} from "../../../common/http";
 import {getLocalAttribute, setLocalAttribute} from "../../../common/helpers";
 import {useNavigator} from "../../../common/routes";
+import {changeIsAll, isAll} from "../../../utilities/progress";
 
 /**
  * master layout's header
@@ -41,7 +42,11 @@ const AppHeader:React.FC = ()=>{
         })
     };
 
-
+    useEffect(()=>{
+        setTimeout(()=>{
+            changeIsAll();
+        } , 1000)
+    } , [])
 
     return (
         <AppBar
@@ -49,6 +54,7 @@ const AppHeader:React.FC = ()=>{
             position="fixed"
             sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
         >
+            {isAll && <LinearProgress color='info' style={{position:"absolute" , width:'100%'}} />}
             <Toolbar  className='app-toolbar'>
                 <div>
                     <IconButton

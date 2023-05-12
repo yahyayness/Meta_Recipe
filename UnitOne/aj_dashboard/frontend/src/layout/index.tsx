@@ -8,7 +8,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import config from './partials/config'
 import AppHeader from "./components/header";
-import {Container} from "@mui/material";
+import {Container, LinearProgress} from "@mui/material";
 import AppRoutes from "../routes";
 import { Outlet} from "react-router-dom";
 import Breadcrumbs from "./components/breadcrumbs";
@@ -23,6 +23,7 @@ const AppLayout: React.FC = () => {
     const {drawerWidth} = config
     return (
         <Box sx={{display: 'flex'}}>
+
             <CssBaseline/>
 
             <AppHeader/>

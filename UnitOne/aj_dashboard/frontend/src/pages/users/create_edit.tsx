@@ -2,10 +2,11 @@ import useBreadcrumb from "../../common/hooks/breadcrumbs";
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import {form, usePasswordAnimation} from './partials/form'
+import {form, useOnSubmitUserForm, usePasswordAnimation} from './partials/form'
 import {
     Button,
-    FormControl, FormHelperText,
+    FormControl,
+    FormHelperText,
     Grid,
     IconButton,
     InputAdornment,
@@ -13,12 +14,24 @@ import {
     OutlinedInput
 } from "@mui/material";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
-import {useForm} from "../../common/hooks/form";
-
+import {useParams} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {UserType} from "../../types/ModelTypes";
+import {http} from "../../plugins/axios";
+import {addParamsToEndpoint, getEndpoint} from "../../common/http";
+import {ResponseType} from "../../types/HttpTypes";
 
 const ProductAddEdit: React.FC = () => {
+    const [user , setUser] = useState<UserType>()
 
-    const  {showPassword , showConfirmedPassword , handleClickShowPassword , handleMouseDownPassword ,  handleClickShowConfirmedPassword , handleMouseDownConfirmedPassword} =  usePasswordAnimation()
+    const {
+        showPassword,
+        showConfirmedPassword,
+        handleClickShowPassword,
+        handleMouseDownPassword,
+        handleClickShowConfirmedPassword,
+        handleMouseDownConfirmedPassword
+    } = usePasswordAnimation()
     /**
      * set the breadcrumbs of the current page
      * @author Amr
@@ -31,22 +44,17 @@ const ProductAddEdit: React.FC = () => {
         {
             label: 'Create',
             path: "/users/create",
-            isCurrent:true
+            isCurrent: true
         }
     ])
 
-    /**
-     * form's handler
-     * @param values
-     * @author Amr
-     */
-    const onSubmit = (values:any)=>{
-        console.log(JSON.stringify(values, null, 2));
-    }
-    /**
-     * initialize page's form
-     */
-    let { formik } = useForm(form(),onSubmit)
+
+
+
+
+
+
+    const {formik} = useOnSubmitUserForm()
 
     return (
         <Box
@@ -54,32 +62,55 @@ const ProductAddEdit: React.FC = () => {
             marginX={3}
             marginY={5}
             sx={{
-                '& .MuiTextField-root': { m: 1, width: '50ch' ,  maxWidth: '100%' },
+                '& .MuiTextField-root': {m: 1, width: '50ch', maxWidth: '100%'},
             }}
             autoComplete="off"
             onSubmit={formik.handleSubmit}
         >
-            <Grid container spacing={1} >
+            <Grid container spacing={1}>
 
                 <Grid item xs={8}>
                     <TextField
                         fullWidth={true}
-                        label="Name"
+                        label="First name"
                         id="outlined-size-small"
                         size="small"
-                        name="name"
+                        name="first_name"
                         onChange={formik.handleChange}
-                        error={formik.touched.name && Boolean(formik.errors.name)}
-                        helperText={formik?.touched?.name && formik?.errors?.name}
+                        value={formik.values.first_name}
+                        error={formik.touched.first_name && Boolean(formik.errors.first_name)}
+                        helperText={formik?.touched?.first_name && formik?.errors?.first_name}
                         InputLabelProps={{
-                            style: { fontSize: '13.45px' }
+                            style: {fontSize: '13.45px'}
                         }}
                         InputProps={{
-                            style: { fontSize: '13.45px' }
+                            style: {fontSize: '13.45px'}
                         }}
 
 
                     />
+                    <TextField
+                        fullWidth={true}
+                        label="Last name"
+                        id="outlined-size-small"
+                        size="small"
+                        name="last_name"
+                        value={formik.values.last_name}
+                        onChange={formik.handleChange}
+                        error={formik.touched.last_name && Boolean(formik.errors.last_name)}
+                        helperText={formik?.touched?.last_name && formik?.errors?.last_name}
+                        InputLabelProps={{
+                            style: {fontSize: '13.45px'}
+                        }}
+                        InputProps={{
+                            style: {fontSize: '13.45px'}
+                        }}
+
+
+                    />
+
+                </Grid>
+                <Grid item xs={8}>
                     <TextField
                         label="Username"
                         id="outlined-size-small"
@@ -90,41 +121,43 @@ const ProductAddEdit: React.FC = () => {
                         error={formik.touched.username && Boolean(formik.errors.username)}
                         helperText={formik?.touched?.username && formik?.errors?.username}
                         InputLabelProps={{
-                            style: { fontSize: '13.45px' }
+                            style: {fontSize: '13.45px'}
                         }}
                         InputProps={{
-                            style: { fontSize: '13.45px' }
+                            style: {fontSize: '13.45px'}
                         }}
 
                     />
-                </Grid>
-                <Grid item xs={8}>
                     <TextField
                         label="Email"
                         id="outlined-size-small"
                         size="small"
                         name="email"
                         InputLabelProps={{
-                            style: { fontSize: '13.45px' }
+                            style: {fontSize: '13.45px'}
                         }}
                         value={formik.values.email}
                         onChange={formik.handleChange}
                         error={formik.touched.email && Boolean(formik.errors.email)}
                         helperText={formik?.touched?.email && formik?.errors?.email}
                         InputProps={{
-                            style: { fontSize: '13.45px' }
+                            style: {fontSize: '13.45px'}
                         }}
 
                     />
-                    <FormControl sx={{ m: 1, width: '50ch' }} variant="outlined"  size="small">
-                        <InputLabel htmlFor="outlined-adornment-password" style={{ fontSize: '13.45px'  }} color={formik?.touched?.password && formik?.errors?.password ? 'error' : 'info'}>Password</InputLabel>
+
+                </Grid>
+                <Grid item xs={8}>
+                    <FormControl sx={{m: 1, width: '50ch'}} variant="outlined" size="small">
+                        <InputLabel htmlFor="outlined-adornment-password" style={{fontSize: '13.45px'}}
+                                    color={formik?.touched?.password && formik?.errors?.password ? 'error' : 'info'}>Password</InputLabel>
                         <OutlinedInput
                             id="outlined-adornment-password"
                             name='password'
-                            value={formik.values.password}
+                            value={formik.values.password??''}
                             type={showPassword ? 'text' : 'password'}
                             inputProps={{
-                                style: { fontSize: '13.45px' }
+                                style: {fontSize: '13.45px'}
                             }}
                             onChange={formik.handleChange}
                             error={formik.touched.password && Boolean(formik.errors.password)}
@@ -139,7 +172,7 @@ const ProductAddEdit: React.FC = () => {
                                         edge="end"
 
                                     >
-                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        {showPassword ? <VisibilityOff/> : <Visibility/>}
                                     </IconButton>
                                 </InputAdornment>
                             }
@@ -147,18 +180,18 @@ const ProductAddEdit: React.FC = () => {
                         />
                         <FormHelperText className='error-text'>{formik?.errors?.password}</FormHelperText>
                     </FormControl>
-                </Grid>
-                <Grid item xs={6} >
-                    <FormControl sx={{ m: 1, width: '50ch' }} variant="outlined"  size="small">
-                        <InputLabel htmlFor="password-confirmation"  style={{ fontSize: '13.45px'  }}  color={formik?.touched?.password_confirmation && formik?.errors?.password_confirmation ? 'error' : 'info'}>Password Confirmation</InputLabel>
+                    <FormControl sx={{m: 1, width: '50ch'}} variant="outlined" size="small">
+                        <InputLabel htmlFor="password-confirmation" style={{fontSize: '13.45px'}}
+                                    color={formik?.touched?.password_confirmation && formik?.errors?.password_confirmation ? 'error' : 'info'}>Password
+                            Confirmation</InputLabel>
                         <OutlinedInput
                             label="Password Confirmation"
                             id="password-confirmation"
                             name='password_confirmation'
                             type={showConfirmedPassword ? 'text' : 'password'}
-                            value={formik.values.password_confirmation}
+                            value={formik.values.password_confirmation??''}
                             inputProps={{
-                                style: { fontSize: '13.45px' }
+                                style: {fontSize: '13.45px'}
                             }}
                             onChange={formik.handleChange}
                             error={formik.touched.password_confirmation && Boolean(formik.errors.password_confirmation)}
@@ -170,7 +203,7 @@ const ProductAddEdit: React.FC = () => {
                                         onMouseDown={handleMouseDownConfirmedPassword}
                                         edge="end"
                                     >
-                                        {showConfirmedPassword ? <VisibilityOff /> : <Visibility />}
+                                        {showConfirmedPassword ? <VisibilityOff/> : <Visibility/>}
                                     </IconButton>
                                 </InputAdornment>
                             }
@@ -179,9 +212,8 @@ const ProductAddEdit: React.FC = () => {
                         <FormHelperText className='error-text'>{formik?.errors?.password_confirmation}</FormHelperText>
                     </FormControl>
                 </Grid>
-                <Grid item xs={8} >
+                <Grid item xs={8}>
                     <Button type="submit" variant="contained" color="primary">Submit</Button>
-
                 </Grid>
 
             </Grid>

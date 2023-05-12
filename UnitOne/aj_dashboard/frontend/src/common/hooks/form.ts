@@ -21,7 +21,7 @@ const setUpConfigurations = (form:Array<FormFields>) : FormikConfigurationType =
         if (row.validation) {
             // update the validationSchema object with
             // the rules of every field
-            validationSchema[row.field] = row.validation.rules;
+            validationSchema[row.field] = row.validation.rules instanceof Function ? row.validation.rules() : row.validation.rules;
         }
         // update the initialValues object with
         // the initial value of every field
@@ -40,14 +40,14 @@ export const useForm = (form:Array<FormFields> , onSubmit:onSubmitFormType)=>{
     const formik =  useFormik({
         initialValues:initialValues,
         validationSchema : yup.object().shape(validationSchema),
-        onSubmit: (values) => {
+        onSubmit: (values, { setSubmitting, setErrors }) => {
 
-            onSubmit(values);
+            onSubmit(values, { setSubmitting, setErrors });
 
         },
     });
 
-    return {formik}
+    return {formik,initialValues}
 
 }
 

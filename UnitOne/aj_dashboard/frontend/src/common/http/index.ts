@@ -14,3 +14,10 @@ export const getEndpoint = (name: string): EndpointType => {
     }
     throw Error(`${name} does not exist`)
 }
+
+export const addParamsToEndpoint = (endpoint: EndpointType, params: any) => {
+    for (let key in params) {
+        endpoint.url = endpoint.url.replace(`:${key}`, params[key] as string)
+    }
+    return endpoint
+}

@@ -1,22 +1,11 @@
 import useBreadcrumb from "../../common/hooks/breadcrumbs";
 import Box from "@mui/material/Box";
-import {
-    Button,
-    FormControl,
-    FormHelperText,
-    Grid,
-    IconButton,
-    InputAdornment,
-    InputLabel,
-    OutlinedInput, Typography
-} from "@mui/material";
+import {Button, Grid, Typography} from "@mui/material";
 import TextField from "@mui/material/TextField";
-import {Visibility, VisibilityOff} from "@mui/icons-material";
 import * as React from "react";
 import {useForm} from "../../common/hooks/form";
 import {form} from "../users/partials/form";
 import FileUploader from "../../components/file-uploader";
-import {useEffect, useState} from "react";
 import {useProductFiles} from "./partials/form";
 
 const ProductAddEdit: React.FC = () => {

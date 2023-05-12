@@ -27,10 +27,16 @@ def custom_exception_handler(exc, context):
             'payload': {}
         })
 
+    detail = exc.default_detail
+
+    if exc.detail is not None:
+        if "detail" in exc.detail:
+            detail = exc.detail['detail']
+
     payload = {
         'status': 'error',
         'code': response.status_code,
-        'message': exc.default_detail,
+        'message': detail,
         'payload': response.data
     }
 

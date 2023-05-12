@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator, UniqueTogetherValidator
 
 from users.models import User
 
@@ -11,7 +12,9 @@ class UserSerializer(serializers.ModelSerializer):
         required=False
     )
     email = serializers.EmailField(required=True)
-    username = serializers.CharField(max_length=70, required=True)
+    username = serializers.CharField(max_length=70, required=True, validators=[
+        UniqueValidator(queryset=User.objects.all())
+    ])
     first_name = serializers.CharField(max_length=20, required=True)
     last_name = serializers.CharField(max_length=20, required=True)
 

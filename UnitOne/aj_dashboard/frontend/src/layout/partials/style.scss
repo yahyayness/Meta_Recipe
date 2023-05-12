@@ -53,11 +53,20 @@ span.item-text {
     }
   }
 }
-.app-header{
-  background-color: $headerBackgroundColor !important;
-  box-shadow: unset !important;
+.app {
+  &-toolbar {
+    display: flex;
+    justify-content: flex-end;
+
+  }
+  &-header{
+    background-color: $headerBackgroundColor !important;
+    box-shadow: unset !important;
+  }
+
+  &-container{
+    position: relative;
+    top: 64px;
+  }
 }
-.app-container{
-  position: relative;
-  top: 64px;
-}
+

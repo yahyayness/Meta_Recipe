@@ -6,34 +6,19 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import React, {useState} from "react";
-import Avatar from "@mui/material/Avatar";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import {Outlet} from "react-router-dom";
-import {http} from "../../plugins/axios";
-import {getEndpoint} from "../../common/http";
-import {useForm} from "../../common/hooks/form";
-import {form} from './partials/form'
-import {useNavigator} from "../../common/routes";
+import {useOnSubmitLoginForm} from './partials/form'
+
+
+/**
+ * redirect user to this page after login
+ * @author Amr
+ */
+export const REDIRECT_LINK:string = "/products"
+
+
 const Login:React.FC = ()=>{
-    const [validationMessage , setValidationMessage] = useState<string>('')
-    /**
-     * common hook that controls all navigations
-     * @author Amr
-     */
-    const { navigator }= useNavigator();
-
-    const onSubmit = (values:any)=>{
-        setValidationMessage('');
-        http(getEndpoint('login') ,values ).then(reponse => {
-            console.log('response' , reponse)
-        }).catch(error =>{
-            setValidationMessage(error.response.data.detail);
-            console.log('error' , error.response.data.detail)
-        });
-    }
-    const  {formik} = useForm(form() , onSubmit);
-
+    const {formik , validationMessage} = useOnSubmitLoginForm(REDIRECT_LINK);
     return (
         <Box
 
@@ -60,7 +45,6 @@ const Login:React.FC = ()=>{
                     name="username"
                     autoComplete="email"
                     autoFocus
-
                     value={formik.values.username}
                     onChange={formik.handleChange}
                     error={(formik.touched.username && Boolean(formik.errors.username) )|| Boolean(validationMessage)}

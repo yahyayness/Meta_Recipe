@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import * as React from "react";
-import {http} from "../../../plugins/axios";
+import {http, useHttp} from "../../../plugins/axios";
 import {ResponseType} from "../../../types/HttpTypes";
 import {UserType} from "../../../types/ModelTypes";
 import {addParamsToEndpoint, getEndpoint} from "../../../common/http";
@@ -101,6 +101,7 @@ export const useOnSubmitUserForm = () => {
     const {navigator} = useNavigator()
     const {id} = useParams();
     const isEdit = !!id
+    const {request} = useHttp();
 
 
 
@@ -119,7 +120,7 @@ export const useOnSubmitUserForm = () => {
          * save user
          * @author Amr
          */
-        http<ResponseType<UserType>>(endpoint, _form).then((response) => {
+        request<UserType>(endpoint, _form).then((response) => {
             const user = response?.data?.payload
             showAlert({
                 type: AlertTypes.SUCCESS,

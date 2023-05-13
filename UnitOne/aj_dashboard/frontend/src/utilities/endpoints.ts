@@ -19,6 +19,6 @@ export default {
     },
     update_user : {
         url : 'users/:id',
-        method: HttpMethodTypes.POST
+        method: HttpMethodTypes.PUT
     }
 }

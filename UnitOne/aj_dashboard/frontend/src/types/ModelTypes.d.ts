@@ -1,3 +1,5 @@
+import {ResponseType} from "./HttpTypes";
+
 interface Product<TaleRow>{
     id:number,
     name:string,
@@ -8,4 +10,13 @@ interface Product<TaleRow>{
 interface AuthType {
     refresh:string,
     access:string
+}
+
+interface UserType extends ResponseType {
+    id:number,
+    first_name:string,
+    last_name:string,
+    username:string,
+    email:string,
+    password?:string
 }

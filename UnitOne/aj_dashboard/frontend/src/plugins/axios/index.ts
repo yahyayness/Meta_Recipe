@@ -1,9 +1,10 @@
 import axios, {AxiosInstance} from 'axios'
-import {EndpointType} from "../../types/HttpTypes";
-import {useEffect} from "react";
+import {EndpointType, ResponseType} from "../../types/HttpTypes";
 import {getEndpoint} from "../../common/http";
 import {getLocalAttribute} from "../../common/helpers";
-import {useNavigator} from "../../common/routes";
+import {AlertTypes} from "../../types/Enums";
+import {useAlert} from "../../common/hooks/alert";
+import {useHttpLoader} from "../../common/hooks/httpLoader";
 
 const axiosInstance: AxiosInstance = axios.create({
     baseURL: 'http://127.0.0.1:8000/',
@@ -30,22 +31,59 @@ axiosInstance.interceptors.request.use(function (config) {
 // Add a response interceptor
 axiosInstance.interceptors.response.use(function (response) {
     // Do something with response data
+    if(response.data.status == 'error'){
+        return  Promise.reject({
+            response
+        });
+    }
     return response;
 }, function (error) {
     // Do something with response error
-    if (error.response.status === 401 && !dontBindToken.includes( error?.config.url ?? '')) {
-        const {navigator} = useNavigator();
+    if (error.response.status === 401 && !dontBindToken.includes(error?.config.url ?? '')) {
         // Handle unauthorized access
         // Redirect user to login page
-        navigator('/auth/login');
+        window.location.href = '/auth/login'
     }
     return Promise.reject(error);
 });
 
-export const http = <T>(endpoint: EndpointType, payload: {}) => {
-    console.log('httpEnd', endpoint)
+/**
+ * the major function that connects front-end with the backend
+ * @param endpoint
+ * @param payload
+ * @author Amr
+ */
+export const http = <T>(endpoint: EndpointType, payload: {} = {}) => {
     const url = endpoint.url.charAt(0) == '/' ? endpoint.url : 'api/' + endpoint.url;
     const method = endpoint.method;
     return axiosInstance[method]<T>(url, payload);
+}
+
+/**
+ * http custom hook
+ * @author Amr
+ */
+export const useHttp = () => {
+    const {showAlert} = useAlert();
+    const {show} = useHttpLoader()
+    /**
+     * handle the request of http, so I can use the custom hooks in it
+     * @param endpoint
+     * @param payload
+     * @author Amr
+     */
+    const request = <T>(endpoint: EndpointType, payload: {} = {}) => {
+        // call the native http request that connects with backend
+        const httpRequest = http<ResponseType<T>>(endpoint, payload)
+        // show LinerProgressBar
+        show(true)
+        // listen to the request
+        httpRequest.then((response) => {
+            // hide LinerProgressBar
+        }).finally(()=>  show(false))
+        return httpRequest;
+    }
+
+    return {request};
 }
 

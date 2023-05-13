@@ -8,6 +8,7 @@ import AuthLayout from "./layout/auth";
 import {getLocalAttribute} from "./common/helpers";
 import {useNavigator} from "./common/routes";
 import {REDIRECT_LINK} from "./pages/auth";
+import AppAlert from "./components/alert";
 
 const Layouts = {
     auth: <AuthLayout/>,
@@ -33,7 +34,8 @@ const App: React.FC = () => {
             {
                 currentLayout && React.cloneElement(currentLayout)
             }
-            <AppRoutes/>
+            <AppAlert/>
+
             {/*<AppLayout/>*/}
         </>
 

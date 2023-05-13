@@ -5,3 +5,10 @@ export enum HttpMethodTypes {
     PUT = 'put',
     DELETE = 'delete'
 }
+
+export enum AlertTypes {
+    ERROR = 'error',
+    WARNING = 'warning',
+    INFO = 'info',
+    SUCCESS = 'success',
+}

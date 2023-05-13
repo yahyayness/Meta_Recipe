@@ -1,55 +1,26 @@
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import React, {useEffect, useState} from "react";
-import config from "../../partials/config";
-import {IconButton, Menu, MenuItem} from "@mui/material";
-import Typography from "@mui/material/Typography";
+import {IconButton, LinearProgress, Menu, MenuItem} from "@mui/material";
 import {AccountCircle} from "@mui/icons-material";
-import MenuIcon from '@mui/icons-material/Menu';
-import {http} from "../../../plugins/axios";
-import {getEndpoint} from "../../../common/http";
-import {getLocalAttribute, setLocalAttribute} from "../../../common/helpers";
-import {useNavigator} from "../../../common/routes";
+import HttpLoader from "./components/httpLoader";
+import useHeaderHook from "./partials/hook";
 
 /**
  * master layout's header
  * @constructor
  * @author Amr
  */
-const AppHeader:React.FC = ()=>{
-    const {drawerWidth} = config
-    const [token , setToken] = useState<string>('')
-    const {navigator} = useNavigator();
-    const [auth, setAuth] = React.useState(true);
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
-    useEffect(()=> setToken(getLocalAttribute('aj_tokens' , true)?.access) , [])
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setAuth(event.target.checked);
-    };
-
-    const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-        http(getEndpoint('logout') ,  {}).then(response => {
-            setLocalAttribute('aj_tokens' , {} , true)
-            setTimeout(()=>{   navigator('/auth/login');} , 1000)
-
-        })
-    };
-
-
-
+const AppHeader: React.FC = () => {
+    const {logout, handleClose, handleMenu, drawerWidth, anchorEl} = useHeaderHook();
     return (
         <AppBar
             className="app-header"
             position="fixed"
-            sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
+            sx={{width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px`}}
         >
-            <Toolbar  className='app-toolbar'>
+            <HttpLoader/>
+            <Toolbar className='app-toolbar'>
                 <div>
                     <IconButton
                         size="large"
@@ -59,7 +30,7 @@ const AppHeader:React.FC = ()=>{
                         onClick={handleMenu}
                         color="inherit"
                     >
-                        <AccountCircle />
+                        <AccountCircle/>
                     </IconButton>
                     <Menu
                         id="menu-appbar"
@@ -76,7 +47,7 @@ const AppHeader:React.FC = ()=>{
                         open={Boolean(anchorEl)}
                         onClose={handleClose}
                     >
-                        <MenuItem onClick={handleClose}>Logout</MenuItem>
+                        <MenuItem onClick={logout}>Logout</MenuItem>
                     </Menu>
                 </div>
             </Toolbar>

@@ -9,9 +9,15 @@ interface EndpointsType {
     [key:string] : EndpointType
 }
 
-interface ResponseType {}
+interface ResponseType<T> {
+    code:number,
+    message:string,
+    payload:T,
+    status:string
+}
 
 interface AuthResponseType extends ResponseType {
     refresh: string,
     token:string
 }
+

@@ -1,13 +1,16 @@
 import RouteList from './list'
 import {Routes, Route, Router} from 'react-router-dom';
 import React from "react";
+import {CircularProgress} from "@mui/material";
 
 /**
  * loader appears before loading the route's component
  * @constructor
  * @author Amr
  */
-const Loading = () => <p >Loading ...</p>;
+const Loading = () =>    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                            <CircularProgress color="inherit" />
+                        </div>;
 
 /**
  * app routes

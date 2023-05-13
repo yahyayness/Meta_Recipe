@@ -2,7 +2,7 @@ interface FormFields{
     field:string,
     value?:any,
     validation?: {
-        rules: StringSchema<string | undefined, AnyObject, undefined, "">
+        rules: StringSchema<string | undefined, AnyObject, undefined, ""> | (() => StringSchema<string | undefined, AnyObject, undefined, "">)
     }
 }
 
@@ -18,7 +18,7 @@ interface FormikConfigurationType {
 
 }
 
-type onSubmitFormType = (values:any)=> void
+type onSubmitFormType = (values:any , extra?: any = {})=> void
 
 type FileHandler = (files:any)=> any
 interface FileUploaderType {

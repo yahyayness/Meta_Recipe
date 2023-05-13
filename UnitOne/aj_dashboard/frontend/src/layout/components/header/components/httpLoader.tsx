@@ -20,7 +20,6 @@ const HttpLoader:React.FC = ()=>{
     useEffect(() => {
         const configurations = (state as any).httpLoader
         setShowLoader(configurations)
-        console.log('loader' , configurations)
     }, [(state as any)])
     return ( <>{ showLoader ? <LinearProgress color='info' style={{position:"absolute" , width:'100%'}} /> : ''} </>);
 

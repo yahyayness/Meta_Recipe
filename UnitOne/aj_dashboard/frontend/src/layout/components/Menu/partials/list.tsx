@@ -13,7 +13,8 @@ const items: MenuItem[] = [
     {
         label: 'Dashboards',
         key: 1,
-        icon: Dashboard
+        icon: Dashboard,
+        route: getRoute('dashboard')
     },
     {
         label: 'Projects',
@@ -24,17 +25,20 @@ const items: MenuItem[] = [
     {
         label: 'Protocols',
         key: 3,
-        icon: ProtocolsIcon
+        icon: ProtocolsIcon,
+        route: getRoute('all-protocols')
     },
     {
         label: 'Reports',
         key: 3,
-        icon: ReportsIcon
+        icon: ReportsIcon,
+        route: getRoute('all-reports')
     },
     {
         label: 'Planning',
         key: 3,
-        icon: PlaningIcon
+        icon: PlaningIcon,
+        route: getRoute('all-plans')
     },
     {
         label: 'Users',
@@ -45,12 +49,14 @@ const items: MenuItem[] = [
     {
         label: 'Setup',
         key: 3,
-        icon: SetupIcon
+        icon: SetupIcon,
+        route: getRoute('all-setups')
     },
     {
         label: 'Other',
         key: 3,
-        icon: OtherIcon
+        icon: OtherIcon,
+        route: getRoute('others')
     }
 ];
 /**

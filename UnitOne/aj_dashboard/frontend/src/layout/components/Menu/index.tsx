@@ -7,12 +7,13 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import {Link} from "@mui/material";
-import {Navigate, NavLink} from "react-router-dom";
+import {Navigate, NavLink, useLocation} from "react-router-dom";
 import {getRoute} from "../../../routes/list";
 
 const AppMenu: React.FC = () => {
     const items = getMenuItems();
     const [selectedIndex, setSelectedIndex] = React.useState(1);
+    const {pathname} =useLocation()
     /**
      * select menu's item
      * @param event
@@ -32,10 +33,11 @@ const AppMenu: React.FC = () => {
             {items.map((item: MenuItem) => (
                 <NavLink to={item.route?.path ?? ''} key={item.key} className="menu-item-nav" state={{name : item?.route?.name}}>
                     <ListItem  disablePadding className="list-item">
-                        {selectedIndex === item.key && <span className="selected-item-indicator"></span>}
+
+                        {pathname.includes(item.route?.path??'') && <span className="selected-item-indicator"></span>}
                         <ListItemButton
-                            className={["menu-item", selectedIndex === item.key ? 'selected' : ''].join(' ')}
-                            selected={selectedIndex === item.key}
+                            className={["menu-item", pathname.includes(item.route?.path??'') ? 'selected' : ''].join(' ')}
+                            selected={pathname.includes(item.route?.path??'')}
                             onClick={(event) => handleListItemClick(event, item.key)}
                         >
                             <ListItemIcon>

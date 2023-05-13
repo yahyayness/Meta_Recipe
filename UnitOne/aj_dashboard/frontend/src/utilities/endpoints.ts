@@ -20,5 +20,13 @@ export default {
     update_user : {
         url : 'users/:id',
         method: HttpMethodTypes.PUT
+    },
+    all_users : {
+        url : 'users/',
+        method: HttpMethodTypes.GET
+    },
+    delete_user : {
+        url : 'users/:id',
+        method: HttpMethodTypes.DELETE
     }
 }

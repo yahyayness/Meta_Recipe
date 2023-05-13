@@ -5,7 +5,6 @@ const httpLoader = createSlice({
     initialState: false,
     reducers: {
         showLoader(state, action) {
-            console.log('flag' , action?.payload )
             return action?.payload
         }
     }

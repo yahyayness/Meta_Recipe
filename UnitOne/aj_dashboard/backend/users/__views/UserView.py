@@ -17,19 +17,14 @@ class UserView(GenericAPIView):
     pagination_class = CustomPagination
 
     def post(self, request, *args, **kwargs):
-        try:
-            serializer = self.get_serializer(data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(
-                    {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': serializer.data},
-                    status=status.HTTP_200_OK)
-            else:
-                return Response({'status': 'error', 'code': status.HTTP_400_BAD_REQUEST, 'message': 'error',
-                                 'payload': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
             return Response(
-                {'status': 'error', 'code': status.HTTP_400_BAD_REQUEST, 'message': str(e), 'payload': {}}, status=status.HTTP_400_BAD_REQUEST)
+                {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': serializer.data},
+                status=status.HTTP_200_OK)
+        else:
+            raise ValidationError(serializer.errors)
 
     def get(self, request, user_id=None, *args, **kwargs):
         if user_id:
@@ -67,9 +62,7 @@ class UserView(GenericAPIView):
             return Response(
                 {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': serializer.data},
                 status=status.HTTP_200_OK)
-        return Response(
-            {'status': 'error', 'code': status.HTTP_400_BAD_REQUEST, 'message': 'error', 'payload': serializer.errors},
-            status=status.HTTP_400_BAD_REQUEST)
+        raise ValidationError(serializer.errors)
 
     def delete(self, request, user_id, *args, **kwargs):
         try:

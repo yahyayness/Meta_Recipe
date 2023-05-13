@@ -17,20 +17,15 @@ class MetaRecipeView(GenericAPIView):
     pagination_class = CustomPagination
 
     def post(self, request, *args, **kwargs):
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid()
-            if serializer.is_valid():
-                serializer.save()
-                return Response(
-                    {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': serializer.data},
-                    status=status.HTTP_200_OK)
-            else:
-                return Response({'status': 'error', 'code': status.HTTP_400_BAD_REQUEST, 'message': 'error',
-                                 'payload': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            raise ValidationError(
-                {'status': 'error', 'code': status.HTTP_400_BAD_REQUEST, 'message': str(e), 'payload': {}})
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid()
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': serializer.data},
+                status=status.HTTP_200_OK)
+        else:
+            raise ValidationError(serializer.errors)
 
     def get(self, request, meta_recipe_id=None, *args, **kwargs):
         if meta_recipe_id:
@@ -68,9 +63,7 @@ class MetaRecipeView(GenericAPIView):
             return Response(
                 {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': serializer.data},
                 status=status.HTTP_200_OK)
-        return Response(
-            {'status': 'error', 'code': status.HTTP_400_BAD_REQUEST, 'message': 'error', 'payload': serializer.errors},
-            status=status.HTTP_400_BAD_REQUEST)
+        raise ValidationError(serializer.errors)
 
     def delete(self, request, meta_recipe_id=None, *args, **kwargs):
         try:

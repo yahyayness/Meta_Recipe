@@ -1,6 +1,6 @@
-from django.core.exceptions import PermissionDenied, ValidationError
 from django.http import Http404
 from rest_framework import exceptions
+from rest_framework.exceptions import PermissionDenied, ValidationError, ErrorDetail
 from rest_framework.response import Response
 from rest_framework.serializers import as_serializer_error
 from rest_framework.views import exception_handler
@@ -9,6 +9,21 @@ from rest_framework.views import exception_handler
 def custom_exception_handler(exc, context):
     if isinstance(exc, ValidationError):
         exc = exceptions.ValidationError(as_serializer_error(exc))
+        response = exception_handler(exc, context)
+        detail = exc.default_detail
+        if (response.data is not None) & (type(response.data) is dict):
+            if len(response.data) > 0:
+                first = list(response.data.keys())[0]
+                __detail = response.data[str(first)]
+                if len(__detail) > 0:
+                    detail = __detail[0]
+
+        return Response({
+            'status': 'error',
+            'code': response.status_code,
+            'message': detail,
+            'payload': response.data
+        })
 
     if isinstance(exc, Http404):
         exc = exceptions.NotFound()

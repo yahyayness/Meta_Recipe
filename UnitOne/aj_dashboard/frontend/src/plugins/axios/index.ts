@@ -80,6 +80,8 @@ export const useHttp = () => {
         // listen to the request
         httpRequest.then((response) => {
             // hide LinerProgressBar
+        }).catch(error => {
+            showAlert({type: AlertTypes.ERROR, message: error.response.data.message})
         }).finally(()=>  show(false))
         return httpRequest;
     }

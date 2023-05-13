@@ -128,7 +128,6 @@ export const useOnSubmitUserForm = () => {
             })
             navigator('/users');
         }).catch(error => {
-            showAlert({type: AlertTypes.ERROR, message: error.response.data.message})
             setErrors(error.response.data.payload);
         })
     }

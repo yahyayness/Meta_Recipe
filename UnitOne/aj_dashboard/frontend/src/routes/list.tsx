@@ -2,6 +2,18 @@ import React from "react";
 
 const routes: Array<RouteType> = [
     {
+        path: '/',
+        component: React.lazy(() => import('../pages/dashboard')),
+        children: [
+            {
+                path: "",
+                component: React.lazy(() => import('../pages/dashboard')),
+                name: 'dashboard',
+                label: 'Users'
+            },
+        ]
+    },
+    {
         path: '/auth',
         component: React.lazy(() => import('../pages/auth/index')),
         children: [
@@ -32,6 +44,42 @@ const routes: Array<RouteType> = [
         ]
     },
     {
+        path: '/plan',
+        component: React.lazy(() => import('../pages/planing')),
+        children: [
+            {
+                path: "/",
+                component: React.lazy(() => import('../pages/planing')),
+                name: 'all-plans',
+                label: 'Projects'
+            },
+            {
+                path: "/create",
+                component: React.lazy(() => import('../pages/projects/create_edit')),
+                name: 'create_plan',
+                label: 'Projects'
+            }
+        ]
+    },
+    {
+        path: '/protocols',
+        component: React.lazy(() => import('../pages/protocols')),
+        children: [
+            {
+                path: "/",
+                component: React.lazy(() => import('../pages/protocols')),
+                name: 'all-protocols',
+                label: 'Projects'
+            },
+            {
+                path: "/create",
+                component: React.lazy(() => import('../pages/protocols/create_edit')),
+                name: 'create_protocol',
+                label: 'Projects'
+            }
+        ]
+    },
+    {
         path: '/users',
         component: React.lazy(() => import('../pages/users')),
         children: [
@@ -54,7 +102,56 @@ const routes: Array<RouteType> = [
                 label: 'Users'
             }
         ]
-    }
+    },
+    {
+        path: '/reports',
+        component: React.lazy(() => import('../pages/Reports')),
+        children: [
+            {
+                path: "/",
+                component: React.lazy(() => import('../pages/Reports')),
+                name: 'all-reports',
+                label: 'Users'
+            },
+            {
+                path: "/create",
+                component: React.lazy(() => import('../pages/Reports/create_edit')),
+                name: 'create_report',
+                label: 'Users'
+            },
+            {
+                path: "/:id",
+                component: React.lazy(() => import('../pages/Reports/create_edit')),
+                name: 'create_report',
+                label: 'Users'
+            }
+        ]
+    },
+    {
+        path: '/setup',
+        component: React.lazy(() => import('../pages/setup')),
+        children: [
+            {
+                path: "/",
+                component: React.lazy(() => import('../pages/setup')),
+                name: 'all-setups',
+                label: ''
+            },
+        ]
+    },
+    {
+        path: '/others',
+        component: React.lazy(() => import('../pages/other')),
+        children: [
+            {
+                path: "/",
+                component: React.lazy(() => import('../pages/other')),
+                name: 'others',
+                label: ''
+            },
+        ]
+    },
+
 ]
 
 

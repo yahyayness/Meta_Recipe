@@ -1,8 +1,7 @@
 import { useCallback, useState } from 'react';
 import ReactFlow, { addEdge, applyEdgeChanges, applyNodeChanges,Node ,Edge} from 'reactflow';
 import 'reactflow/dist/style.css';
-import './partials/style.scss' +
-    ''
+import './partials/style.scss'
 import TextUpdaterNode from './components/ingredient/index';
 import {Container, ListItem, Stack} from "@mui/material";
 import Box from "@mui/material/Box";

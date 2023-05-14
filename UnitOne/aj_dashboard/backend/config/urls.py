@@ -30,6 +30,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("ingredients.urls")),
     path('', include("molecules.urls")),
+    path('', include("process.urls")),
+    path('', include("ingredient_molecules.urls")),
 ]
 
 if settings.DEBUG:

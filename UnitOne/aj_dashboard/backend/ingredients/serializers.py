@@ -9,7 +9,7 @@ class IngredientsSerilizer(serializers.ModelSerializer):
 class IngredientNodesCreateSerilizer(serializers.ModelSerializer):
     class Meta:
         model = IngredientNode
-        fields = ('ingredient','quantity') 
+        fields = ('id','ingredient','quantity') 
 
 class IngredientNodesSerilizer(serializers.ModelSerializer):
     ingredient=IngredientsSerilizer(read_only=True)

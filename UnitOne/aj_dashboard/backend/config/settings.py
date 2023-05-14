@@ -29,8 +29,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'process.apps.ProcessConfig',
     'molecules.apps.MoleculesConfig',
     'ingredients.apps.IngredientsConfig',
+    'ingredient_molecules.apps.IngredientMoleculesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

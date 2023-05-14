@@ -20,3 +20,5 @@ interface UserType extends ResponseType {
     email:string,
     password?:string
 }
+
+type ListType<T> = Merge<{ results: Array<T>} , PaginationType>

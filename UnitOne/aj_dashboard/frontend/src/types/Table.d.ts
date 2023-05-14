@@ -19,7 +19,7 @@ interface TableActionType {
 }
 
 type TableRowProps  = Merge<TableHeaderProps , { rows:Array<TableRow> , actions?:Array<TableActionType>}>
-type TableTypeProps = Merge<TableRowProps, {}>
+type TableTypeProps = Merge<TableRowProps, {pagination?:PaginationType}>
 
 interface TableActionProps {
     onClick: (vars:any)=> any,
@@ -28,3 +28,14 @@ interface TableActionProps {
 
 type DeleteActionProps = typeof TableActionProps;
 type EditActionProps = typeof TableActionProps;
+
+type PaginationPropsType  = Merge<PaginationType , {}>
+
+interface PaginationType {
+    count:number,
+    num_pages:number | undefined,
+    links : {
+        next:stirng,
+        previous?:string
+    }
+}

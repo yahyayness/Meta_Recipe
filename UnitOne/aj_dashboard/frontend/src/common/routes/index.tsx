@@ -8,7 +8,7 @@ import {useNavigate} from 'react-router-dom';
  */
 export const useNavigator = () => {
     const navigate = useNavigate();
-    const navigator = (path: string)=>{
+    const navigator = (path: any)=>{
         navigate(path);
     }
 

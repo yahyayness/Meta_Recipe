@@ -16,7 +16,7 @@ def custom_exception_handler(exc, context):
                 first = list(response.data.keys())[0]
                 __detail = response.data[str(first)]
                 if len(__detail) > 0:
-                    detail = __detail[0]
+                    detail = str(__detail[0])
 
         return Response({
             'status': 'error',

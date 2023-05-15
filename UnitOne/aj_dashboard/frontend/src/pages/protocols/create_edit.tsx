@@ -3,7 +3,7 @@ import ReactFlow, { addEdge, applyEdgeChanges, applyNodeChanges,Node ,Edge} from
 import 'reactflow/dist/style.css';
 import './partials/style.scss'
 import TextUpdaterNode from './components/ingredient/index';
-import {Container, ListItem, Stack} from "@mui/material";
+import {Container, Divider, ListItem, Stack} from "@mui/material";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import List from "@mui/material/List";
@@ -14,12 +14,12 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import useBreadcrumb from "../../common/hooks/breadcrumbs";
-
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 const rfStyle = {
     backgroundColor: 'trasparent',
 };
 
-const initialNodes = [
+let initialNodes = [
     { id: 'node-1', type: 'textUpdater', position: { x: 0, y: 0 }, data: { value: 123 } },
     {
         id: 'node-2',
@@ -78,31 +78,48 @@ const CreateEditProtocol:React.FC = ()=> {
         [setEdges]
     );
 
+    const addProtocol = ()=> {
+        // setNodes((nodes:Array<Node>) => {
+        //    nodes.push( )
+        //     return nodes;
+        // })
+        setNodes([...nodes ,{ id: 'node-'+nodes?.length +1, type: 'textUpdater', position: { x:10, y: 1 }, data: { value: 123 } } ])
+    }
+
     return (
         <Stack flexDirection='row'>
-            <Box mx={0} width="100%" style={{height : '70ch'}}>
+            <Box  width="100%" style={{height : '70ch'}}>
                 <ReactFlow
+                    key={'nodes-'+nodes?.length}
                     nodes={nodes}
                     edges={edges}
                     onNodesChange={onNodesChange}
                     onEdgesChange={onEdgesChange}
                     onConnect={onConnect}
                     nodeTypes={nodeTypes}
-                    fitView
+                    // fitView
                     style={rfStyle}
                 />
             </Box>
-            <Box width='20%'  className="protocols-items">
+            <Box width='20%'  className="protocols-items" mr={-3}>
                 <List>
-                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItem key={text} disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItemButton>
-                        </ListItem>
+                    <ListItem  className="justify-center">Add Protocol</ListItem>
+                    <Divider />
+                    {['Ingredient', 'Process', 'Merge' , 'Serve'].map((text, index) => (
+                        <>
+                            <ListItem key={'protocol-list-items-'+index} disablePadding >
+
+                                <ListItemButton onClick={addProtocol}>
+                                    <ListItemText primary={text} />
+                                    <ListItemIcon>
+                                        <AddCircleIcon/>
+                                    </ListItemIcon>
+
+                                </ListItemButton>
+                            </ListItem>
+                            <Divider key={'divider-protocol-list-items-'+index} />
+                        </>
+
                     ))}
                 </List>
             </Box>

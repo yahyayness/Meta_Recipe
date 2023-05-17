@@ -10,7 +10,7 @@ from protocols.models import Protocol
 class Recipe(Model):
     meta_recipe = models.ForeignKey(MetaRecipe, on_delete=models.CASCADE, related_name='recipes_for_meta', blank=False,
                                     null=False)
-    name = models.CharField(unique=True, blank=False, null=False)
+    name = models.CharField(max_length=225, unique=True, blank=False, null=False)
     protocol = models.ForeignKey(Protocol, on_delete=models.CASCADE, related_name='recipes_for_protocol', blank=False,
                                  null=False)
 
@@ -21,5 +21,5 @@ class Recipe(Model):
         verbose_name = "Recipe"
 
     def __str__(self):
-        return f"{self.meta_recipe.name} : {self.amount}"
+        return f"{self.meta_recipe.name} : {self.name}"
 

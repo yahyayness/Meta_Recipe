@@ -33,6 +33,7 @@ urlpatterns = [
     path('', include("molecules.urls")),
     path('', include("process.urls")),
     path('', include("ingredient_molecules.urls")),
+    path('', include("projects.urls")),
 ]
 
 if settings.DEBUG:

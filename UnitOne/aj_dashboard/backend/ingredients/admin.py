@@ -5,9 +5,9 @@ from .models import IngredientNode
 
 
 class IngredientsAdmin(admin.ModelAdmin):
-    list_display=['name', 'unit']
+    list_display=['name']
     #list_editable = []
-    search_fields=['name', 'unit']
+    search_fields=['name']
     list_filter=['name']
     #fields=[]
 admin.site.register(Ingredients,IngredientsAdmin)
@@ -18,5 +18,6 @@ class IngredientsNodeAdmin(admin.ModelAdmin):
     search_fields=['ingredient__name']
     list_filter=['ingredient'] 
     #fields=[]
+    exclude = (["deleted_at"])
 
 admin.site.register(IngredientNode,IngredientsNodeAdmin)

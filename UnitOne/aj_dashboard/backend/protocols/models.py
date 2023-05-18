@@ -12,7 +12,7 @@ class Protocol(SoftDeleteModel):
     reference_author = models.CharField(max_length=225, null=True)
     aliquot_date = models.DateField(null=True)
     reagent = models.CharField(max_length=225, null=True)
-    name = models.CharField(max_length=225, null=False, blank=False, unique=True)
+    name = models.CharField(max_length=225, null=False, unique=True, blank=False)
     processes = models.JSONField(null=True, blank=False)
     ingredients = models.JSONField(null=True, blank=False)
 

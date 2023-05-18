@@ -29,6 +29,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'projects.apps.ProjectsConfig',
     'process.apps.ProcessConfig',
     'molecules.apps.MoleculesConfig',
     'ingredients.apps.IngredientsConfig',

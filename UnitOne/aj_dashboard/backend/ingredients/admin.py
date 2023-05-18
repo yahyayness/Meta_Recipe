@@ -18,5 +18,6 @@ class IngredientsNodeAdmin(admin.ModelAdmin):
     search_fields=['ingredient__name']
     list_filter=['ingredient'] 
     #fields=[]
+    exclude = (["deleted_at"])
 
 admin.site.register(IngredientNode,IngredientsNodeAdmin)

@@ -21,4 +21,10 @@ interface UserType extends ResponseType {
     password?:string
 }
 
+interface IngredientType {
+    name: string,
+    amount: string,
+    [key:string] : string
+}
+
 type ListType<T> = Merge<{ results: Array<T>} , PaginationType>

@@ -1,4 +1,6 @@
 import {TextField} from "@mui/material";
+import {TimePicker} from "antd";
+import ProtocolSelect from "../components/select";
 
 export default [
     {
@@ -14,9 +16,9 @@ export default [
                 protocol: 'process',
                 inputs: [
                     {
-                        type: 'select',
-                        options: [
-                            [
+                        type: ProtocolSelect,
+                        props : {
+                            options:  [
                                 {
                                     label: 'Big',
                                     value: 'big'
@@ -30,7 +32,8 @@ export default [
                                     value: 'small'
                                 }
                             ]
-                        ]
+                        }
+
 
                     }
                 ]
@@ -40,9 +43,23 @@ export default [
                 protocol: 'process',
                 inputs: [
                     {
-                        type: TextField,
+                        type: TimePicker,
                         props : {
-                            type: 'time'
+                            format:'hh:mm',
+                            style : {
+                                height: '45px'
+                            }
+
+                        }
+                    },
+                    {
+                        type: TimePicker,
+                        props : {
+                            format:'hh:mm',
+                            style : {
+                                height: '45px'
+                            }
+
                         }
                     }
                 ]
@@ -52,9 +69,12 @@ export default [
                 protocol: 'process',
                 inputs: [
                     {
-                        type: TextField,
+                        type: TimePicker,
                         props : {
-                            type: 'time'
+                            format:'hh:mm',
+                            style : {
+                                height: '45px'
+                            }
                         }
                     }
                 ]

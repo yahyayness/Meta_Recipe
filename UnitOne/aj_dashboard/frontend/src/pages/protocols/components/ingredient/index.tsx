@@ -16,14 +16,13 @@ import {
 import Typography from "@mui/material/Typography";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import IngredientRow from "../ingredient-row";
+import {IngredientType} from "../../../../types/ModelTypes";
 const handleStyle = { left: 10 };
 
 
-const Ingredient:React.FC<any> = ({data , isConnectable} )=>{
+const Ingredient:React.FC<any> = ({data , isConnectable , id} )=>{
     const [children , setChildren] = useState<Array<Node>>([]);
-    const onChange = useCallback((evt:any) => {
-        console.log(evt.target.value);
-    }, []);
+
     const addMoreIngredient = useCallback((event:any)=>{
         setChildren([...children ,  {
             id: 'A-1',
@@ -34,6 +33,12 @@ const Ingredient:React.FC<any> = ({data , isConnectable} )=>{
             extent: 'parent',
         }])
     } , [])
+
+    const onChange = (childIndex:string, value:IngredientType)=>{
+        data.onChange(id ,childIndex, value)
+
+    }
+
 
     useEffect(()=>{
 
@@ -63,7 +68,7 @@ const Ingredient:React.FC<any> = ({data , isConnectable} )=>{
 
 
                 <CardContent>
-                    {data.children?.map((node:any , index:number) => (<IngredientRow data={node} isConnectable={true} index={'ingredient-children-'+index} key={'ingredient-children-'+index}/>))}
+                    {data.children?.map((node:any , index:number) => (<IngredientRow data={node} isConnectable={true} index={node.id} key={'ingredient-children-'+index} onChange={onChange}/>))}
                     {/*<IngredientRow data={data} isConnectable={isConnectable}/>*/}
                 </CardContent>
 

@@ -21,6 +21,7 @@ import Merge from "./components/merge";
 import Serve from "./components/serve";
 import ProtocolsOptions from "./components/protocols";
 import Process from "./components/process";
+import {number} from "yup";
 
 const rfStyle = {
     backgroundColor: 'trasparent',
@@ -75,6 +76,24 @@ const CreateEditProtocol: React.FC = () => {
                             id: nextId,
                             type: 'Ingredient',
                             data: {label: 'child node 1', type: 'target'},
+                        },
+                    ]
+                };
+            return updatedNodes;
+        })
+    }, [setNodes])
+    const addProcessChild = useCallback((parentId: string) => {
+        setNodes((nodes: Array<Node>) => {
+            let parentIndex = nodes?.findIndex((node: Node) => node.id == parentId)
+            const updatedNodes = [...nodes]
+            const nextId = parentId + '-' +(updatedNodes[parentIndex]?.data?.children?.length) +1
+            updatedNodes[parentIndex].data =
+                {
+                    ...updatedNodes[parentIndex].data,
+                    children: [...(updatedNodes[parentIndex].data.children ?? []),
+                        {
+                            ...updatedNodes[parentIndex]?.data?.children[0],
+                            id: nextId,
                         },
                     ]
                 };
@@ -151,6 +170,22 @@ const CreateEditProtocol: React.FC = () => {
 
     const random = (max:number)=> Math.floor(Math.random() * max) + 1
 
+    const onChildChange = useCallback(  (parentId:string , childIndex:string, value:any )=> {
+        setNodes((nodes: Array<Node>) => {
+            let parentIndex = nodes?.findIndex((node: Node) => node.id == parentId)
+            const updatedNodes = [...nodes]
+           let childrenIndex =  updatedNodes[parentIndex].data.children?.findIndex((node: Node) => node.id == childIndex)
+            updatedNodes[parentIndex].data.children[childrenIndex].data = {
+               ... updatedNodes[parentIndex].data.children[childrenIndex].data,
+                value
+            }
+            console.log('nodes',updatedNodes)
+            return updatedNodes;
+        })
+    }, [setNodes])
+
+
+
     const addIngredientProtocol = (process:any = {}) => {
         const id = 'ingredient-' + (nodes?.length + 1);
         setNodes(nodes => [...nodes, {
@@ -162,6 +197,7 @@ const CreateEditProtocol: React.FC = () => {
             data: {
                 value: 123,
                 addAction: () => addIngredient(id),
+                onChange : onChildChange,
                 children: [],
                 ...process
             }
@@ -206,10 +242,15 @@ const CreateEditProtocol: React.FC = () => {
         ])
     }
 
+    const onClose = (id:string)=> {
+           setNodes((nodes:Array<Node>)=> nodes.filter((node:Node) => node.id != id))
+           setEdges((edges:Array<Edge>)=> edges.filter((edge:Edge) => edge.source != id ||  edge.target != id ))
+    }
+
 
     const addProcess = (process:any = {})=> {
-        const id = 'process-' + (random(100));
-
+        const id = 'process-' + (nodes?.length + 1);
+        console.log('process' ,process )
         setNodes(nodes => [...nodes, {
             id: id,
             type: 'process',
@@ -218,8 +259,21 @@ const CreateEditProtocol: React.FC = () => {
             height: 100,
             data: {
                 value: 123,
-                addAction: () => addIngredient(id),
-                children: [],
+                addAction: addProcessChild,
+                onChange : onChildChange,
+                onClose,
+                children: process.inputs?.map((input:any , index:number) => {
+                    const childId = `process-${id}-${index}`
+                    return {
+                        id: childId,
+                        type:input.type,
+                        position: {x: 10, y: 1},
+                        draggable: true,
+                        height: 100,
+                        props: input.props,
+                        data:{}
+                    }
+                }),
                 ...process
             }
         }
@@ -235,6 +289,10 @@ const CreateEditProtocol: React.FC = () => {
         }
         return actions[type] as Function
     }
+
+    useEffect(()=>{
+        console.log('edges' , edges)
+    } , [edges])
 
     return (
         <Stack flexDirection='row'>

@@ -21,6 +21,10 @@ interface UserType extends ResponseType {
     password?:string
 }
 
+interface ProtocolType extends ResponseType{
+    [key:stirng] : [value:any]
+}
+
 interface IngredientType {
     name: string,
     amount: string,

@@ -11,14 +11,11 @@ import React, {useEffect, useState} from "react";
 import {IngredientType} from "../../../../types/ModelTypes";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 
-const Process:React.FC<any> = ({data , isConnectable , id}) => {
+const Process:React.FC<any> = ({data , isConnectable , id , type}) => {
     const [label , setLabel] = useState<string>('');
     const [value , setValue] = useState<any>('')
 
-    useEffect(()=>{
-        setLabel(data.label)
-        console.log('data' , data)
-    } , [data])
+    useEffect(()=> setLabel(data.label) , [data])
 
     const handleChange = (newValue:any , childId:string)=> {
        setValue( newValue.toString())
@@ -96,7 +93,7 @@ const Process:React.FC<any> = ({data , isConnectable , id}) => {
 
 
                 <CardActions disableSpacing className='node-item-actions'>
-                    <IconButton aria-label="add to favorites" onClick={()=> data.addAction(id)}>
+                    <IconButton aria-label="add to favorites" onClick={()=> data.addAction(id , type)}>
                         <AddCircleIcon/>
                     </IconButton>
                 </CardActions>

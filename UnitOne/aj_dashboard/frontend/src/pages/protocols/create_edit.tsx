@@ -1,9 +1,9 @@
-import { useCallback, useState } from 'react';
-import ReactFlow, { addEdge, applyEdgeChanges, applyNodeChanges,Node ,Edge} from 'reactflow';
+import React, {useCallback, useEffect, useState} from 'react';
+import ReactFlow, {addEdge, applyEdgeChanges, applyNodeChanges, Node, Edge, ReactFlowProvider} from 'reactflow';
 import 'reactflow/dist/style.css';
 import './partials/style.scss'
-import TextUpdaterNode from './components/ingredient/index';
-import {Container, Divider, ListItem, Stack} from "@mui/material";
+import IngredientGroup from './components/ingredient/index';
+import {Button, Container, Divider, ListItem, Stack} from "@mui/material";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import List from "@mui/material/List";
@@ -15,116 +15,72 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import useBreadcrumb from "../../common/hooks/breadcrumbs";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import Ingredient from './components/ingredient-row/index'
+import IngredientRow from "./components/ingredient-row/index";
+import Merge from "./components/merge";
+import Serve from "./components/serve";
+import ProtocolsOptions from "./components/protocols";
+import Process from "./components/process";
+import {number} from "yup";
+import ListActions from "../../components/stack-actions";
+import {actions} from './partials/actions'
+import useProtocol from "./partials/hooks";
+import {addParamsToEndpoint, getEndpoint} from "../../common/http";
+import {ProtocolType} from "../../types/ModelTypes";
+import {useAlert} from "../../common/hooks/alert";
+import {useNavigator} from "../../common/routes";
+import {useParams} from "react-router-dom";
+import {useHttp} from "../../plugins/axios";
+
 const rfStyle = {
     backgroundColor: 'trasparent',
 };
 
-let initialNodes = [
-    { id: 'node-1', type: 'textUpdater', position: { x: 0, y: 0 }, data: { value: 123 } },
-    {
-        id: 'node-2',
-        type: 'output',
-        targetPosition: 'top',
-        position: { x: 0, y: 200 },
-        data: { label: 'node 2' },
-    },
-    {
-        id: 'node-3',
-        type: 'output',
-        targetPosition: 'top',
-        position: { x: 200, y: 200 },
-        data: { label: 'node 3' },
-    },
-] as Array<Node>;
 
-const initialEdges = [
-    { id: 'edge-1', source: 'node-1', target: 'node-2', sourceHandle: 'a' },
-    { id: 'edge-2', source: 'node-1', target: 'node-3', sourceHandle: 'b' },
-]as Array<Edge>;
-
-// we define the nodeTypes outside of the component to prevent re-renderings
+// we define the nodeTypes outside the component to prevent re-renderings
 // you could also use useMemo inside the component
-const nodeTypes = { textUpdater: TextUpdaterNode };
+const nodeTypes = {
+    Ingredient,
+    'ingredient-container': IngredientGroup,
+    'ingredient': IngredientRow,
+    merge: Merge,
+    serve: Serve,
+    process: Process
+};
 
-const CreateEditProtocol:React.FC = ()=> {
-    /**
-     * set the breadcrumbs of the current page
-     * @author Amr
-     */
-    useBreadcrumb([
-        {
-            label: 'Protocols',
-            path: "/protocols"
-        },
-        {
-            label: '230201-v01 Vegan Croissant',
-            path: "/protocols/create",
-            isCurrent: true
-        }
-    ])
-    const [nodes, setNodes] = useState(initialNodes);
-    const [edges, setEdges] = useState(initialEdges);
+const EXTRA_HEIGHT = 55;
 
-    const onNodesChange = useCallback(
-        (changes:any) => setNodes((nds) => applyNodeChanges(changes, nds)),
-        [setNodes]
-    );
-    const onEdgesChange = useCallback(
-        (changes:any) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-        [setEdges]
-    );
-    const onConnect = useCallback(
-        (connection:any) => setEdges((eds) => addEdge(connection, eds)),
-        [setEdges]
-    );
+const CreateEditProtocol: React.FC = () => {
 
-    const addProtocol = ()=> {
-        // setNodes((nodes:Array<Node>) => {
-        //    nodes.push( )
-        //     return nodes;
-        // })
-        setNodes([...nodes ,{ id: 'node-'+nodes?.length +1, type: 'textUpdater', position: { x:10, y: 1 }, data: { value: 123 } } ])
-    }
-
+    const { onSave , onDuplicate, nodes , edges,onNodesChange,onEdgesChange, onConnect , addProtocol ,counter}
+        = useProtocol();
     return (
-        <Stack flexDirection='row'>
-            <Box  width="100%" style={{height : '70ch'}}>
-                <ReactFlow
-                    key={'nodes-'+nodes?.length}
-                    nodes={nodes}
-                    edges={edges}
-                    onNodesChange={onNodesChange}
-                    onEdgesChange={onEdgesChange}
-                    onConnect={onConnect}
-                    nodeTypes={nodeTypes}
-                    // fitView
-                    style={rfStyle}
-                />
-            </Box>
-            <Box width='20%'  className="protocols-items" mr={-3}>
-                <List>
-                    <ListItem  className="justify-center">Add Protocol</ListItem>
-                    <Divider />
-                    {['Ingredient', 'Process', 'Merge' , 'Serve'].map((text, index) => (
-                        <>
-                            <ListItem key={'protocol-list-items-'+index} disablePadding >
+        <>
+            <Stack spacing={2} direction="row"  justifyContent="right" className="list-master-actions">
+                <Button  variant="text" color="info" onClick={onDuplicate}>Duplicate</Button>
+                <Button  variant="text" color="info" onClick={onSave}>Save</Button>
 
-                                <ListItemButton onClick={addProtocol}>
-                                    <ListItemText primary={text} />
-                                    <ListItemIcon>
-                                        <AddCircleIcon/>
-                                    </ListItemIcon>
+            </Stack>
+            <Stack flexDirection='row'>
 
-                                </ListItemButton>
-                            </ListItem>
-                            <Divider key={'divider-protocol-list-items-'+index} />
-                        </>
+                <Box width="100%" style={{height: '70ch'}} key={'nodes-' + counter}>
+                    <ReactFlow
 
-                    ))}
-                </List>
-            </Box>
+                        nodes={nodes}
+                        edges={edges}
+                        onNodesChange={onNodesChange}
+                        onEdgesChange={onEdgesChange}
+                        onConnect={onConnect}
+                        nodeTypes={nodeTypes}
+                        // fitView
+                        style={rfStyle}
+                    />
+                </Box>
+                <ProtocolsOptions addProtocol={addProtocol}/>
 
-        </Stack>
+            </Stack>
+        </>
+
 
 
     );

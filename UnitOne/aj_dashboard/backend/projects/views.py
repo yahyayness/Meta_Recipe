@@ -34,10 +34,12 @@ def getOrCreateIngredientByName(iname):
 def ProjectList(request):
     #GET
     if request.method=='GET':
-        #queryset= IngredientNode.objects.all()
-        #serializer_class=IngredientNodesSerilizer(queryset, many=True)
+        queryset= Projects.objects.all()
+        serializer_class=ProjrctSerilizer(queryset, many=True)
 
-        return Response("GET")
+        return Response(
+                {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': serializer_class.data},
+                status=status.HTTP_200_OK)
         
     #POST
     elif request.method=='POST':
@@ -48,6 +50,25 @@ def ProjectList(request):
             serializer = ProjrctSerilizer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
+    
+
+        ## import ingredients data from ingredients files
+        if "ingredients" in request.FILES:
+            for iF in request.FILES.getlist('ingredients'):
+                iData =  json.loads(iF.read())
+                ingredients_list=iData["ingredients"]
+                #print(ingredients_list)
+                for ing in ingredients_list:
+                    opj={"name":ing['name']}
+                    #check if Ingredients not Exists Create a new
+                    try:
+                        ingredientExist=Ingredients.objects.get(name=ing['name'])
+                    except Ingredients.DoesNotExist:
+                        Ingserializer = IngredientsSerilizer(data = opj)
+                        if Ingserializer.is_valid():
+                            Ingserializer.save()
+
+        ## import Projcet data from files
         if "data" in request.FILES:
             for f in request.FILES.getlist('data'):
                 data =  json.loads(f.read())

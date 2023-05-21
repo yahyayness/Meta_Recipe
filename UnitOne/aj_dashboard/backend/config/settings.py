@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'users',
     'meta_recipe',
     'recipe',
-    'protocols'
+    'protocols',
+    'equipments'
 ]
 
 MIDDLEWARE = [

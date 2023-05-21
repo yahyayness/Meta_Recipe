@@ -24,16 +24,9 @@ from django.urls import path, include
 urlpatterns = [
     # path('admin/', admin.site.urls),
     path('auth/', include('auths.urls')),
-    path('api/users/', include('users.urls')),
-    path('api/', include('meta_recipe.urls')),
-    path('api/recipes/', include('recipe.urls')),
-    path('api/protocols/', include('protocols.urls')),
     path('admin/', admin.site.urls),
-    path('', include("ingredients.urls")),
-    path('', include("molecules.urls")),
-    path('', include("process.urls")),
-    path('', include("ingredient_molecules.urls")),
-    path('', include("projects.urls")),
+    path('api/', include("config.urls_api")),
+  
 ]
 
 if settings.DEBUG:

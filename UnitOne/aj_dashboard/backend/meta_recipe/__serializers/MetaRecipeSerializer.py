@@ -13,4 +13,4 @@ class MetaRecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MetaRecipe
-        fields = ["id", "name"]
+        fields = ["id", "name",'project']

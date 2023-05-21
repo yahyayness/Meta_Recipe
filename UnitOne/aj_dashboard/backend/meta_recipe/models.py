@@ -3,12 +3,13 @@ from django.db.models import Model
 
 from ingredients.models import Ingredients
 from common.Models.SoftDeleteModel import SoftDeleteModel
-
+from projects.models import Projects
 
 # Create your models here.
 
 class MetaRecipe(SoftDeleteModel):
     name = models.CharField(max_length=180)
+    project = models.ForeignKey(Projects, on_delete=models.CASCADE, related_name='meta_recipe_project',blank=True, null=True)
 
     class Meta:
         db_table = 'meta_recipe'

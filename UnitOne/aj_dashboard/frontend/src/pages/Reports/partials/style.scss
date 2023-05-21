@@ -1,0 +1,42 @@
+.report-statistic {
+  font-family: 'Roboto';
+  padding: 20.18px;
+
+  &.common-legends{
+    padding-bottom: unset;
+    padding-left: unset;
+  }
+
+  :first-child {
+    font-weight: bold;
+    color: rgba(58, 53, 65, 0.87);
+  }
+
+  :nth-child(2) {
+    color: rgba(58, 53, 65, 0.6);
+    font-size: 13.45px;
+  }
+
+  .legend-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 15px;
+
+    .legend-item-container {
+      .legend {
+        width: 5px;
+      }
+
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 5px;
+
+      div:nth-child(2) {
+        line-height: 2.8;
+      }
+    }
+  }
+
+}

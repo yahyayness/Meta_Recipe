@@ -5,18 +5,23 @@ import {ProtocolType, UserType} from "../../../types/ModelTypes";
 import {AlertTypes} from "../../../types/Enums";
 import {Edge, Node} from "reactflow";
 import {EndpointType, ResponseType} from "../../../types/HttpTypes";
-export const actions = (onSave = ()=>{} , onDuplicate = ()=>{})=> [
+
+export const actions = (onSave = () => {
+}, onDuplicate = () => {
+}) => [
     {
         label: 'Duplicate',
         extra: {
-            onClick : onDuplicate
+            onClick: onDuplicate
         }
     },
     {
         label: 'Save',
         extra: {
             className: 'primary',
-            onClick : onSave
+            onClick: () => {
+                onSave()
             }
-        },
+        }
+    },
 ] as Array<StackActionsType>

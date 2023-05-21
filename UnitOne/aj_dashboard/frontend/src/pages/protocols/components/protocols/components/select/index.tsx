@@ -16,8 +16,8 @@ const MenuProps = {
 };
 
 
-const ProtocolSelect:React.FC<any> = ({options , onChange})=> {
-    const [value,setValue] = useState<any>('');
+const ProtocolSelect:React.FC<any> = ({options , onChange , data})=> {
+    const [value,setValue] = useState<any>(data.value?? '');
     const [open, setOpen] = useState(false);
     const handleChange = (event: any) => {
         setValue(event.target.value as string);
@@ -41,6 +41,11 @@ const ProtocolSelect:React.FC<any> = ({options , onChange})=> {
     useEffect(()=>{
         console.log('options' ,options )
     } , [options])
+
+    useEffect(()=>{
+        console.log('IngredientRow', data)
+    } , [data])
+
     return (
         <FormControl fullWidth>
             <InputLabel id="process-options-label">Size</InputLabel>

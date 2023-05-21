@@ -7,7 +7,7 @@ import {IngredientType} from "../../../../types/ModelTypes";
 
 
 const IngredientRow:React.FC<any> = ({ data, isConnectable, index  , onChange})=>{
-    const [value , setValue] = useState<IngredientType>((data.value ?? {}) as IngredientType)
+    const [value , setValue] = useState<IngredientType>((data?.data.value ?? {}) as IngredientType)
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>)=> {
         value[event.target.name] = event.target.value;
@@ -19,9 +19,7 @@ const IngredientRow:React.FC<any> = ({ data, isConnectable, index  , onChange})=
         return true;
     }
 
-    useEffect(()=>{
-        console.log('reactFlow', index)
-    } , [isConnectable])
+
 
 
     return (

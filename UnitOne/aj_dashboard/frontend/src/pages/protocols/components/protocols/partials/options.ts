@@ -16,7 +16,7 @@ export default [
                 protocol: 'process',
                 inputs: [
                     {
-                        type: ProtocolSelect,
+                        type: 'ProtocolSelect',
                         props : {
                             options:  [
                                 {
@@ -43,7 +43,7 @@ export default [
                 protocol: 'process',
                 inputs: [
                     {
-                        type: TimePicker,
+                        type: 'TimePicker',
                         props : {
                             format:'hh:mm',
                             style : {
@@ -52,16 +52,6 @@ export default [
 
                         }
                     },
-                    {
-                        type: TimePicker,
-                        props : {
-                            format:'hh:mm',
-                            style : {
-                                height: '45px'
-                            }
-
-                        }
-                    }
                 ]
             },
             {
@@ -69,7 +59,7 @@ export default [
                 protocol: 'process',
                 inputs: [
                     {
-                        type: TimePicker,
+                        type: 'TimePicker',
                         props : {
                             format:'hh:mm',
                             style : {

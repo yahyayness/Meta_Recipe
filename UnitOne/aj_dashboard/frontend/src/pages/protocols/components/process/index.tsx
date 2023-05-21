@@ -10,6 +10,9 @@ import target from "../../../../images/target.svg";
 import React, {useEffect, useState} from "react";
 import {IngredientType} from "../../../../types/ModelTypes";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import {TimePicker} from "antd";
+import ProtocolSelect from "../protocols/components/select";
+import dayjs from "dayjs";
 
 const Process:React.FC<any> = ({data , isConnectable , id , type}) => {
     const [label , setLabel] = useState<string>('');
@@ -21,6 +24,19 @@ const Process:React.FC<any> = ({data , isConnectable , id , type}) => {
        setValue( newValue.toString())
         data.onChange(id ,childId,newValue?.toString());
     }
+
+    const getComponent = (componentName:string)=>{
+        const _components:any = {
+            'TimePicker' : TimePicker,
+            'ProtocolSelect' : ProtocolSelect
+        }
+        return _components[componentName] as any
+    }
+
+
+    useEffect(()=>{
+        console.log('data',data)
+    } , [data])
 
     return (
         <div >
@@ -59,7 +75,8 @@ const Process:React.FC<any> = ({data , isConnectable , id , type}) => {
                                     />
                                 </Grid>
                                 <Grid item xs={8} key={`process-field-${index}`}>
-                                    {React.createElement(input.type , {...(input.props || {}) , size: 'small'  , onChange: (newValue:any)=>handleChange(newValue ,input.id )})}
+
+                                    {React.createElement(getComponent(input.type) , {...(input.props || {}) , value:dayjs(input.data.value) ,locale:'en_US', data:input.data, size: 'small'  , onChange: (newValue:any)=>handleChange(newValue ,input.id )})}
                                 </Grid>
                                 <Grid item xs={2} key={`process-source-${index}`} >
                                     <Handle type="source" position={Position.Right} id={`${input.id}-source`} isConnectable={isConnectable}

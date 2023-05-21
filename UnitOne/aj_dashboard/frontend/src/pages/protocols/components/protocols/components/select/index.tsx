@@ -47,13 +47,16 @@ const ProtocolSelect:React.FC<any> = ({options , onChange , data})=> {
     } , [data])
 
     return (
-        <FormControl fullWidth>
+        <FormControl fullWidth >
             <InputLabel id="process-options-label">Size</InputLabel>
             <Select
                 labelId="process-options-label"
                 id="process-options"
                 value={value}
                 open={open}
+                style={{
+                    height: '45px'
+                }}
                 // onClose={handleClose}
                 // onOpen={handleOpen}
                 label="Size"

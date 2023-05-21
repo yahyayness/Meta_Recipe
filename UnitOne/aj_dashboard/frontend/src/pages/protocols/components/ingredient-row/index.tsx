@@ -26,7 +26,7 @@ const IngredientRow:React.FC<any> = ({ data, isConnectable, index  , onChange})=
 
         <Grid container spacing={0}>
 
-            <Grid item xs={8} width='7ch'>
+            <Grid item xs={7} width='7ch'>
                 <FormControl sx={{ m: 1}} variant="outlined"   size="small"  >
                     <OutlinedInput
                         value={value.name}
@@ -40,9 +40,10 @@ const IngredientRow:React.FC<any> = ({ data, isConnectable, index  , onChange})=
                     />
                 </FormControl>
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={4}>
                 <FormControl sx={{ m: 1 }} variant="outlined"   size="small">
                     <OutlinedInput
+                        type='number'
                         value={value.amount}
                         onChange={handleChange}
                         name='amount'

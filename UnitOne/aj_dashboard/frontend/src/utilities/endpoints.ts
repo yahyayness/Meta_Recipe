@@ -30,7 +30,7 @@ export default {
         method: HttpMethodTypes.DELETE
     },
     add_protocol : {
-        url : 'projects/:project_id/protocols/:id',
+        url : 'protocols/test',
         method: HttpMethodTypes.POST
     }
 }

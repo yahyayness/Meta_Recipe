@@ -56,14 +56,14 @@ const CreateEditProtocol: React.FC = () => {
         = useProtocol();
     return (
         <>
-            <Stack spacing={2} direction="row"  justifyContent="right" className="list-master-actions">
-                <Button  variant="text" color="info" onClick={onDuplicate}>Duplicate</Button>
-                <Button  variant="text" color="info" onClick={onSave}>Save</Button>
 
-            </Stack>
             <Stack flexDirection='row'>
+                <Box width="100%" style={{height: '80ch'}} key={'nodes-' + counter}>
+                    <Stack spacing={2} direction="row"  justifyContent="right" className="list-master-actions" width="100%">
+                        <Button  variant="text" color="info" onClick={onDuplicate}>Duplicate</Button>
+                        <Button variant="text"  color="primary" className='primary' onClick={onSave}>Save</Button>
 
-                <Box width="100%" style={{height: '70ch'}} key={'nodes-' + counter}>
+                    </Stack>
                     <ReactFlow
 
                         nodes={nodes}

@@ -28,5 +28,9 @@ export default {
     delete_user : {
         url : 'users/:id',
         method: HttpMethodTypes.DELETE
+    },
+    add_protocol : {
+        url : 'projects/:project_id/protocols/:id',
+        method: HttpMethodTypes.POST
     }
 }

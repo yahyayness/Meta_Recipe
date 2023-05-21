@@ -28,6 +28,7 @@ urlpatterns = [
     path('api/', include('meta_recipe.urls')),
     path('api/recipes/', include('recipe.urls')),
     path('api/protocols/', include('protocols.urls')),
+    path('api/equipments/', include('equipments.urls')),
     path('admin/', admin.site.urls),
     path('', include("ingredients.urls")),
     path('', include("molecules.urls")),

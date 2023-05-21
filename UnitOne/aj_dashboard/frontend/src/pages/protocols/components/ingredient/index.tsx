@@ -58,7 +58,7 @@ const Ingredient:React.FC<any> = ({data , isConnectable , id} )=>{
                         </Typography>
                     }
                     action={
-                        <IconButton aria-label="settings" className='icon'>
+                        <IconButton aria-label="settings" className='icon' onClick={()=> data.onClose(id)}>
                             <CancelIcon />
                         </IconButton>
                     }

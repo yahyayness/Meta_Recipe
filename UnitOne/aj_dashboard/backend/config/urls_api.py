@@ -15,6 +15,7 @@ urlpatterns = [
     path('', include('meta_recipe.urls')),
     path('recipes/', include('recipe.urls')),
     path('protocols/', include('protocols.urls')),
+    path('equipments/', include('equipments.urls')),
 ]
 
 if settings.DEBUG:

@@ -96,7 +96,7 @@ const useCommon = (setNodes: React.Dispatch<React.SetStateAction<Array<Node>>>, 
  * @param onChildChange
  * @author Amr
  */
-const useIngredient = (nodes: Array<Node>, setNodes: (nodes: any) => any, onChildChange: any) => {
+const useIngredient = (nodes: Array<Node>, setNodes: (nodes: any) => any, onChildChange: any, onClose: any) => {
     const addIngredient = useCallback((parentId: string) => {
         setNodes((nodes: Array<Node>) => {
             let parentIndex = nodes?.findIndex((node: Node) => node.id == parentId)
@@ -126,6 +126,7 @@ const useIngredient = (nodes: Array<Node>, setNodes: (nodes: any) => any, onChil
             height: 100,
             data: {
                 value: 123,
+                onClose,
                 addAction: () => addIngredient(id),
                 onChange: onChildChange,
                 children: [],
@@ -147,7 +148,7 @@ const useIngredient = (nodes: Array<Node>, setNodes: (nodes: any) => any, onChil
  * @param random
  * @author Amr
  */
-const useMerge = (setNodes: (nodes: any) => any, random: any) => {
+const useMerge = (setNodes: (nodes: any) => any, random: any, onClose: any) => {
     const addMerge = (process: any = {}) => {
         const id = 'merge-' + (random(100));
         setNodes((nodes: Array<Node>) => [...nodes, {
@@ -157,6 +158,7 @@ const useMerge = (setNodes: (nodes: any) => any, random: any) => {
             draggable: true,
             height: 100,
             data: {
+                onClose,
                 children: [],
             }
         }
@@ -166,7 +168,7 @@ const useMerge = (setNodes: (nodes: any) => any, random: any) => {
     return {addMerge}
 }
 
-const useServe = (setNodes: (nodes: any) => any, random: any) => {
+const useServe = (setNodes: (nodes: any) => any, random: any, onClose: any) => {
     const addServe = (process: any = {}) => {
         const id = 'serve-' + (random(100));
         setNodes((nodes: Array<Node>) => [...nodes, {
@@ -176,6 +178,7 @@ const useServe = (setNodes: (nodes: any) => any, random: any) => {
             draggable: true,
             height: 100,
             data: {
+                onClose,
                 children: [],
             }
         }
@@ -238,261 +241,13 @@ const useProcess = (nodes: Array<Node>, setNodes: (nodes: any) => any, onChildCh
 
 const useProtocol = () => {
 
-    const [nodes, setNodes] = useState<Array<Node>>( [
-        {
-            "id": "ingredient-1",
-            "type": "ingredient-container",
-            "position": {
-                "x": 89,
-                "y": 31
-            },
-            "draggable": true,
-            "height": 204,
-            "data": {
-                "value": 123,
-                "children": [
-                    {
-                        "id": "ingredient-1-0.14956229258083664",
-                        "type": "Ingredient",
-                        "data": {
-                            "type": "target",
-                            "value": {
-                                "name": "water",
-                                "amount": "26"
-                            }
-                        }
-                    },
-                    {
-                        "id": "ingredient-1-0.7308646710299707",
-                        "type": "Ingredient",
-                        "data": {
-                            "type": "target",
-                            "value": {
-                                "name": "botato"
-                            }
-                        }
-                    }
-                ],
-                "label": "Ingredient",
-                "protocol": "ingredient"
-            },
-            "width": 345,
-            "selected": false,
-            "dragging": false,
-            "positionAbsolute": {
-                "x": 89,
-                "y": 31
-            }
-        },
-        {
-            "id": "process-2",
-            "type": "process",
-            "position": {
-                "x": 490,
-                "y": 155.39999999999998
-            },
-            "draggable": true,
-            "height": 148,
-            "data": {
-                "children": [
-                    {
-                        "id": "process-process-2-0",
-                        "type": "ProtocolSelect",
-                        "position": {
-                            "x": 10,
-                            "y": 1
-                        },
-                        "draggable": true,
-                        "height": 100,
-                        "props": {
-                            "options": [
-                                {
-                                    "label": "Big",
-                                    "value": "big"
-                                },
-                                {
-                                    "label": "Medium",
-                                    "value": "medium"
-                                },
-                                {
-                                    "label": "Small",
-                                    "value": "small"
-                                }
-                            ]
-                        },
-                        "data": {
-                            "value": "small"
-                        }
-                    }
-                ],
-                "label": "Chop",
-                "protocol": "process",
-                "inputs": [
-                    {
-                        "type": "ProtocolSelect",
-                        "props": {
-                            "options": [
-                                {
-                                    "label": "Big",
-                                    "value": "big"
-                                },
-                                {
-                                    "label": "Medium",
-                                    "value": "medium"
-                                },
-                                {
-                                    "label": "Small",
-                                    "value": "small"
-                                }
-                            ]
-                        }
-                    }
-                ]
-            },
-            "width": 250,
-            "selected": false,
-            "positionAbsolute": {
-                "x": 490,
-                "y": 155.39999999999998
-            },
-            "dragging": false
-        },
-        {
-            "id": "process-3",
-            "type": "process",
-            "position": {
-                "x": 493,
-                "y": -28
-            },
-            "draggable": true,
-            "height": 137,
-            "data": {
-                "children": [
-                    {
-                        "id": "process-process-3-0",
-                        "type": "TimePicker",
-                        "position": {
-                            "x": 10,
-                            "y": 1
-                        },
-                        "draggable": true,
-                        "height": 100,
-                        "props": {
-                            "format": "hh:mm",
-                            "style": {
-                                "height": "45px"
-                            }
-                        },
-                        "data": {
-                            "value": "Sat, 20 May 2023 21:03:00 GMT"
-                        }
-                    }
-                ],
-                "label": "Boil",
-                "protocol": "process",
-                "inputs": [
-                    {
-                        "type": "TimePicker",
-                        "props": {
-                            "format": "hh:mm",
-                            "style": {
-                                "height": "45px"
-                            }
-                        }
-                    }
-                ]
-            },
-            "width": 250,
-            "selected": false,
-            "positionAbsolute": {
-                "x": 493,
-                "y": -28
-            },
-            "dragging": false
-        },
-        {
-            "id": "merge-23",
-            "type": "merge",
-            "position": {
-                "x": 841,
-                "y": 46
-            },
-            "draggable": true,
-            "height": 126,
-            "data": {
-                "children": []
-            },
-            "width": 150,
-            "selected": false,
-            "positionAbsolute": {
-                "x": 841,
-                "y": 46
-            },
-            "dragging": false
-        },
-        {
-            "id": "serve-39",
-            "type": "serve",
-            "position": {
-                "x": 1103,
-                "y": 40
-            },
-            "draggable": true,
-            "height": 126,
-            "data": {
-                "children": []
-            },
-            "width": 150,
-            "selected": true,
-            "positionAbsolute": {
-                "x": 1103,
-                "y": 40
-            },
-            "dragging": false
-        }
-    ],);
-    const [edges, setEdges] = useState<Array<Edge>>( [
-        {
-            "source": "ingredient-1",
-            "sourceHandle": "ingredient-1-0.7308646710299707",
-            "target": "process-2",
-            "targetHandle": "process-process-2-0-target",
-            "id": "reactflow__edge-ingredient-1ingredient-1-0.7308646710299707-process-2process-process-2-0-target"
-        },
-        {
-            "source": "ingredient-1",
-            "sourceHandle": "ingredient-1-0.14956229258083664",
-            "target": "process-3",
-            "targetHandle": "process-process-3-0-target",
-            "id": "reactflow__edge-ingredient-1ingredient-1-0.14956229258083664-process-3process-process-3-0-target"
-        },
-        {
-            "source": "process-3",
-            "sourceHandle": "process-process-3-0-source",
-            "target": "merge-23",
-            "targetHandle": "merge-target",
-            "id": "reactflow__edge-process-3process-process-3-0-source-merge-23merge-target"
-        },
-        {
-            "source": "process-2",
-            "sourceHandle": "process-process-2-0-source",
-            "target": "merge-23",
-            "targetHandle": "merge-target",
-            "id": "reactflow__edge-process-2process-process-2-0-source-merge-23merge-target"
-        },
-        {
-            "source": "merge-23",
-            "sourceHandle": "merge-source",
-            "target": "serve-39",
-            "targetHandle": "merge-target",
-            "id": "reactflow__edge-merge-23merge-source-serve-39merge-target"
-        }
-    ]);
+    const [nodes, setNodes] = useState<Array<Node>>([]);
+    const [edges, setEdges] = useState<Array<Edge>>([]);
     const [counter, setCounter] = useState<number>(0)
     const  {onChildChange , random ,onClose } = useCommon(setNodes , setEdges)
-    const {addIngredient, addIngredientProtocol} = useIngredient(nodes, setNodes, onChildChange)
-    const {addMerge} = useMerge(setNodes, random)
-    const {addServe} = useServe(setNodes, random)
+    const {addIngredient, addIngredientProtocol} = useIngredient(nodes, setNodes, onChildChange,onClose)
+    const {addMerge} = useMerge(setNodes, random,onClose)
+    const {addServe} = useServe(setNodes, random,onClose)
     const {addProcess , addProcessChild} = useProcess(nodes, setNodes , onChildChange , onClose)
     const {onNodesChange ,onEdgesChange ,  onConnect} = useFlowActions(setNodes , setEdges)
     const {showAlert} = useAlert();
@@ -559,8 +314,7 @@ const useProtocol = () => {
             nodes : nodes,
             edges : edges
         }
-        alert('sd')
-        console.log('form' , JSON.stringify(_form))
+        console.log('form' , _form , JSON.stringify(_form))
         // change the endpoint according to the isEdit flag
         const endpoint = isEdit? addParamsToEndpoint(getEndpoint('update_protocol'), {project_id : 1 , id: id} )  : addParamsToEndpoint(getEndpoint('add_protocol'), {project_id :1 ,id: id})
         /**

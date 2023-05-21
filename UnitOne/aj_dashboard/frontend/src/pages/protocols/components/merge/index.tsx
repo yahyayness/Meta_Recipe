@@ -9,7 +9,7 @@ import Grid from "@mui/material/Grid";
 import target from "../../../../images/target.svg";
 import source from "../../../../images/source.svg";
 
-const Merge:React.FC<any> = ({data , isConnectable}) => {
+const Merge:React.FC<any> = ({data , isConnectable , id}) => {
     return (
         <div >
             {/*<Handle type="target" position={Position.Top} isConnectable={isConnectable}  />*/}
@@ -24,7 +24,7 @@ const Merge:React.FC<any> = ({data , isConnectable}) => {
                         </Typography>
                     }
                     action={
-                        <IconButton aria-label="settings" className='icon'>
+                        <IconButton aria-label="settings" className='icon' onClick={()=> data.onClose(id)}>
                             <CancelIcon />
                         </IconButton>
                     }

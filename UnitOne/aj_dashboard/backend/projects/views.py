@@ -26,7 +26,7 @@ def getOrCreateIngredientByName(iname):
         Ingserializer = IngredientsSerilizer(data = {'name':iname})
         if Ingserializer.is_valid():
             Ingserializer.save()
-            ingredientExist=Ingserializer.data
+            ingredientExist=Ingserializer.instance
     return ingredientExist
 
 # Get POST FBV_List
@@ -47,10 +47,10 @@ def ProjectList(request):
         #print(request.data)
         projectExist=Projects.objects.filter(name=request.data['name']).first()
         if not projectExist :
-            serializer = ProjrctSerilizer(data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-    
+            pSerializer = ProjrctSerilizer(data=request.data)
+            if pSerializer.is_valid():
+                pSerializer.save()
+                projectExist=pSerializer.instance
 
         ## import ingredients data from ingredients files
         if "ingredients" in request.FILES:
@@ -67,6 +67,7 @@ def ProjectList(request):
                         Ingserializer = IngredientsSerilizer(data = opj)
                         if Ingserializer.is_valid():
                             Ingserializer.save()
+                            ingredientExist=Ingserializer.data
 
         ## import Projcet data from files
         if "data" in request.FILES:
@@ -87,15 +88,15 @@ def ProjectList(request):
                 
                 #Save metaRecipe  Data     
                 metaRecipe=data["meta_recipe"]
-                #print(metaRecipe)
+ 
                 metaRecipeExist={}
                 try:
                     metaRecipeExist=MetaRecipe.objects.get(name=metaRecipe['name'])
                 except MetaRecipe.DoesNotExist:
-                    metaRecipeserializer = MetaRecipeSerializer(data={'name':metaRecipe['name']})
+                    metaRecipeserializer = MetaRecipeSerializer(data={'name':metaRecipe['name'],'project':projectExist.id})
                     if metaRecipeserializer.is_valid():
                         metaRecipeserializer.save()
-                        metaRecipeExist=metaRecipeserializer.data
+                        metaRecipeExist=metaRecipeserializer.instance
                    
                 meta_recipe_ingredients_list=metaRecipe["meta_recipe_ingredients"]
                 #print(meta_recipe_ingredients_list)
@@ -138,7 +139,7 @@ def ProjectList(request):
                         print(recipeserializer.is_valid())
                         if recipeserializer.is_valid():
                             recipeserializer.save()
-                            recipeExist=recipeserializer.data
+                            recipeExist=recipeserializer.instance
                     
                     recipe_ingredients=rcipeItem["recipe_ingredients"]   
                     for rIng in recipe_ingredients:
@@ -162,3 +163,47 @@ def ProjectList(request):
         return Response(
                 {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': {}},
                 status=status.HTTP_200_OK)
+    
+
+#GET PUT PATCH 
+@api_view(['GET', 'DELETE','PATCH'])
+def ProjectItem(request,pk):
+    #GET
+    
+    try:
+        project=Projects.objects.get(pk=pk)
+    except :
+        return Response(status=status.HTTP_404_NOT_FOUND )
+
+    #GET
+    if request.method=='GET':
+        serializer_class=ProjrctSerilizer(project)
+        return Response(
+                {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': serializer_class.data},
+                status=status.HTTP_200_OK)
+    
+    #PUT
+    elif request.method=='PATCH':
+         serializer_class=ProjrctSerilizer(project,data=request.data)
+         if serializer_class.is_valid():
+                serializer_class.save()
+                return Response(
+                {'status': 'success', 'code': status.HTTP_201_CREATED, 'message': 'success', 'payload': serializer_class.data},
+                status=status.HTTP_201_CREATED)
+                 
+         return Response(
+                {'status': 'fail', 'code': status.HTTP_400_BAD_REQUEST, 'message': 'success', 'payload': serializer_class.errors},
+                status=status.HTTP_400_BAD_REQUEST)
+   
+    #DELETE
+    elif request.method=='DELETE':
+        project.delete()
+        return Response(
+                {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': {}},
+                status=status.HTTP_204_NO_CONTENT)
+    
+    else:
+        return Response(
+                {'status': 'fail', 'code': status.HTTP_400_BAD_REQUEST, 'message': 'success', 'payload': {}},
+                status=status.HTTP_204_NO_CONTENT)
+         

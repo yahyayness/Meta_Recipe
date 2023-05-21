@@ -7,8 +7,9 @@ from rest_framework.views import exception_handler
 
 
 def custom_exception_handler(exc, context):
+    print(exc)
     if isinstance(exc, ValidationError):
-        print(exc)
+        
         exc = exceptions.ValidationError(as_serializer_error(exc))
         response = exception_handler(exc, context)
         detail = exc.default_detail

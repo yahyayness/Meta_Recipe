@@ -1,4 +1,5 @@
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -58,3 +59,7 @@ class ProtocolView(GenericViewSet):
             {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'Protocol deleted!', 'payload': {}},
             status=status.HTTP_200_OK
         )
+
+    @action(detail=False, methods=['POST'])
+    def test(self, request, *args, **kwargs):
+        return Response({'status': 'success'})

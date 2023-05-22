@@ -11,6 +11,7 @@ urlpatterns = [
     path('', include("process.urls")),
     path('', include("ingredient_molecules.urls")),
     path('', include("projects.urls")),
+    path('sample_descriptions/', include("sample_descriptions.urls")),
     path('users/', include('users.urls')),
     path('', include('meta_recipe.urls')),
     path('recipes/', include('recipe.urls')),

@@ -3,6 +3,8 @@ from rest_framework import permissions, status
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
+
 from ingredients.serializers import IngredientsSerilizer
 from meta_recipe.__serializers.MetaRecipeSerializer import MetaRecipeSerializer
 from meta_recipe.__serializers.MetaRecipeIngredientsSerializer import MetaRecipeIngredientsSerializer
@@ -12,7 +14,16 @@ from recipe.__serializers.RecipeSerializer import RecipeSerializer
 from recipe.__serializers.RecipeIngredientsSerializer import RecipeIngredientsSerializer
 from .serializers import ProjrctSerilizer
 from ingredients.models import Ingredients
+from equipments.models import Equipment
+from equipments.__serializers.Equipment import EquipmentSerializer
+from sensory_panels.models import SensoryPanel
+from sensory_panels.serializers import SensoryPanelsCreateSerializers,SensoryPanelsSerializers
 from .models import Projects
+from sensors.models import Sensors
+from sensors.serializers import SensorsCreateSerializers,SensorsSerializers
+from analytical_chemistry.models import AnalyticalChemistry
+from analytical_chemistry.serializers import AnalyticalChemistryCreateSerializers,AnalyticalChemistrySerializers
+
 
 # Create your views here.
 import json
@@ -67,7 +78,88 @@ def ProjectList(request):
                         Ingserializer = IngredientsSerilizer(data = opj)
                         if Ingserializer.is_valid():
                             Ingserializer.save()
-                            ingredientExist=Ingserializer.data
+                            ingredientExist=Ingserializer.instance
+                        else:
+                            print(ValidationError(spiSerializer.errors))
+
+         ## import equipments data from equipments files                   
+        if "equipments" in request.FILES:
+            for eF in request.FILES.getlist('equipments'):
+                eData =  json.loads(eF.read())
+                equipments_list=eData["equipment"]
+              
+                for equ in equipments_list:
+                    opj={'name':equ['name'], 'type':equ['equipment_type'],'brand':equ['brand'],'model':equ['model']}
+                    #check if Ingredients not Exists Create a new
+                    try:
+                        equipmentExist=Equipment.objects.get(name=equ['name'])
+                    except Equipment.DoesNotExist:
+                        equSerializer = EquipmentSerializer(data = opj)
+                        if equSerializer.is_valid():
+                            equSerializer.save()
+                            equipmentExist=equSerializer.instance
+                        else:
+                            print(ValidationError(spiSerializer.errors))
+
+
+         ## import sensory_panels data from sensory_panels files                   
+        if "sensory_panels" in request.FILES:
+            for sPF in request.FILES.getlist('sensory_panels'):
+                sPData =  json.loads(sPF.read())
+                sensoryPanels_list=sPData["sensory_panels"]
+              
+                for spi in sensoryPanels_list:
+                    opj={'judge':spi['judge_id'],'data':spi['date'],'sample_id':spi['sample_id'],'panel_type':spi['panel_type'],'panel_variable':spi['panel_variable'],'panel_value':spi['panel_value']}
+                    #check if Ingredients not Exists Create a new
+                    #try:
+                    #    sensoryPanelsExist=SensoryPanel.objects.get(name=equ['name'])
+                    #except SensoryPanel.DoesNotExist:
+                    spiSerializer = SensoryPanelsCreateSerializers(data = opj)
+                    print(spiSerializer.is_valid())
+                    if spiSerializer.is_valid():
+                        spiSerializer.save()
+                        sensoryPanelsExist=spiSerializer.instance
+                    else:
+                        print(ValidationError(spiSerializer.errors))
+        ## import Sensors data from sensors files  
+        if "sensors" in request.FILES:
+            for sF in request.FILES.getlist('sensors'):
+                sData =  json.loads(sF.read())
+                sensors_list=sData["sensor_data"]
+              
+                for sI in sensors_list:
+                    opj={'name':sI['name'],'units':sI['units'],'equipment':sI['equipment_id']}
+
+                    #check if sensor not Exists Create a new
+                    try:
+                        sensorsExist=Sensors.objects.get(name=sI['name'])
+                    except Sensors.DoesNotExist:
+                        sensorSerializer = SensorsCreateSerializers(data = opj)
+                        if sensorSerializer.is_valid():
+                            sensorSerializer.save()
+                            sensorsExist=sensorSerializer.instance
+                        else:
+                            print(ValidationError(sensorSerializer.errors))
+        
+        ## import analytical_chemistry data from analytical_chemistry files  
+        if "analytical_chemistry" in request.FILES:
+            for aCF in request.FILES.getlist('analytical_chemistry'):
+                aCData =  json.loads(aCF.read())
+                analytical_chemistry_list=aCData["sensor_data"]
+              
+                for aCI in analytical_chemistry_list:
+                    opj={'sample':aCI['sample_id'],'sensor':aCI['sensor_id'],'date':aCI['date'],'method':aCI['method'],'assay_component':aCI['assay_component'],'variable':aCI['variable'],'value':aCI['value'],'unit':aCI['unit']}
+
+                    #check if sensor not Exists Create a new
+                    #try:
+                    #    analyticalChemistryExist=AnalyticalChemistry.objects.get(name=sI['name'])
+                    #except AnalyticalChemistry.DoesNotExist:
+                    analyticalChemistrySerializer = AnalyticalChemistryCreateSerializers(data = opj)
+                    if analyticalChemistrySerializer.is_valid():
+                        analyticalChemistrySerializer.save()
+                        analyticalChemistryExist=analyticalChemistrySerializer.instance
+                    else:
+                        print(ValidationError(analyticalChemistrySerializer.errors))
 
         ## import Projcet data from files
         if "data" in request.FILES:
@@ -85,6 +177,8 @@ def ProjectList(request):
                         Ingserializer = IngredientsSerilizer(data = opj)
                         if Ingserializer.is_valid():
                             Ingserializer.save()
+                        else:
+                            print(ValidationError(spiSerializer.errors))
                 
                 #Save metaRecipe  Data     
                 metaRecipe=data["meta_recipe"]
@@ -140,6 +234,8 @@ def ProjectList(request):
                         if recipeserializer.is_valid():
                             recipeserializer.save()
                             recipeExist=recipeserializer.instance
+                        else:
+                            print(ValidationError(spiSerializer.errors))
                     
                     recipe_ingredients=rcipeItem["recipe_ingredients"]   
                     for rIng in recipe_ingredients:

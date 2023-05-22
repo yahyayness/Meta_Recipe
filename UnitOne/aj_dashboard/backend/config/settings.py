@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'sample_descriptions.apps.SampleDescriptionsConfig',
     'sensory_panels.apps.SensoryPanelsConfig',
     'sensors.apps.SensorsConfig',
+    'analytical_chemistry.apps.AnalyticalChemistryConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

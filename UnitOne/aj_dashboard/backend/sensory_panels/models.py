@@ -12,4 +12,4 @@ class SensoryPanel(models.Model):
 
 
     def __str__(self):
-        return self.panel_type
+        return self.panel_type if self.panel_type else ''

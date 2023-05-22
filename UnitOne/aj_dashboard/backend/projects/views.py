@@ -19,6 +19,11 @@ from equipments.__serializers.Equipment import EquipmentSerializer
 from sensory_panels.models import SensoryPanel
 from sensory_panels.serializers import SensoryPanelsCreateSerializers,SensoryPanelsSerializers
 from .models import Projects
+from sensors.models import Sensors
+from sensors.serializers import SensorsCreateSerializers,SensorsSerializers
+from analytical_chemistry.models import AnalyticalChemistry
+from analytical_chemistry.serializers import AnalyticalChemistryCreateSerializers,AnalyticalChemistrySerializers
+
 
 # Create your views here.
 import json
@@ -116,7 +121,45 @@ def ProjectList(request):
                         sensoryPanelsExist=spiSerializer.instance
                     else:
                         print(ValidationError(spiSerializer.errors))
+        ## import Sensors data from sensors files  
+        if "sensors" in request.FILES:
+            for sF in request.FILES.getlist('sensors'):
+                sData =  json.loads(sF.read())
+                sensors_list=sData["sensor_data"]
+              
+                for sI in sensors_list:
+                    opj={'name':sI['name'],'units':sI['units'],'equipment':sI['equipment_id']}
 
+                    #check if sensor not Exists Create a new
+                    try:
+                        sensorsExist=Sensors.objects.get(name=sI['name'])
+                    except Sensors.DoesNotExist:
+                        sensorSerializer = SensorsCreateSerializers(data = opj)
+                        if sensorSerializer.is_valid():
+                            sensorSerializer.save()
+                            sensorsExist=sensorSerializer.instance
+                        else:
+                            print(ValidationError(sensorSerializer.errors))
+        
+        ## import analytical_chemistry data from analytical_chemistry files  
+        if "analytical_chemistry" in request.FILES:
+            for aCF in request.FILES.getlist('analytical_chemistry'):
+                aCData =  json.loads(aCF.read())
+                analytical_chemistry_list=aCData["sensor_data"]
+              
+                for aCI in analytical_chemistry_list:
+                    opj={'sample':aCI['sample_id'],'sensor':aCI['sensor_id'],'date':aCI['date'],'method':aCI['method'],'assay_component':aCI['assay_component'],'variable':aCI['variable'],'value':aCI['value'],'unit':aCI['unit']}
+
+                    #check if sensor not Exists Create a new
+                    #try:
+                    #    analyticalChemistryExist=AnalyticalChemistry.objects.get(name=sI['name'])
+                    #except AnalyticalChemistry.DoesNotExist:
+                    analyticalChemistrySerializer = AnalyticalChemistryCreateSerializers(data = opj)
+                    if analyticalChemistrySerializer.is_valid():
+                        analyticalChemistrySerializer.save()
+                        analyticalChemistryExist=analyticalChemistrySerializer.instance
+                    else:
+                        print(ValidationError(analyticalChemistrySerializer.errors))
 
         ## import Projcet data from files
         if "data" in request.FILES:

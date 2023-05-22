@@ -1,3 +1,26 @@
+.chart{
+  &-container{
+
+  }
+  &-card{
+
+    &-header , .MuiCardHeader-title , .MuiCardHeader-action > button > svg{
+      font-style: normal;
+      font-weight: 600 !important;
+      font-size: 16.8125px !important;
+      /* identical to box height, or 160% */
+      /* identical to box height, or 160% */
+
+
+      /* Light/Text/Primary */
+
+      color: rgba(58, 53, 65, 0.87);
+    }
+    &-content{
+      height: 400px;
+    }
+  }
+}
 .report-statistic {
   font-family: 'Roboto';
   padding: 20.18px;
@@ -40,3 +63,4 @@
   }
 
 }
+

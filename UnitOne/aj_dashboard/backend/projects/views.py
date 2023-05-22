@@ -3,6 +3,8 @@ from rest_framework import permissions, status
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
+
 from ingredients.serializers import IngredientsSerilizer
 from meta_recipe.__serializers.MetaRecipeSerializer import MetaRecipeSerializer
 from meta_recipe.__serializers.MetaRecipeIngredientsSerializer import MetaRecipeIngredientsSerializer
@@ -14,6 +16,8 @@ from .serializers import ProjrctSerilizer
 from ingredients.models import Ingredients
 from equipments.models import Equipment
 from equipments.__serializers.Equipment import EquipmentSerializer
+from sensory_panels.models import SensoryPanel
+from sensory_panels.serializers import SensoryPanelsCreateSerializers,SensoryPanelsSerializers
 from .models import Projects
 
 # Create your views here.
@@ -70,6 +74,8 @@ def ProjectList(request):
                         if Ingserializer.is_valid():
                             Ingserializer.save()
                             ingredientExist=Ingserializer.instance
+                        else:
+                            print(ValidationError(spiSerializer.errors))
 
          ## import equipments data from equipments files                   
         if "equipments" in request.FILES:
@@ -87,6 +93,29 @@ def ProjectList(request):
                         if equSerializer.is_valid():
                             equSerializer.save()
                             equipmentExist=equSerializer.instance
+                        else:
+                            print(ValidationError(spiSerializer.errors))
+
+
+         ## import sensory_panels data from sensory_panels files                   
+        if "sensory_panels" in request.FILES:
+            for sPF in request.FILES.getlist('sensory_panels'):
+                sPData =  json.loads(sPF.read())
+                sensoryPanels_list=sPData["sensory_panels"]
+              
+                for spi in sensoryPanels_list:
+                    opj={'judge':spi['judge_id'],'data':spi['date'],'sample_id':spi['sample_id'],'panel_type':spi['panel_type'],'panel_variable':spi['panel_variable'],'panel_value':spi['panel_value']}
+                    #check if Ingredients not Exists Create a new
+                    #try:
+                    #    sensoryPanelsExist=SensoryPanel.objects.get(name=equ['name'])
+                    #except SensoryPanel.DoesNotExist:
+                    spiSerializer = SensoryPanelsCreateSerializers(data = opj)
+                    print(spiSerializer.is_valid())
+                    if spiSerializer.is_valid():
+                        spiSerializer.save()
+                        sensoryPanelsExist=spiSerializer.instance
+                    else:
+                        print(ValidationError(spiSerializer.errors))
 
 
         ## import Projcet data from files
@@ -105,6 +134,8 @@ def ProjectList(request):
                         Ingserializer = IngredientsSerilizer(data = opj)
                         if Ingserializer.is_valid():
                             Ingserializer.save()
+                        else:
+                            print(ValidationError(spiSerializer.errors))
                 
                 #Save metaRecipe  Data     
                 metaRecipe=data["meta_recipe"]
@@ -160,6 +191,8 @@ def ProjectList(request):
                         if recipeserializer.is_valid():
                             recipeserializer.save()
                             recipeExist=recipeserializer.instance
+                        else:
+                            print(ValidationError(spiSerializer.errors))
                     
                     recipe_ingredients=rcipeItem["recipe_ingredients"]   
                     for rIng in recipe_ingredients:

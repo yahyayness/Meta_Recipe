@@ -27,6 +27,17 @@ const AppMenu: React.FC = () => {
         setSelectedIndex(index);
     };
 
+    /**
+     * check the selected menu's item according to pathname and  item's path
+     * @param path
+     * @author Amr
+     */
+    const checkSelectedItem = (path:string)=> {
+        if(path == pathname)
+            return true;
+        return pathname.replace('/' , '').includes(path??'')
+    }
+
 
     return (
         <List>
@@ -34,10 +45,10 @@ const AppMenu: React.FC = () => {
                 <NavLink to={item.route?.path ?? ''} key={item.key} className="menu-item-nav" state={{name : item?.route?.name}}>
                     <ListItem  disablePadding className="list-item">
 
-                        {pathname.includes(item.route?.path??'') && <span className="selected-item-indicator"></span>}
+                        {checkSelectedItem(item.route?.path??'') && <span className="selected-item-indicator"></span>}
                         <ListItemButton
-                            className={["menu-item", pathname.includes(item.route?.path??'') ? 'selected' : ''].join(' ')}
-                            selected={pathname.includes(item.route?.path??'')}
+                            className={["menu-item", checkSelectedItem(item.route?.path??'') ? 'selected' : ''].join(' ')}
+                            selected={checkSelectedItem(item.route?.path??'')}
                             onClick={(event) => handleListItemClick(event, item.key)}
                         >
                             <ListItemIcon>

@@ -16,7 +16,7 @@ const ProtocolsOptions: React.FC<any> = ({addProtocol}) => {
         setOpen(!open);
     };
     return (
-        <Box width='20%' className="protocols-items" mr={-3}>
+        <Box width='20%' className="protocols-items" mr={-3} mt={-11}>
             <List>
                 <ListItem className="justify-center">Add Protocol</ListItem>
                 <Divider/>

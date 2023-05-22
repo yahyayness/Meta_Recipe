@@ -39,11 +39,6 @@ const Ingredient:React.FC<any> = ({data , isConnectable , id} )=>{
 
     }
 
-
-    useEffect(()=>{
-
-    } , [])
-
     return (
         <div >
             {/*<Handle type="target" position={Position.Top} isConnectable={isConnectable}  />*/}
@@ -76,7 +71,7 @@ const Ingredient:React.FC<any> = ({data , isConnectable , id} )=>{
 
 
                 <CardActions disableSpacing className='node-item-actions'>
-                    <IconButton aria-label="add to favorites" onClick={data.addAction}>
+                    <IconButton aria-label="add to favorites" onClick={()=> data.addAction(id)}>
                         <AddCircleIcon/>
                     </IconButton>
                 </CardActions>

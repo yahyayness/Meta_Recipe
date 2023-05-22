@@ -12,6 +12,8 @@ from recipe.__serializers.RecipeSerializer import RecipeSerializer
 from recipe.__serializers.RecipeIngredientsSerializer import RecipeIngredientsSerializer
 from .serializers import ProjrctSerilizer
 from ingredients.models import Ingredients
+from equipments.models import Equipment
+from equipments.__serializers.Equipment import EquipmentSerializer
 from .models import Projects
 
 # Create your views here.
@@ -67,7 +69,25 @@ def ProjectList(request):
                         Ingserializer = IngredientsSerilizer(data = opj)
                         if Ingserializer.is_valid():
                             Ingserializer.save()
-                            ingredientExist=Ingserializer.data
+                            ingredientExist=Ingserializer.instance
+
+         ## import equipments data from equipments files                   
+        if "equipments" in request.FILES:
+            for eF in request.FILES.getlist('equipments'):
+                eData =  json.loads(eF.read())
+                equipments_list=eData["equipment"]
+              
+                for equ in equipments_list:
+                    opj={'name':equ['name'], 'type':equ['equipment_type'],'brand':equ['brand'],'model':equ['model']}
+                    #check if Ingredients not Exists Create a new
+                    try:
+                        equipmentExist=Equipment.objects.get(name=equ['name'])
+                    except Equipment.DoesNotExist:
+                        equSerializer = EquipmentSerializer(data = opj)
+                        if equSerializer.is_valid():
+                            equSerializer.save()
+                            equipmentExist=equSerializer.instance
+
 
         ## import Projcet data from files
         if "data" in request.FILES:

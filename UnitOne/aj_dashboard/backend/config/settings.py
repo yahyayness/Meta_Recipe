@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'molecules.apps.MoleculesConfig',
     'ingredients.apps.IngredientsConfig',
     'ingredient_molecules.apps.IngredientMoleculesConfig',
+    'receptors.apps.ReceptorsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

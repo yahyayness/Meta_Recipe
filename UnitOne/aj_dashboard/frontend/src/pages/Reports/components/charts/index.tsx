@@ -1,22 +1,17 @@
-import {Box, Card, CardActions, CardContent, CardHeader, CardMedia, Collapse, IconButton} from "@mui/material";
-import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
+import {Card, CardActions, CardContent, CardHeader, Collapse, IconButton} from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import {ResponsiveRadar} from "@nivo/radar";
 import Typography from "@mui/material/Typography";
-import TimelineDot from '@mui/lab/TimelineDot';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import './partials/style.scss'
-import ReportStatistics from "./components/statistics";
-import Avatar from "@mui/material/Avatar";
-import {ExpandMore} from "@mui/icons-material";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ShareIcon from "@mui/icons-material/Share";
 import React from "react";
-
-import {ResponsiveRadar} from '@nivo/radar'
-import {ResponsiveBullet} from '@nivo/bullet'
-import ReportCharts from "./components/charts";
-
+import PersonalSensory from "./panel-sensory";
+import Emouth from "./Emouth";
+import Enose from "./Enose";
+import {ResponsiveBullet} from "@nivo/bullet";
+import RecipeAnalysis from "./recipe-analysis";
+import ChemicalAnalysis from "./chemical-analysis";
 
 const data = [
     {
@@ -228,22 +223,21 @@ const barData = [
     }
 ]
 
-
-const Report: React.FC = () => {
-
-    const [expanded, setExpanded] = React.useState(false);
-
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
-
+const ReportCharts: React.FC = () => {
     return (
-        <Box>
-            <ReportStatistics/>
-            <ReportCharts/>
+        <>
+            <Grid container spacing={3} className='chart-container' mt={1}>
+                <PersonalSensory data={data}/>
+                <Enose data={secondData}/>
+                <Emouth data={secondData}/>
+            </Grid>
+            <Grid container spacing={2} mt={1}>
+                <RecipeAnalysis data={barData}/>
+                <ChemicalAnalysis/>
+            </Grid>
+        </>
 
-        </Box>
-    )
+    );
 }
 
-export default Report;
+export default ReportCharts;

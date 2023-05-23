@@ -64,3 +64,34 @@
 
 }
 
+.chemical-analysis  {
+  border: 1px solid #FFFFFF;
+  border-collapse: collapse;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  text-align: center;
+
+  th, td {
+    border: 1px solid #FFFFFF;
+
+    border-collapse: collapse;
+    width: 101.44px;
+    height: 17.36px;
+  }
+  td{
+    background-color:#F0F1F1;
+    &.red-cell{
+      background-color:  #FF6166;
+      color: #FFFFFF;
+
+    }
+  }
+
+  th , td:last-child{
+    background-color: #FFFFFF;
+  }
+
+}
+

@@ -9,6 +9,16 @@
  conda update -n base -c defaults conda -y
  ```
 
+## Git branch
+This instruction assumes the code on the `dressed_up_version` branch. Go to root of the local copy of the `Meta_Recipe` repo.
+```
+git fetch
+git checkout dressed_up_version
+git pull origin dressed_up_version
+cd UnitOne
+```
+
+
 ## Backend
 
  - In one terminal window, create the virtual environment:
@@ -21,6 +31,15 @@ pip install -r requirements.txt
 conda install psycopg2=2.8.6
 python manage.py runserver
 ```
+
+(Maybe also
+```
+# Ctrl+C
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+```
+)
 
  - Navigate a browser tab to [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
 

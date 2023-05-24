@@ -4,13 +4,12 @@ import {Button, Grid, Typography} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import * as React from "react";
 import {useForm} from "../../common/hooks/form";
-import {form} from "../users/partials/form";
+import {form, useOnSubmitUserForm} from "../users/partials/form";
 import FileUploader from "../../components/file-uploader";
-import {useProductFiles} from "./partials/form";
+import {useOnSubmitProjectForm, useProductFiles} from "./partials/form";
 
 const ProductAddEdit: React.FC = () => {
 
-    const {files, fileHandler}= useProductFiles();
     /**
      * set the breadcrumbs of the current page
      * @author Amr
@@ -37,7 +36,7 @@ const ProductAddEdit: React.FC = () => {
     /**
      * initialize page's form
      */
-    let {formik} = useForm(form(), onSubmit)
+    const {formik, fileHandler} = useOnSubmitProjectForm()
 
     return (
         <Box
@@ -59,8 +58,9 @@ const ProductAddEdit: React.FC = () => {
                         id="name"
                         size="small"
                         name="name"
+                        value={formik.values.name}
                         onChange={formik.handleChange}
-                        error={formik.touched.name && Boolean(formik.errors.name)}
+                        error={formik?.touched?.name && Boolean(formik?.errors?.name)}
                         helperText={formik?.touched?.name && formik?.errors?.name}
                         InputLabelProps={{
                             style: {fontSize: '13.45px'}

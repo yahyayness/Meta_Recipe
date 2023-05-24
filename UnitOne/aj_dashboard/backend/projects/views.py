@@ -23,6 +23,7 @@ from sensors.models import Sensors
 from sensors.serializers import SensorsCreateSerializers,SensorsSerializers
 from analytical_chemistry.models import AnalyticalChemistry
 from analytical_chemistry.serializers import AnalyticalChemistryCreateSerializers,AnalyticalChemistrySerializers
+from common.utilities.Pagination import CustomPagination
 
 
 # Create your views here.
@@ -45,12 +46,12 @@ def getOrCreateIngredientByName(iname):
 def ProjectList(request):
     #GET
     if request.method=='GET':
+        pagination_class = CustomPagination
         queryset= Projects.objects.all()
-        serializer_class=ProjrctSerilizer(queryset, many=True)
-
-        return Response(
-                {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': serializer_class.data},
-                status=status.HTTP_200_OK)
+        paginator = pagination_class()
+        result_page = paginator.paginate_queryset(queryset, request)
+        serializer_class = ProjrctSerilizer(result_page, many=True)
+        return paginator.get_paginated_response(serializer_class.data)
         
     #POST
     elif request.method=='POST':

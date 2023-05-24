@@ -19,7 +19,7 @@ interface TableActionType {
 }
 
 type TableRowProps  = Merge<TableHeaderProps , { rows:Array<TableRow> , actions?:Array<TableActionType>}>
-type TableTypeProps = Merge<TableRowProps, {pagination?:PaginationType}>
+type TableTypeProps = Merge<TableRowProps, {pagination?:PaginationType , setSelectedIds:(id:number)=>void}>
 
 interface TableActionProps {
     onClick: (vars:any)=> any,

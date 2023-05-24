@@ -6,7 +6,7 @@ import React from "react";
 
 const RecipeAnalysis:React.FC<any> = ({data})=> {
     return (
-        <Grid item xs={8}>
+        <Grid item xs={7}>
             <Card className='chart-card'>
                 <CardHeader
                     className='chart-card-header'

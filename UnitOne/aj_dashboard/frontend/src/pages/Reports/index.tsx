@@ -16,6 +16,7 @@ import React from "react";
 import {ResponsiveRadar} from '@nivo/radar'
 import {ResponsiveBullet} from '@nivo/bullet'
 import ReportCharts from "./components/charts";
+import ProductProcess from "./components/product-process";
 
 
 const data = [
@@ -241,6 +242,7 @@ const Report: React.FC = () => {
         <Box>
             <ReportStatistics/>
             <ReportCharts/>
+            <ProductProcess/>
 
         </Box>
     )

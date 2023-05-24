@@ -4,7 +4,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import React from "react";
 
 const ChemicalAnalysis:React.FC = ()=> {
-    return (      <Grid item xs={4}>
+    return (      <Grid item xs={5}>
         <Card className='chart-card'>
             <CardHeader
                 className='chart-card-header'

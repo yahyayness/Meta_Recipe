@@ -3,7 +3,7 @@ import TableRow from "@mui/material/TableRow";
 import React from "react";
 import Checkbox from "@mui/material/Checkbox";
 
-const TableRows: React.FC<TableRowProps> = ({rows, columns, actions ,setSelectedRows }) => {
+const TableRows: React.FC<TableRowProps> = ({rows, columns, actions ,setSelectedRows , showStaticColumn= true }) => {
 
     /**
      * this one is used for publishing the selected ids
@@ -25,9 +25,11 @@ const TableRows: React.FC<TableRowProps> = ({rows, columns, actions ,setSelected
                     key={'table-' + index}
                     sx={{'&:last-child td, &:last-child th': {border: 0}}}
                 >
-                    <TableCell align="center">
-                        <Checkbox color="primary"   onChange={(event)=> handleChange(event , row)}/>
-                    </TableCell>
+                    {showStaticColumn &&    <TableCell align="center">
+                                                <Checkbox color="primary"   onChange={(event)=> handleChange(event , row)}/>
+                                            </TableCell>
+                    }
+
                     {
                         columns.map((column: TableColumns, columnIndex: number) => column.isHidden ? '' : column.component ? React.createElement(column.component, {data: row}) :
                             <TableCell key={`table-${columnIndex}-row-` + index}

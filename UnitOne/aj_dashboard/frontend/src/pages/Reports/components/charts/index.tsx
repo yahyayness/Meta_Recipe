@@ -223,13 +223,286 @@ const barData = [
     }
 ]
 
+const emouthData = [
+    {
+        "id": "japan",
+        "color": "hsl(218, 70%, 50%)",
+        "data": [
+            {
+                "x": "plane",
+                "y": 150
+            },
+            {
+                "x": "helicopter",
+                "y": 199
+            },
+            {
+                "x": "boat",
+                "y": 293
+            },
+            {
+                "x": "train",
+                "y": 237
+            },
+            {
+                "x": "subway",
+                "y": 165
+            },
+            {
+                "x": "bus",
+                "y": 75
+            },
+            {
+                "x": "car",
+                "y": 259
+            },
+            {
+                "x": "moto",
+                "y": 12
+            },
+            {
+                "x": "bicycle",
+                "y": 17
+            },
+            {
+                "x": "horse",
+                "y": 55
+            },
+            {
+                "x": "skateboard",
+                "y": 38
+            },
+            {
+                "x": "others",
+                "y": 129
+            }
+        ]
+    },
+    {
+        "id": "france",
+        "color": "hsl(163, 70%, 50%)",
+        "data": [
+            {
+                "x": "plane",
+                "y": 10
+            },
+            {
+                "x": "helicopter",
+                "y": 70
+            },
+            {
+                "x": "boat",
+                "y": 18
+            },
+            {
+                "x": "train",
+                "y": 183
+            },
+            {
+                "x": "subway",
+                "y": 61
+            },
+            {
+                "x": "bus",
+                "y": 21
+            },
+            {
+                "x": "car",
+                "y": 56
+            },
+            {
+                "x": "moto",
+                "y": 95
+            },
+            {
+                "x": "bicycle",
+                "y": 49
+            },
+            {
+                "x": "horse",
+                "y": 73
+            },
+            {
+                "x": "skateboard",
+                "y": 184
+            },
+            {
+                "x": "others",
+                "y": 110
+            }
+        ]
+    },
+    {
+        "id": "us",
+        "color": "hsl(21, 70%, 50%)",
+        "data": [
+            {
+                "x": "plane",
+                "y": 73
+            },
+            {
+                "x": "helicopter",
+                "y": 196
+            },
+            {
+                "x": "boat",
+                "y": 268
+            },
+            {
+                "x": "train",
+                "y": 283
+            },
+            {
+                "x": "subway",
+                "y": 163
+            },
+            {
+                "x": "bus",
+                "y": 0
+            },
+            {
+                "x": "car",
+                "y": 100
+            },
+            {
+                "x": "moto",
+                "y": 165
+            },
+            {
+                "x": "bicycle",
+                "y": 57
+            },
+            {
+                "x": "horse",
+                "y": 276
+            },
+            {
+                "x": "skateboard",
+                "y": 108
+            },
+            {
+                "x": "others",
+                "y": 241
+            }
+        ]
+    },
+    {
+        "id": "germany",
+        "color": "hsl(193, 70%, 50%)",
+        "data": [
+            {
+                "x": "plane",
+                "y": 20
+            },
+            {
+                "x": "helicopter",
+                "y": 292
+            },
+            {
+                "x": "boat",
+                "y": 146
+            },
+            {
+                "x": "train",
+                "y": 13
+            },
+            {
+                "x": "subway",
+                "y": 1
+            },
+            {
+                "x": "bus",
+                "y": 7
+            },
+            {
+                "x": "car",
+                "y": 114
+            },
+            {
+                "x": "moto",
+                "y": 246
+            },
+            {
+                "x": "bicycle",
+                "y": 145
+            },
+            {
+                "x": "horse",
+                "y": 274
+            },
+            {
+                "x": "skateboard",
+                "y": 231
+            },
+            {
+                "x": "others",
+                "y": 179
+            }
+        ]
+    },
+    {
+        "id": "norway",
+        "color": "hsl(280, 70%, 50%)",
+        "data": [
+            {
+                "x": "plane",
+                "y": 213
+            },
+            {
+                "x": "helicopter",
+                "y": 14
+            },
+            {
+                "x": "boat",
+                "y": 43
+            },
+            {
+                "x": "train",
+                "y": 291
+            },
+            {
+                "x": "subway",
+                "y": 125
+            },
+            {
+                "x": "bus",
+                "y": 86
+            },
+            {
+                "x": "car",
+                "y": 261
+            },
+            {
+                "x": "moto",
+                "y": 88
+            },
+            {
+                "x": "bicycle",
+                "y": 271
+            },
+            {
+                "x": "horse",
+                "y": 57
+            },
+            {
+                "x": "skateboard",
+                "y": 232
+            },
+            {
+                "x": "others",
+                "y": 215
+            }
+        ]
+    }
+]
+
 const ReportCharts: React.FC = () => {
     return (
         <>
             <Grid container spacing={3} className='chart-container' mt={1}>
                 <PersonalSensory data={data}/>
                 <Enose data={secondData}/>
-                <Emouth data={secondData}/>
+                <Emouth data={emouthData}/>
             </Grid>
             <Grid container spacing={2} mt={1}>
                 <RecipeAnalysis data={barData}/>

@@ -11,6 +11,8 @@ import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
+import AppTable from "../../../../components/table";
+import {tableActions} from "../../../users/partials/table";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -54,6 +56,7 @@ const ProductProcess: React.FC = () => {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+        console.log('value' , value)
         setValue(newValue);
     };
     return (
@@ -106,34 +109,187 @@ const ProductProcess: React.FC = () => {
 
                                 </Box>
                             )}
+                            {value === 1 && (
+                                <Box>
+
+                                    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                                        <TableHead>
+                                            <TableRow>
+                                                <StyledTableCell>Dessert (100g serving)</StyledTableCell>
+                                                <StyledTableCell align="right">Calories</StyledTableCell>
+                                                <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
+                                                <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
+                                                <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {rows.map((row) => (
+                                                <StyledTableRow key={row.name}>
+                                                    <StyledTableCell component="th" scope="row">
+                                                        {row.name}
+                                                    </StyledTableCell>
+                                                    <StyledTableCell align="right">{row.calories}</StyledTableCell>
+                                                    <StyledTableCell align="right">{row.fat}</StyledTableCell>
+                                                    <StyledTableCell align="right">{row.carbs}</StyledTableCell>
+                                                    <StyledTableCell align="right">{row.protein}</StyledTableCell>
+                                                </StyledTableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+
+                                </Box>
+                            )}
+                            {value === 2 && (
+                                <Box>
+
+                                    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                                        <TableHead>
+                                            <TableRow>
+                                                <StyledTableCell>Dessert (100g serving)</StyledTableCell>
+                                                <StyledTableCell align="right">Calories</StyledTableCell>
+                                                <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
+                                                <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
+                                                <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {rows.map((row) => (
+                                                <StyledTableRow key={row.name}>
+                                                    <StyledTableCell component="th" scope="row">
+                                                        {row.name}
+                                                    </StyledTableCell>
+                                                    <StyledTableCell align="right">{row.calories}</StyledTableCell>
+                                                    <StyledTableCell align="right">{row.fat}</StyledTableCell>
+                                                    <StyledTableCell align="right">{row.carbs}</StyledTableCell>
+                                                    <StyledTableCell align="right">{row.protein}</StyledTableCell>
+                                                </StyledTableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+
+                                </Box>
+                            )}
                         </div>
+
+                        <div
+                            role="tabpanel"
+                            hidden={value !== 1}
+                            id={`simple-tabpanel-${1}`}
+                            aria-labelledby={`simple-tab-${1}`}
+
+                        >
+
+                            {value === 1 && (
+                                <Box>
+
+                                    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                                        <TableHead>
+                                            <TableRow>
+                                                <StyledTableCell>Dessert (100g serving)</StyledTableCell>
+                                                <StyledTableCell align="right">Calories</StyledTableCell>
+                                                <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
+                                                <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
+                                                <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {rows.map((row) => (
+                                                <StyledTableRow key={row.name}>
+                                                    <StyledTableCell component="th" scope="row">
+                                                        {row.name}
+                                                    </StyledTableCell>
+                                                    <StyledTableCell align="right">{row.calories}</StyledTableCell>
+                                                    <StyledTableCell align="right">{row.fat}</StyledTableCell>
+                                                    <StyledTableCell align="right">{row.carbs}</StyledTableCell>
+                                                    <StyledTableCell align="right">{row.protein}</StyledTableCell>
+                                                </StyledTableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+
+                                </Box>
+                            )}
+
+                        </div>
+
+                        <div
+                            role="tabpanel"
+                            hidden={value !== 2}
+                            id={`simple-tabpanel-${2}`}
+                            aria-labelledby={`simple-tab-${2}`}
+
+                        >
+
+                            {value === 2 && (
+                                <Box>
+
+                                    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                                        <TableHead>
+                                            <TableRow>
+                                                <StyledTableCell>Dessert (100g serving)</StyledTableCell>
+                                                <StyledTableCell align="right">Calories</StyledTableCell>
+                                                <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
+                                                <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
+                                                <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {rows.map((row) => (
+                                                <StyledTableRow key={row.name}>
+                                                    <StyledTableCell component="th" scope="row">
+                                                        {row.name}
+                                                    </StyledTableCell>
+                                                    <StyledTableCell align="right">{row.calories}</StyledTableCell>
+                                                    <StyledTableCell align="right">{row.fat}</StyledTableCell>
+                                                    <StyledTableCell align="right">{row.carbs}</StyledTableCell>
+                                                    <StyledTableCell align="right">{row.protein}</StyledTableCell>
+                                                </StyledTableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+
+                                </Box>
+                            )}
+
+                        </div>
+
                     </CardContent>
                 </Card>
             </Grid>
             <Grid item xs={4}>
-                <Card className='chart-card'>
+                <Card className='chart-card  report-process-table'>
 
-                    <CardContent className='chart-card-content'>
-                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                            <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                                <Tab label="Item One" />
-                                <Tab label="Item Two"  />
-                                <Tab label="Item Three" />
-                            </Tabs>
-                        </Box>
-                        <div
-                            role="tabpanel"
-                            hidden={value !== 0}
-                            id={`simple-tabpanel-${0}`}
-                            aria-labelledby={`simple-tab-${0}`}
-
-                        >
-                            {value === 0 && (
-                                <Box sx={{ p: 3 }}>
-                                    <Typography>Tab1</Typography>
-                                </Box>
-                            )}
-                        </div>
+                    <CardContent className='chart-card-content report-process-table'>
+                        <AppTable columns={ [
+                            {
+                                label: 'id',
+                                value: 'id',
+                                isHidden: true
+                            },
+                            {
+                                label: 'Process',
+                                value: 'process',
+                            },
+                            {
+                                label: 'P1',
+                                value: 'p1',
+                            },
+                            {
+                                label: 'P2',
+                                value: 'p2',
+                            },
+                            {
+                                label: 'P3',
+                                value: 'p3',
+                            }
+                        ] as Array<TableColumns>} rows={[
+                            {
+                                process : 'Baking temperature (C)',
+                                p1: '200',
+                                p2: '180',
+                                p3: '200'
+                            }
+                        ]} actions={[]} pagination={{}} showStaticColumn={false} />
                     </CardContent>
                 </Card>
             </Grid>

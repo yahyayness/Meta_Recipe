@@ -7,11 +7,12 @@ import TableRow from "@mui/material/TableRow";
  * @constructor
  * @author Amr
  */
-const TableHeader:React.FC<TableHeaderProps> = ({columns , actions})=>{
+const TableHeader:React.FC<TableHeaderProps> = ({columns , actions, showStaticColumn= true})=>{
     return (
         <TableHead>
             <TableRow>
-                <TableCell align="center">#</TableCell>
+                {showStaticColumn &&  <TableCell align="center">#</TableCell>}
+
                 {(columns || [])?.map((column: TableColumns, index: number) => column.isHidden ? '' :  <TableCell key={column.label + index} align="center">{column.label}</TableCell>)}
                 {
                     (actions && actions?.length > 0) ?   <TableCell align="center">Properties</TableCell>: ''

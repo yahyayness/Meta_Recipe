@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+
+
+.master-table{
+  th{
+    font-weight: 600;
+  }
+
+}
+
+.report-process-table{
+  padding: unset;
+  table {
+    min-width: unset;
+  }
+}

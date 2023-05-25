@@ -11,7 +11,8 @@ interface TaleRow{}
 
 interface TableHeaderProps{
     columns:Array<TableColumns>,
-    actions?:Array<TableActionType>
+    actions?:Array<TableActionType>,
+    showStaticColumn: boolean
 
 }
 interface TableActionType {

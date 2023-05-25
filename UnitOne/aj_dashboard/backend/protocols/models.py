@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext as _
 
 from common.Models.SoftDeleteModel import SoftDeleteModel
+from ingredients.models import Ingredients
 from process.models import Process
 
 
@@ -15,6 +16,9 @@ class Protocol(SoftDeleteModel):
     name = models.CharField(max_length=225, null=False, unique=True, blank=False)
     processes = models.JSONField(null=True, blank=False)
     ingredients = models.JSONField(null=True, blank=False)
+    flow = models.JSONField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
 
     class Meta:
         db_table = 'protocols'
@@ -35,10 +39,10 @@ class ProtocolProcess(models.Model):
     process = models.ForeignKey(Process, on_delete=models.CASCADE, related_name='protocol_concrete_processes',
                                 blank=False, null=False)
     start_time = models.DateTimeField(null=True)
-    duration = models.IntegerField()
-    duration_type = models.CharField(max_length=225)
-    input_ingredients = models.JSONField()
-    output_ingredients = models.JSONField()
+    duration = models.IntegerField(null=True)
+    duration_type = models.CharField(max_length=225, null=True)
+    input_ingredients = models.JSONField(null=True)
+    output_ingredients = models.JSONField(null=True)
     next_process_id = models.ForeignKey('self', on_delete=models.CASCADE, related_name='next_process', blank=False,
                                         null=True)
     time_step = models.CharField(
@@ -46,7 +50,8 @@ class ProtocolProcess(models.Model):
         choices=TimeStep.choices,
         default=TimeStep.SEQUENTIAL,
     )
-    arguments = models.JSONField()
+    arguments = models.JSONField(null=True)
+    value = models.CharField(max_length=225, null=True)
 
     class Meta:
         db_table = 'protocol_processes'
@@ -54,3 +59,68 @@ class ProtocolProcess(models.Model):
 
     def __str__(self):
         return f"{self.protocol.reference_author} : {self.process.name}"
+
+
+class ProtocolNode(models.Model):
+    class ModelType(models.TextChoices):
+        INGREDIENT = "ingredient", _("ingredient")
+        PROCESS = "process", _("process")
+        MERGE = "merge ", _("merge")
+        SERVE = "serve ", _("serve")
+
+    protocol = models.ForeignKey(Protocol, on_delete=models.CASCADE, related_name='protocol_nodes', blank=False,
+                                 null=False)
+    model_type = models.CharField(
+        max_length=12,
+        choices=ModelType.choices,
+        null=True
+    )
+
+    model_id = models.BigIntegerField(null=True)
+    container = models.CharField(max_length=225, null=True)
+    slug = models.CharField(max_length=225, null=True)
+    payload = models.JSONField(null=True)
+    type = models.CharField(max_length=225, null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'protocol_nodes'
+        verbose_name = 'ProtocolNode'
+
+    def __str__(self):
+        return self.protocol.name
+
+
+class ProtocolEdge(models.Model):
+    source_node = models.ForeignKey(ProtocolNode, on_delete=models.CASCADE, related_name='source_node_edges',
+                                    blank=False,
+                                    null=False)
+    target_node = models.ForeignKey(ProtocolNode, on_delete=models.CASCADE, related_name='target_node_edges',
+                                    blank=False,
+                                    null=False)
+
+    class Meta:
+        db_table = 'protocol_edges'
+        verbose_name = 'ProtocolEdge'
+
+    def __str__(self):
+        return f"{self.source_node}  >> {self.target_node}"
+
+
+class ProtocolIngredient(models.Model):
+    protocol = models.ForeignKey(Protocol, on_delete=models.CASCADE, related_name='protocol_ingredient',
+                                 blank=False,
+                                 null=False)
+    ingredient = models.ForeignKey(Ingredients, on_delete=models.CASCADE, related_name='protocol_ingredient',
+                                   blank=False,
+                                   null=False)
+    unit = models.CharField(max_length=225, blank=False, null=False)
+    quantity = models.FloatField(blank=False, null=False, default=0)
+
+    class Meta:
+        db_table = 'protocol_ingredients'
+        verbose_name = 'ProtocolIngredient'
+
+    def __str__(self):
+        return f"{self.unit}  >> {self.quantity}"

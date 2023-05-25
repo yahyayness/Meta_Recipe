@@ -1,77 +1,249 @@
-import {Box} from "@mui/material";
+import {Box, Card, CardActions, CardContent, CardHeader, CardMedia, Collapse, IconButton} from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import TimelineDot from '@mui/lab/TimelineDot';
-
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ShareIcon from '@mui/icons-material/Share';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import './partials/style.scss'
+import ReportStatistics from "./components/statistics";
+import Avatar from "@mui/material/Avatar";
+import {ExpandMore} from "@mui/icons-material";
+import React from "react";
+
+import {ResponsiveRadar} from '@nivo/radar'
+import {ResponsiveBullet} from '@nivo/bullet'
+import ReportCharts from "./components/charts";
+import ProductProcess from "./components/product-process";
+
+
+const data = [
+    {
+        "taste": "fruity",
+        "p1": 107,
+        "p2": 110,
+        "p3": 113
+    },
+    {
+        "taste": "bitter",
+        "p1": 96,
+        "p2": 61,
+        "p3": 80
+    },
+    {
+        "taste": "heavy",
+        "p1": 86,
+        "p2": 23,
+        "p3": 69
+    },
+    {
+        "taste": "strong",
+        "p1": 74,
+        "p2": 39,
+        "p3": 110
+    },
+    {
+        "taste": "sunny",
+        "p1": 115,
+        "p2": 77,
+        "p3": 108
+    }
+]
+
+const secondData = [
+    {
+        "taste": "E0",
+        "p1": 107,
+        "p2": 110,
+        "p3": 113
+    },
+    {
+        "taste": "E1",
+        "p1": 96,
+        "p2": 61,
+        "p3": 80
+    },
+    {
+        "taste": "E2",
+        "p1": 86,
+        "p2": 23,
+        "p3": 69
+    },
+    {
+        "taste": "E3",
+        "p1": 74,
+        "p2": 39,
+        "p3": 110
+    },
+    {
+        "taste": "E4",
+        "p1": 115,
+        "p2": 77,
+        "p3": 108
+    },
+    {
+        "taste": "E5",
+        "p1": 115,
+        "p2": 77,
+        "p3": 108
+    },
+    {
+        "taste": "E6",
+        "p1": 115,
+        "p2": 77,
+        "p3": 108
+    },
+    {
+        "taste": "E7",
+        "p1": 115,
+        "p2": 77,
+        "p3": 108
+    },
+    {
+        "taste": "E8",
+        "p1": 115,
+        "p2": 77,
+        "p3": 108
+    },
+    {
+        "taste": "E9",
+        "p1": 115,
+        "p2": 77,
+        "p3": 108
+    },
+    {
+        "taste": "E10",
+        "p1": 115,
+        "p2": 77,
+        "p3": 108
+    },
+    {
+        "taste": "E11",
+        "p1": 115,
+        "p2": 77,
+        "p3": 108
+    },
+    {
+        "taste": "E12",
+        "p1": 115,
+        "p2": 77,
+        "p3": 108
+    },
+    {
+        "taste": "E13",
+        "p1": 115,
+        "p2": 77,
+        "p3": 108
+    }
+
+]
+
+const barData = [
+    {
+        "id": "temp.",
+        "ranges": [
+            2,
+            73,
+            14,
+            0,
+            120
+        ],
+        "measures": [
+            61
+        ],
+        "markers": [
+            106
+        ]
+    },
+    {
+        "id": "power",
+        "ranges": [
+            0.20888204031012148,
+            1.1444875437060535,
+            0.42812705615041935,
+            0,
+            2
+        ],
+        "measures": [
+            0.3507309687165055,
+            1.8594172996433231
+        ],
+        "markers": [
+            1.261142807396343
+        ]
+    },
+    {
+        "id": "volume",
+        "ranges": [
+            11,
+            27,
+            19,
+            27,
+            3,
+            30,
+            0,
+            60
+        ],
+        "measures": [
+            1
+        ],
+        "markers": [
+            53
+        ]
+    },
+    {
+        "id": "cost",
+        "ranges": [
+            31028,
+            26900,
+            460827,
+            0,
+            500000
+        ],
+        "measures": [
+            55077,
+            179188
+        ],
+        "markers": [
+            357350
+        ]
+    },
+    {
+        "id": "revenue",
+        "ranges": [
+            1,
+            2,
+            2,
+            0,
+            11
+        ],
+        "measures": [
+            0
+        ],
+        "markers": [
+            8.002022984472033,
+            6.887815784981754
+        ]
+    }
+]
+
+
 const Report: React.FC = () => {
+
+    const [expanded, setExpanded] = React.useState(false);
+
+    const handleExpandClick = () => {
+        setExpanded(!expanded);
+    };
+
     return (
         <Box>
-            <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <Paper elevation={0} className='report-statistic common-legends'>
-                        <Typography variant="h5">
-                            R230201-v01
-                        </Typography>
-                        <Typography variant="caption" display="block" gutterBottom>
-                            <Typography variant="subtitle1" color="textSecondary">
-                                <div className='legend-container'>
-                                    <div className='legend-item-container'>
-                                        <div><TimelineDot className='legend' style={{backgroundColor:'#FF6F67'}} /></div>
-                                        <div>Target- Butter Croissant - v000</div>
-                                    </div>
-                                    <div className='legend-item-container'>
-                                        <div><TimelineDot className='legend' style={{backgroundColor:'#FFAF68'}} /></div>
-                                        <div>Vegan Croissant - v011</div>
-                                    </div>
-                                    <div className='legend-item-container'>
-                                        <div><TimelineDot className='legend' style={{backgroundColor:'#66B2FE'}} /></div>
-                                        <div>Vegan Croissant - v012</div>
-                                    </div>
-                                </div>
+            <ReportStatistics/>
+            <ReportCharts/>
+            <ProductProcess/>
 
-
-
-                            </Typography>
-                        </Typography>
-
-                    </Paper>
-                </Grid>
-                <Grid item xs={4}>
-                    <Paper variant="outlined" className='report-statistic'>
-                        <Typography variant="h5">
-                            0.24 sec
-                        </Typography>
-                        <Typography variant="caption" display="block" gutterBottom>
-                            Digitization time
-                        </Typography>
-
-                    </Paper>
-                </Grid>
-                <Grid item xs={4}>
-                    <Paper variant="outlined" className='report-statistic'>
-                        <Typography variant="h5">
-                            60+
-                        </Typography>
-                        <Typography variant="caption" display="block" gutterBottom>
-                            Panelists
-                        </Typography>
-
-                    </Paper>
-                </Grid>
-                <Grid item xs={4}>
-                    <Paper variant="outlined" className='report-statistic'>
-                        <Typography variant="h5">
-                            3
-                        </Typography>
-                        <Typography variant="caption" display="block" gutterBottom>
-                            Potential comparable items in Database
-                        </Typography>
-
-                    </Paper>
-                </Grid>
-            </Grid>
         </Box>
     )
 }

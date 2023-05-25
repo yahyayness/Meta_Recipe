@@ -53,10 +53,10 @@ axiosInstance.interceptors.response.use(function (response) {
  * @param payload
  * @author Amr
  */
-export const http = <T>(endpoint: EndpointType, payload: {} = {}) => {
+export const http = <T>(endpoint: EndpointType, payload: {} = {} , config:{}  = {}) => {
     const url = endpoint.url.charAt(0) == '/' ? endpoint.url : 'api/' + endpoint.url;
     const method = endpoint.method;
-    return axiosInstance[method]<T>(url, payload);
+    return axiosInstance[method]<T>(url, payload,config);
 }
 
 /**
@@ -72,9 +72,9 @@ export const useHttp = () => {
      * @param payload
      * @author Amr
      */
-    const request = <T>(endpoint: EndpointType, payload: {} = {}) => {
+    const request = <T>(endpoint: EndpointType, payload: {} = {} , config:{} = {}) => {
         // call the native http request that connects with backend
-        const httpRequest = http<ResponseType<T>>(endpoint, payload)
+        const httpRequest = http<ResponseType<T>>(endpoint, payload,config)
         // show LinerProgressBar
         show(true)
         // listen to the request

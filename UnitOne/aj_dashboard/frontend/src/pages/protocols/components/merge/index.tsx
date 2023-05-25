@@ -37,7 +37,7 @@ const Merge:React.FC<any> = ({data , isConnectable , id}) => {
                     <Box sx={{ width: '100%' , height:50 }}>
                         <Grid  container spacing={1} height={'50px'}  alignItems={'center'}>
                             <Grid item xs >
-                                <Handle type="source" position={Position.Right} id="merge-source" isConnectable={isConnectable}
+                                <Handle type="source" position={Position.Right} id={`${id}-source`} isConnectable={isConnectable}
                                         className="handle-circle"
                                         style={{
                                             backgroundImage : `url(${target})`,
@@ -47,7 +47,7 @@ const Merge:React.FC<any> = ({data , isConnectable , id}) => {
                                 />
                             </Grid>
                             <Grid item xs >
-                                <Handle type="target" position={Position.Left} id="merge-target" isConnectable={isConnectable}
+                                <Handle type="target" position={Position.Left} id={`${id}-target`}  isConnectable={isConnectable}
                                         className="handle-circle target"
                                         style={{
                                             backgroundImage : `url(${source})`,

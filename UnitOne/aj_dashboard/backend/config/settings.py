@@ -34,6 +34,11 @@ INSTALLED_APPS = [
     'molecules.apps.MoleculesConfig',
     'ingredients.apps.IngredientsConfig',
     'ingredient_molecules.apps.IngredientMoleculesConfig',
+    'receptors.apps.ReceptorsConfig',
+    'sample_descriptions.apps.SampleDescriptionsConfig',
+    'sensory_panels.apps.SensoryPanelsConfig',
+    'sensors.apps.SensorsConfig',
+    'analytical_chemistry.apps.AnalyticalChemistryConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -143,7 +148,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
-    'EXCEPTION_HANDLER': 'common.utilities.ExceptionHandler.custom_exception_handler',
+    #'EXCEPTION_HANDLER': 'common.utilities.ExceptionHandler.custom_exception_handler',
     'DEFAULT_PAGINATION_CLASS': 'common.utilities.Pagination.CustomPagination',
     'PAGE_SIZE': 10,
 

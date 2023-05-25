@@ -10,6 +10,8 @@ class Equipment(models.Model):
         SENSOR = "sensor", _("sensor")
 
     name = models.CharField(max_length=225, unique=True)
+    brand  = models.CharField(max_length=225, null=True, blank=True)
+    model  = models.CharField(max_length=225, null=True, blank=True)
     type = models.CharField(
         max_length=225,
         choices=EquipmentTypes.choices,

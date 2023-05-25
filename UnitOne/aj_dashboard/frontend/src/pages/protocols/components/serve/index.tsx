@@ -45,7 +45,7 @@ const Serve:React.FC<any> = ({data , isConnectable , id})=>{
                             {/*    />*/}
                             {/*</Grid>*/}
                             <Grid item xs >
-                                <Handle type="target" position={Position.Left} id="merge-target" isConnectable={isConnectable}
+                                <Handle type="target" position={Position.Left} id={`${id}-target`} isConnectable={isConnectable}
                                         className="handle-circle target"
                                         style={{
                                             backgroundImage : `url(${source})`,

@@ -75,8 +75,8 @@ class ProtocolView(GenericViewSet):
             'payload': serializer.data,
         }, status=status.HTTP_200_OK)
 
-    def destroy(self, request, protocol_id, *args, **kwargs):
-        protocol = Protocol.objects.get(id=protocol_id)
+    def destroy(self, request, pk, *args, **kwargs):
+        protocol = Protocol.objects.get(id=pk)
         protocol.soft_delete()
         return Response(
             {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'Protocol deleted!', 'payload': {}},

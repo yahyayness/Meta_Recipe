@@ -3,13 +3,14 @@ import {addEdge, applyEdgeChanges, applyNodeChanges, Edge, Node} from "reactflow
 import {number} from "yup";
 import useBreadcrumb from "../../../common/hooks/breadcrumbs";
 import {actions} from "./actions";
-import {useHttp} from "../../../plugins/axios";
+import {http, useHttp} from "../../../plugins/axios";
 import {useAlert} from "../../../common/hooks/alert";
 import {useNavigator} from "../../../common/routes";
 import {useParams} from "react-router-dom";
 import {addParamsToEndpoint, getEndpoint} from "../../../common/http";
-import {ProtocolType} from "../../../types/ModelTypes";
+import {ProjectType, ProtocolType} from "../../../types/ModelTypes";
 import {AlertTypes} from "../../../types/Enums";
+import {ResponseType} from "../../../types/HttpTypes";
 
 /**
  * this hook handles the required operations for ReactFlow lib.
@@ -273,6 +274,7 @@ const useProtocol = () => {
     const {addServe, serveActions} = useServe(setNodes, random, onClose)
     const {addProcess, addProcessChild, processActions} = useProcess(nodes, setNodes, onChildChange, onClose)
     const {onNodesChange, onEdgesChange, onConnect} = useFlowActions(setNodes, setEdges)
+    const [form , setForm] = useState({});
     const {showAlert} = useAlert();
     const {navigator} = useNavigator()
     const {id} = useParams();
@@ -346,229 +348,244 @@ const useProtocol = () => {
         }
         return actions[type] as Function
     }
+    //
+    // useEffect(()=>{
+    //     setNodes(bindActions([
+    //         {
+    //             "id": "ingredient-1",
+    //             "type": "ingredient-container",
+    //             "position": {
+    //                 "x": 89,
+    //                 "y": 31
+    //             },
+    //             "draggable": true,
+    //             "height": 204,
+    //             "data": {
+    //                 "value": 123,
+    //                 "children": [
+    //                     {
+    //                         "id": "ingredient-1-0.14956229258083664",
+    //                         "type": "Ingredient",
+    //                         "data": {
+    //                             "type": "target",
+    //                             "value": {
+    //                                 "name": "water",
+    //                                 "amount": "26"
+    //                             }
+    //                         }
+    //                     },
+    //                     {
+    //                         "id": "ingredient-1-0.7308646710299707",
+    //                         "type": "Ingredient",
+    //                         "data": {
+    //                             "type": "target",
+    //                             "value": {
+    //                                 "name": "botato"
+    //                             }
+    //                         }
+    //                     }
+    //                 ],
+    //                 "label": "Ingredient",
+    //                 "protocol": "ingredient"
+    //             },
+    //             "width": 345,
+    //             "selected": false,
+    //             "dragging": false,
+    //             "positionAbsolute": {
+    //                 "x": 89,
+    //                 "y": 31
+    //             }
+    //         },
+    //         {
+    //             "id": "process-2",
+    //             "type": "process",
+    //             "position": {
+    //                 "x": 490,
+    //                 "y": 155.39999999999998
+    //             },
+    //             "draggable": true,
+    //             "height": 148,
+    //             "data": {
+    //                 "children": [
+    //                     {
+    //                         "id": "process-process-2-0",
+    //                         "type": "ProtocolSelect",
+    //                         "position": {
+    //                             "x": 10,
+    //                             "y": 1
+    //                         },
+    //                         "draggable": true,
+    //                         "height": 100,
+    //                         "props": {
+    //                             "options": [
+    //                                 {
+    //                                     "label": "Big",
+    //                                     "value": "big"
+    //                                 },
+    //                                 {
+    //                                     "label": "Medium",
+    //                                     "value": "medium"
+    //                                 },
+    //                                 {
+    //                                     "label": "Small",
+    //                                     "value": "small"
+    //                                 }
+    //                             ]
+    //                         },
+    //                         "data": {
+    //                             "value": "small"
+    //                         }
+    //                     }
+    //                 ],
+    //                 "label": "Chop",
+    //                 "protocol": "process",
+    //                 "inputs": [
+    //                     {
+    //                         "type": "ProtocolSelect",
+    //                         "props": {
+    //                             "options": [
+    //                                 {
+    //                                     "label": "Big",
+    //                                     "value": "big"
+    //                                 },
+    //                                 {
+    //                                     "label": "Medium",
+    //                                     "value": "medium"
+    //                                 },
+    //                                 {
+    //                                     "label": "Small",
+    //                                     "value": "small"
+    //                                 }
+    //                             ]
+    //                         }
+    //                     }
+    //                 ]
+    //             },
+    //             "width": 250,
+    //             "selected": false,
+    //             "positionAbsolute": {
+    //                 "x": 490,
+    //                 "y": 155.39999999999998
+    //             },
+    //             "dragging": false
+    //         },
+    //         {
+    //             "id": "process-3",
+    //             "type": "process",
+    //             "position": {
+    //                 "x": 493,
+    //                 "y": -28
+    //             },
+    //             "draggable": true,
+    //             "height": 137,
+    //             "data": {
+    //                 "children": [
+    //                     {
+    //                         "id": "process-process-3-0",
+    //                         "type": "TimePicker",
+    //                         "position": {
+    //                             "x": 10,
+    //                             "y": 1
+    //                         },
+    //                         "draggable": true,
+    //                         "height": 100,
+    //                         "props": {
+    //                             "format": "hh:mm",
+    //                             "style": {
+    //                                 "height": "45px"
+    //                             }
+    //                         },
+    //                         "data": {
+    //                             "value": "Sat, 20 May 2023 21:03:00 GMT"
+    //                         }
+    //                     }
+    //                 ],
+    //                 "label": "Boil",
+    //                 "protocol": "process",
+    //                 "inputs": [
+    //                     {
+    //                         "type": "TimePicker",
+    //                         "props": {
+    //                             "format": "hh:mm",
+    //                             "style": {
+    //                                 "height": "45px"
+    //                             }
+    //                         }
+    //                     }
+    //                 ]
+    //             },
+    //             "width": 250,
+    //             "selected": false,
+    //             "positionAbsolute": {
+    //                 "x": 493,
+    //                 "y": -28
+    //             },
+    //             "dragging": false
+    //         },
+    //         {
+    //             "id": "merge-23",
+    //             "type": "merge",
+    //             "position": {
+    //                 "x": 841,
+    //                 "y": 46
+    //             },
+    //             "draggable": true,
+    //             "height": 126,
+    //             "data": {
+    //                 "children": []
+    //             },
+    //             "width": 150,
+    //             "selected": false,
+    //             "positionAbsolute": {
+    //                 "x": 841,
+    //                 "y": 46
+    //             },
+    //             "dragging": false
+    //         },
+    //         {
+    //             "id": "serve-39",
+    //             "type": "serve",
+    //             "position": {
+    //                 "x": 1103,
+    //                 "y": 40
+    //             },
+    //             "draggable": true,
+    //             "height": 126,
+    //             "data": {
+    //                 "children": []
+    //             },
+    //             "width": 150,
+    //             "selected": true,
+    //             "positionAbsolute": {
+    //                 "x": 1103,
+    //                 "y": 40
+    //             },
+    //             "dragging": false
+    //         }
+    //     ]))
+    // } , [])
 
-    useEffect(()=>{
-        setNodes(bindActions([
-            {
-                "id": "ingredient-1",
-                "type": "ingredient-container",
-                "position": {
-                    "x": 89,
-                    "y": 31
-                },
-                "draggable": true,
-                "height": 204,
-                "data": {
-                    "value": 123,
-                    "children": [
-                        {
-                            "id": "ingredient-1-0.14956229258083664",
-                            "type": "Ingredient",
-                            "data": {
-                                "type": "target",
-                                "value": {
-                                    "name": "water",
-                                    "amount": "26"
-                                }
-                            }
-                        },
-                        {
-                            "id": "ingredient-1-0.7308646710299707",
-                            "type": "Ingredient",
-                            "data": {
-                                "type": "target",
-                                "value": {
-                                    "name": "botato"
-                                }
-                            }
-                        }
-                    ],
-                    "label": "Ingredient",
-                    "protocol": "ingredient"
-                },
-                "width": 345,
-                "selected": false,
-                "dragging": false,
-                "positionAbsolute": {
-                    "x": 89,
-                    "y": 31
-                }
-            },
-            {
-                "id": "process-2",
-                "type": "process",
-                "position": {
-                    "x": 490,
-                    "y": 155.39999999999998
-                },
-                "draggable": true,
-                "height": 148,
-                "data": {
-                    "children": [
-                        {
-                            "id": "process-process-2-0",
-                            "type": "ProtocolSelect",
-                            "position": {
-                                "x": 10,
-                                "y": 1
-                            },
-                            "draggable": true,
-                            "height": 100,
-                            "props": {
-                                "options": [
-                                    {
-                                        "label": "Big",
-                                        "value": "big"
-                                    },
-                                    {
-                                        "label": "Medium",
-                                        "value": "medium"
-                                    },
-                                    {
-                                        "label": "Small",
-                                        "value": "small"
-                                    }
-                                ]
-                            },
-                            "data": {
-                                "value": "small"
-                            }
-                        }
-                    ],
-                    "label": "Chop",
-                    "protocol": "process",
-                    "inputs": [
-                        {
-                            "type": "ProtocolSelect",
-                            "props": {
-                                "options": [
-                                    {
-                                        "label": "Big",
-                                        "value": "big"
-                                    },
-                                    {
-                                        "label": "Medium",
-                                        "value": "medium"
-                                    },
-                                    {
-                                        "label": "Small",
-                                        "value": "small"
-                                    }
-                                ]
-                            }
-                        }
-                    ]
-                },
-                "width": 250,
-                "selected": false,
-                "positionAbsolute": {
-                    "x": 490,
-                    "y": 155.39999999999998
-                },
-                "dragging": false
-            },
-            {
-                "id": "process-3",
-                "type": "process",
-                "position": {
-                    "x": 493,
-                    "y": -28
-                },
-                "draggable": true,
-                "height": 137,
-                "data": {
-                    "children": [
-                        {
-                            "id": "process-process-3-0",
-                            "type": "TimePicker",
-                            "position": {
-                                "x": 10,
-                                "y": 1
-                            },
-                            "draggable": true,
-                            "height": 100,
-                            "props": {
-                                "format": "hh:mm",
-                                "style": {
-                                    "height": "45px"
-                                }
-                            },
-                            "data": {
-                                "value": "Sat, 20 May 2023 21:03:00 GMT"
-                            }
-                        }
-                    ],
-                    "label": "Boil",
-                    "protocol": "process",
-                    "inputs": [
-                        {
-                            "type": "TimePicker",
-                            "props": {
-                                "format": "hh:mm",
-                                "style": {
-                                    "height": "45px"
-                                }
-                            }
-                        }
-                    ]
-                },
-                "width": 250,
-                "selected": false,
-                "positionAbsolute": {
-                    "x": 493,
-                    "y": -28
-                },
-                "dragging": false
-            },
-            {
-                "id": "merge-23",
-                "type": "merge",
-                "position": {
-                    "x": 841,
-                    "y": 46
-                },
-                "draggable": true,
-                "height": 126,
-                "data": {
-                    "children": []
-                },
-                "width": 150,
-                "selected": false,
-                "positionAbsolute": {
-                    "x": 841,
-                    "y": 46
-                },
-                "dragging": false
-            },
-            {
-                "id": "serve-39",
-                "type": "serve",
-                "position": {
-                    "x": 1103,
-                    "y": 40
-                },
-                "draggable": true,
-                "height": 126,
-                "data": {
-                    "children": []
-                },
-                "width": 150,
-                "selected": true,
-                "positionAbsolute": {
-                    "x": 1103,
-                    "y": 40
-                },
-                "dragging": false
-            }
-        ]))
-    } , [])
+    useEffect(() => {
+        if (id) {
+            http<ResponseType<ProtocolType>>(addParamsToEndpoint(getEndpoint('find_protocol'), {id})).then(response => {
+                setForm(response.data.payload);
+                setNodes(bindActions(response.data.payload.flow.nodes))
+                setEdges(response.data.payload.flow.edges)
+
+            })
+        }else{
+
+        }
+    }, [id])
 
 
     const onSave = () => {
         let _form = {
-            project_id: 1,
-            nodes: nodes,
-            edges: edges
+            ...form,
+            flow : {
+                nodes: nodes,
+                edges: edges
+            }
         }
         console.log('form', _form, JSON.stringify(_form))
         // change the endpoint according to the isEdit flag
@@ -581,8 +598,12 @@ const useProtocol = () => {
          * @author Amr
          */
         request<ProtocolType>(endpoint, _form).then((response) => {
-            const user = response?.data?.payload
-
+            const protocol = response?.data?.payload
+            showAlert({
+                type: AlertTypes.SUCCESS,
+                message: `Protocol ${protocol.name} ${isEdit ? 'updated' : 'added'}  successfully`
+            })
+            navigator('/protocols');
         })
     }
 

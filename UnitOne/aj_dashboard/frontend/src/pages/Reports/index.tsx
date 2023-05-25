@@ -17,6 +17,7 @@ import {ResponsiveRadar} from '@nivo/radar'
 import {ResponsiveBullet} from '@nivo/bullet'
 import ReportCharts from "./components/charts";
 import ProductProcess from "./components/product-process";
+import useBreadcrumb from "../../common/hooks/breadcrumbs";
 
 
 const data = [
@@ -237,6 +238,16 @@ const Report: React.FC = () => {
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
+
+    /**
+     * set the breadcrumbs of the current page
+     * @author Amr
+     */
+    useBreadcrumb([
+        {
+            label: 'Reports',
+            path: "/reports"
+        }])
 
     return (
         <Box>

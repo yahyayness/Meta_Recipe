@@ -1,4 +1,5 @@
 import {ResponseType} from "./HttpTypes";
+import {Edge, Node} from "reactflow";
 
 interface Product<TaleRow> {
     id: number,
@@ -29,8 +30,21 @@ interface ProjectType extends ResponseType{
     [key:string] : [value : string | File]
 }
 
+interface ProtocolFlowType{
+    nodes: Array<Node>,
+    edges:Array<Edge>
+}
 interface ProtocolType extends ResponseType {
-    [key: stirng]: [value: any]
+    id?:number,
+    aliquot_date?: string,
+    created_at?: string,
+    ingredients?: []
+    name:stirng,
+    processes?:[],
+    reagent?: string,
+    reference_author?:string,
+    updated_at?: string,
+    flow: ProtocolFlowType
 }
 
 interface IngredientType {

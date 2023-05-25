@@ -6,22 +6,36 @@ import {AlertTypes} from "../../../types/Enums";
 import {Edge, Node} from "reactflow";
 import {EndpointType, ResponseType} from "../../../types/HttpTypes";
 
-export const actions = (onSave = () => {
-}, onDuplicate = () => {
-}) => [
+export const actions = (navigator:any , onDuplicate : any)=> [
     {
         label: 'Duplicate',
         extra: {
-            onClick: onDuplicate
+            // className: 'primary',
+            onClick : ()=>  onDuplicate()
         }
     },
     {
-        label: 'Save',
+        label: 'Create new',
         extra: {
             className: 'primary',
-            onClick: () => {
-                onSave()
+            onClick : ()=>{
+                navigator("/protocols/create");
             }
         }
     },
+    // {
+    //     label: 'Compare',
+    //     extra: {
+    //
+    //         onClick : ()=>{
+    //             alert('Compare')
+    //         }
+    //     }
+    // },
+    {
+        component: <IconButton aria-label="upload picture" component="label" key={'stack-list-actions'}>
+            <MoreVertIcon/>
+        </IconButton>
+    },
+
 ] as Array<StackActionsType>

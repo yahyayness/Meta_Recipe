@@ -30,8 +30,24 @@ export default {
         method: HttpMethodTypes.DELETE
     },
     add_protocol : {
-        url : 'protocols/test',
+        url : 'protocols/',
         method: HttpMethodTypes.POST
+    },
+    all_protocols:{
+        url : 'protocols/',
+        method: HttpMethodTypes.GET
+    },
+    delete_protocol:{
+        url : 'protocols/:id',
+        method: HttpMethodTypes.DELETE
+    },
+    find_protocol:{
+        url : 'protocols/:id',
+        method: HttpMethodTypes.GET
+    },
+    update_protocol:{
+        url : 'protocols/:id',
+        method: HttpMethodTypes.PUT
     },
     add_project : {
         url : 'project/',

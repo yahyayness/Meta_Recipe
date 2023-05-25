@@ -16,8 +16,9 @@ export const getEndpoint = (name: string): EndpointType => {
 }
 
 export const addParamsToEndpoint = (endpoint: EndpointType, params: any) => {
+    const _endpoint = {...endpoint}
     for (let key in params) {
-        endpoint.url = endpoint.url.replace(`:${key}`, params[key] as string)
+        _endpoint.url = _endpoint.url.replace(`:${key}`, params[key] as string)
     }
-    return endpoint
+    return _endpoint
 }

@@ -82,6 +82,12 @@ const routes: Array<RouteType> = [
                 component: React.lazy(() => import('../pages/protocols/create_edit')),
                 name: 'create_protocol',
                 label: 'Projects'
+            },
+            {
+                path: "/:id",
+                component: React.lazy(() => import('../pages/protocols/create_edit')),
+                name: 'create_protocol',
+                label: 'Protocols'
             }
         ]
     },

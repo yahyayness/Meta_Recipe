@@ -9,6 +9,9 @@ class ProtocolSerializer(serializers.ModelSerializer):
         UniqueValidator(queryset=Protocol.objects.all())
     ])
 
+    flow = serializers.JSONField(required=False, initial=dict)
+
     class Meta:
         model = Protocol
-        fields = ['id', 'description', 'reference_author', 'aliquot_date', 'reagent', 'name', 'processes', 'ingredients', 'flow']
+        fields = ['id', 'description', 'reference_author', 'aliquot_date', 'reagent', 'name', 'processes',
+                  'ingredients', 'flow', 'created_at', 'updated_at']

@@ -16,7 +16,7 @@ class Protocol(SoftDeleteModel):
     name = models.CharField(max_length=225, null=False, unique=True, blank=False)
     processes = models.JSONField(null=True, blank=False)
     ingredients = models.JSONField(null=True, blank=False)
-    flow = models.JSONField(null=True)
+    flow = models.JSONField(default=dict)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 

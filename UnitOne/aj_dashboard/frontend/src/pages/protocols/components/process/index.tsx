@@ -13,6 +13,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import {TimePicker} from "antd";
 import ProtocolSelect from "../protocols/components/select";
 import dayjs from "dayjs";
+import ProtocolTimePicker from "../protocols/components/time-picker";
 
 const Process:React.FC<any> = ({data , isConnectable , id , type}) => {
     const [label , setLabel] = useState<string>('');
@@ -27,7 +28,7 @@ const Process:React.FC<any> = ({data , isConnectable , id , type}) => {
 
     const getComponent = (componentName:string)=>{
         const _components:any = {
-            'TimePicker' : TimePicker,
+            'TimePicker' : ProtocolTimePicker,
             'ProtocolSelect' : ProtocolSelect
         }
         return _components[componentName] as any

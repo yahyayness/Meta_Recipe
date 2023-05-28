@@ -10,7 +10,10 @@ const IngredientRow:React.FC<any> = ({ data, isConnectable, index  , onChange})=
     const [value , setValue] = useState<IngredientType>((data?.data.value ?? {}) as IngredientType)
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>)=> {
-        value[event.target.name] = event.target.value;
+        // value[event.target.name] = event.target.value;
+        setValue(_value => {
+            return {..._value , [event.target.name] :  event.target.value}
+        } )
         onChange(index ,value);
     }
 
@@ -26,7 +29,7 @@ const IngredientRow:React.FC<any> = ({ data, isConnectable, index  , onChange})=
 
         <Grid container spacing={0}>
 
-            <Grid item xs={7} width='7ch'>
+            <Grid item xs={7} width='7ch' >
                 <FormControl sx={{ m: 1}} variant="outlined"   size="small"  >
                     <OutlinedInput
                         value={value.name}
@@ -43,6 +46,7 @@ const IngredientRow:React.FC<any> = ({ data, isConnectable, index  , onChange})=
             <Grid item xs={4}>
                 <FormControl sx={{ m: 1 }} variant="outlined"   size="small">
                     <OutlinedInput
+                        className={'number-input'}
                         type='number'
                         value={value.amount}
                         onChange={handleChange}

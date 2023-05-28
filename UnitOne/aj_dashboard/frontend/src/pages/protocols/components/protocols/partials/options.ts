@@ -1,6 +1,7 @@
 import {TextField} from "@mui/material";
 import {TimePicker} from "antd";
 import ProtocolSelect from "../components/select";
+import {getDefaultTime} from "../../../../../common/helpers";
 
 export default [
     {
@@ -64,7 +65,8 @@ export default [
                             format:'hh:mm',
                             style : {
                                 height: '45px'
-                            }
+                            },
+                            value: '12:00'
                         }
                     }
                 ]

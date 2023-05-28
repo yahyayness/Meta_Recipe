@@ -50,6 +50,7 @@ interface ProtocolType extends ResponseType {
 interface IngredientType {
     name: string,
     amount: string,
+    unit: string,
 
     [key: string]: string
 }

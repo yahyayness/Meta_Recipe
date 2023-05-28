@@ -33,6 +33,10 @@ export default {
         url : 'protocols/',
         method: HttpMethodTypes.POST
     },
+    clone_protocols : {
+        url : 'protocols/clone/',
+        method: HttpMethodTypes.POST
+    },
     all_protocols:{
         url : 'protocols/',
         method: HttpMethodTypes.GET

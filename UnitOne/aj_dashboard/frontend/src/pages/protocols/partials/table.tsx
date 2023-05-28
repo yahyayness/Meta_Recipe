@@ -2,7 +2,7 @@ import DeleteAction from "../../../components/actions/delete";
 import EditAction from "../../../components/actions/edit";
 import {useHttp} from "../../../plugins/axios";
 import {useCallback, useEffect, useState} from "react";
-import {ListType, ProjectType, UserType} from "../../../types/ModelTypes";
+import {ListType, ProjectType, ProtocolType, UserType} from "../../../types/ModelTypes";
 import {useAlert} from "../../../common/hooks/alert";
 import {useSearchParams} from "react-router-dom";
 import {useNavigator} from "../../../common/routes";
@@ -77,7 +77,13 @@ export const useProtocolTable = () => {
 
     useEffect(()=>{
         setCommonActions(actions(navigator, ((_selectedRows:any)=>{
-            console.log('selectedRowsssssss' , selectedRows )
+            console.log('selectedRows' , selectedRows)
+            request<ListType<ProtocolType>>(getEndpoint('clone_protocols'), selectedRows?.map( (row:ProtocolType) => row.id) ).then(response => {
+                showAlert({
+                    type: AlertTypes.SUCCESS,
+                    message: `Protocols cloned successfully`
+                })
+            })
         })) as []);
     } , [selectedRows])
 

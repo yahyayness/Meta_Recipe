@@ -63,7 +63,7 @@ class ProtocolView(GenericViewSet):
         obj.protocol_processes.all().delete()
         obj.protocol_nodes.all().delete()
         obj.protocol_ingredient.all().delete()
-        result = self.create_flow(request=request, protocol_id=obj.id)
+        result = self.create_flow(flow=request.data['flow'], protocol_id=obj.id)
         return Response(
             {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': result},
             status=status.HTTP_200_OK)
@@ -165,9 +165,11 @@ class ProtocolView(GenericViewSet):
         if not result:
             raise ValidationError("At least one ID is not in DB")
 
+        count = Protocol.objects.filter().count()
+
         for id in ids:
             protocol = Protocol.objects.get(id=id)
-            clone_protocol = Protocol.objects.create(name=f"{protocol.name}_clone")
+            clone_protocol = Protocol.objects.create(name=f"{protocol.name}_clone_{++count}")
             self.create_flow(flow=protocol.flow, protocol_id=clone_protocol.id)
 
         return Response(

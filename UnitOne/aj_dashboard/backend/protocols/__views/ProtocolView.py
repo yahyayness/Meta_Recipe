@@ -152,3 +152,7 @@ class ProtocolView(GenericViewSet):
                 return ProtocolSerializer(protocol).data
         except Exception as e:
             raise Exception(str(e))
+
+    @action(detail=False, methods=['POST'], name='clone')
+    def clone(self, request, *args, **kwargs):
+        return Response({'status': 'success'})

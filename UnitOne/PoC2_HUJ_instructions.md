@@ -68,3 +68,14 @@ cd frontend
 npm run start
 ```
  - Navigate another browser tab to [http://localhost:3000/](http://localhost:3000/).
+
+## Troubleshooting
+
+ - If there is a problem with the [Backend](https://github.com/yahyayness/Meta_Recipe/edit/main/UnitOne/PoC2_HUJ_instructions.md#backend) instructions, try changing the step `pip install --upgrade pip` into `python3 -m pip install --upgrade pip setuptools wheel`. If successful, proceed normally to the next step. 
+
+ - If things go badly wrong, start over by removing the environment with the following command:
+```
+conda remove -n ajx_poc2_huj_env --all
+```
+
+ - Then start going through the setup from the beginning. 

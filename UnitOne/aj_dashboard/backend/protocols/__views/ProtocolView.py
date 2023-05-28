@@ -1,10 +1,14 @@
 import json
 import random
 import string
+from functools import reduce
+from operator import or_
 
 from django.db import transaction
+from django.db.models import Q
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -41,7 +45,12 @@ class ProtocolView(GenericViewSet):
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         obj = serializer.save()
-        result = self.create_flow(request=request, protocol_id=obj.id)
+        flow = {}
+        if 'flow' in request.data:
+            flow = request.data['flow']
+        else:
+            flow = request.data
+        result = self.create_flow(flow=flow, protocol_id=obj.id)
         return Response(
             {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': result},
             status=status.HTTP_200_OK)
@@ -85,17 +94,11 @@ class ProtocolView(GenericViewSet):
 
     @action(detail=False, methods=['POST'])
     @transaction.atomic
-    def create_flow(self, request, protocol_id=None, *args, **kwargs):
+    def create_flow(self, flow, protocol_id=None, *args, **kwargs):
         try:
             with transaction.atomic():
                 protocol = Protocol.objects.get(id=protocol_id)
-                flow = {}
-                if 'flow' in request.data:
-                    protocol.flow = request.data['flow']
-                    flow = request.data['flow']
-                else:
-                    protocol.flow = request.data
-                    flow = request.data
+                protocol.flow = flow
                 protocol.save()
                 protocol.refresh_from_db()
                 nodes = {}
@@ -155,4 +158,19 @@ class ProtocolView(GenericViewSet):
 
     @action(detail=False, methods=['POST'], name='clone')
     def clone(self, request, *args, **kwargs):
-        return Response({'status': 'success'})
+        ids = request.data['ids']
+        result = Protocol.objects.filter(
+            reduce(or_, [Q(id=n) for n in ids])
+        ).count() == len(ids)
+        if not result:
+            raise ValidationError("At least one ID is not in DB")
+
+        for id in ids:
+            protocol = Protocol.objects.get(id=id)
+            clone_protocol = Protocol.objects.create(name=f"{protocol.name}_clone")
+            self.create_flow(flow=protocol.flow, protocol_id=clone_protocol.id)
+
+        return Response(
+            {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': {}},
+            status=status.HTTP_200_OK)
+

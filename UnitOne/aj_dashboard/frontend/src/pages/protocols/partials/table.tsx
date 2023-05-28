@@ -78,7 +78,7 @@ export const useProtocolTable = () => {
     useEffect(()=>{
         setCommonActions(actions(navigator, ((_selectedRows:any)=>{
             console.log('selectedRows' , selectedRows)
-            request<ListType<ProtocolType>>(getEndpoint('clone_protocols'), selectedRows?.map( (row:ProtocolType) => row.id) ).then(response => {
+            request<ListType<ProtocolType>>(getEndpoint('clone_protocols'), {ids : selectedRows?.map( (row:ProtocolType) => row.id)} ).then(response => {
                 showAlert({
                     type: AlertTypes.SUCCESS,
                     message: `Protocols cloned successfully`

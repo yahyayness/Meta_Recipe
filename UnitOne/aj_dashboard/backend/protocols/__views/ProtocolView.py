@@ -31,6 +31,7 @@ class ProtocolView(GenericViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = ProtocolSerializer
     pagination_class = CustomPagination
+    ordering = '-updated_at'
 
     queryset = Protocol.objects.all()
 
@@ -69,7 +70,7 @@ class ProtocolView(GenericViewSet):
             status=status.HTTP_200_OK)
 
     def list(self, request):
-        queryset = Protocol.objects.all()
+        queryset = Protocol.objects.all().order_by('-updated_at')
         paginator = self.pagination_class()
         result_page = paginator.paginate_queryset(queryset, request)
         serializer = ProtocolSerializer(result_page, many=True)

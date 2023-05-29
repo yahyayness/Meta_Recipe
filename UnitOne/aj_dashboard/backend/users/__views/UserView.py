@@ -40,7 +40,7 @@ class UserView(GenericAPIView):
                 {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': serializer.data},
                 status=status.HTTP_200_OK)
         else:
-            queryset = User.objects.all()
+            queryset = User.objects.all().order_by('-updated_at')
             paginator = self.pagination_class()
             result_page = paginator.paginate_queryset(queryset, request)
             serializer = UserSerializer(result_page, many=True)

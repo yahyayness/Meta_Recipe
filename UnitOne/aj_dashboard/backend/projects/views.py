@@ -47,7 +47,7 @@ def ProjectList(request):
     #GET
     if request.method=='GET':
         pagination_class = CustomPagination
-        queryset= Projects.objects.all()
+        queryset= Projects.objects.all().order_by('-updated_at')
         paginator = pagination_class()
         result_page = paginator.paginate_queryset(queryset, request)
         serializer_class = ProjrctSerilizer(result_page, many=True)

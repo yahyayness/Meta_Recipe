@@ -34,7 +34,7 @@ export default {
         method: HttpMethodTypes.POST
     },
     clone_protocols : {
-        url : 'protocols/clone/',
+        url : 'protocols/clone',
         method: HttpMethodTypes.POST
     },
     all_protocols:{

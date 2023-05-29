@@ -13,7 +13,7 @@
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="e4e06802-2710-4b0f-8bfd-28e67b2cda60">
-      <console name="Connection" type="STANDARD" schema="main" session="Main"><![CDATA[select * from recipe_users]]></console>
+      <console name="Connection" type="STANDARD" schema="main" session="Main"><![CDATA[select * from protocols]]></console>
     </connection>
     <connection id="02d73369-eb0f-4e9c-8994-760a1f249349">
       <console name="Connection 1" type="STANDARD" schema="main" session="Main"><![CDATA[select *from auth_user]]></console>

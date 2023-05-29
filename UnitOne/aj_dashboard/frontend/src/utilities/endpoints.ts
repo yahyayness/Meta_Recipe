@@ -57,6 +57,10 @@ export default {
         url : 'project/',
         method: HttpMethodTypes.POST
     },
+    edit_project : {
+        url : 'project/:id',
+        method: HttpMethodTypes.PATCH
+    },
     all_projects : {
         url : 'project/',
         method: HttpMethodTypes.GET

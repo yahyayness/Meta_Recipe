@@ -139,7 +139,7 @@ const ProductAddEdit: React.FC = () => {
                 </Grid>
 
                 <Grid item xs={8} ml={1}>
-                    <Button type="submit" variant="contained" color="primary">Create Project</Button>
+                    <Button type="submit" variant="contained" color="primary">Save</Button>
                 </Grid>
 
             </Grid>

@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AppRoutes from "../../routes";
-
+import Logo from '../../images/logo.png'
 function Copyright(props: any) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -47,6 +47,7 @@ const AuthLayout:React.FC = ()=>{
                         alignItems: 'center',
                     }}
                 >
+                    <img src={Logo} alt="" className='auth-logo'/>
                     <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                         <LockOutlinedIcon />
                     </Avatar>

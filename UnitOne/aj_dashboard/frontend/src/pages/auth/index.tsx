@@ -65,6 +65,7 @@ const Login:React.FC = ()=>{
                     helperText={(formik?.touched?.password && formik?.errors?.password) || validationMessage}
                 />
                 <FormControlLabel
+                    style={{display:'none'}}
                     control={<Checkbox value="remember" color="primary" />}
                     label="Remember me"
                 />
@@ -76,7 +77,7 @@ const Login:React.FC = ()=>{
                 >
                     Sign In
                 </Button>
-                <Grid container>
+                <Grid container style={{display:'none'}}>
                     <Grid item xs>
                         <Link href="#" variant="body2">
                             Forgot password?

@@ -104,7 +104,7 @@ export const useOnSubmitProjectForm = () => {
 
         console.log('Form' , formData)
         // change the endpoint according to the isEdit flag
-        const endpoint = isEdit? addParamsToEndpoint(getEndpoint('add_project'), {id}) : getEndpoint('add_project')
+        const endpoint = isEdit? addParamsToEndpoint(getEndpoint('edit_project'), {id}) : getEndpoint('add_project')
         /**
          * save user
          * @author Amr
@@ -117,7 +117,7 @@ export const useOnSubmitProjectForm = () => {
             const user = response?.data?.payload
             showAlert({
                 type: AlertTypes.SUCCESS,
-                message: `Project ${user.first_name + ' ' + user.last_name} ${isEdit ? 'updated' : 'added'}  successfully`
+                message: `Project ${user.name} ${isEdit ? 'updated' : 'added'}  successfully`
             })
             navigator('/projects');
         }).catch(error => {

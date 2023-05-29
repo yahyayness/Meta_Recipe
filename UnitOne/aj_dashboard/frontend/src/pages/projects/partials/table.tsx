@@ -11,8 +11,7 @@ import useBreadcrumb from "../../../common/hooks/breadcrumbs";
 import {addParamsToEndpoint, getEndpoint} from "../../../common/http";
 import {AlertTypes} from "../../../types/Enums";
 import GeneralAction from "../../../components/actions/general";
-import ControlPointIcon from '@mui/icons-material/ControlPoint';
-
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
 export const tableActions = (navigator: any, request: any, showAlert: any, setRefresh: any) => [
     {
         component: <DeleteAction onClick={(row: any) => {
@@ -35,7 +34,7 @@ export const tableActions = (navigator: any, request: any, showAlert: any, setRe
         }/>
     },
     {
-        component: <GeneralAction tooltip='Create a new Protocol' icon={ControlPointIcon} onClick={(row: any) => {
+        component: <GeneralAction tooltip='Create a new Protocol' icon={AccountTreeIcon} onClick={(row: any) => {
             navigator(`/protocols/${row.id}/create`)
             return '';
         }

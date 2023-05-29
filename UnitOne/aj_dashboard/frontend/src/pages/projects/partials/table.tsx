@@ -10,7 +10,8 @@ import {actions} from "../../projects/partials/actions";
 import useBreadcrumb from "../../../common/hooks/breadcrumbs";
 import {addParamsToEndpoint, getEndpoint} from "../../../common/http";
 import {AlertTypes} from "../../../types/Enums";
-
+import GeneralAction from "../../../components/actions/general";
+import ControlPointIcon from '@mui/icons-material/ControlPoint';
 
 export const tableActions = (navigator: any, request: any, showAlert: any, setRefresh: any) => [
     {
@@ -29,6 +30,13 @@ export const tableActions = (navigator: any, request: any, showAlert: any, setRe
     {
         component: <EditAction onClick={(row: any) => {
             navigator('/projects/' + row.id)
+            return '';
+        }
+        }/>
+    },
+    {
+        component: <GeneralAction tooltip='Create a new Protocol' icon={ControlPointIcon} onClick={(row: any) => {
+            navigator(`/protocols/${row.id}/create`)
             return '';
         }
         }/>

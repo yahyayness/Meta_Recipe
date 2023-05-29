@@ -64,6 +64,18 @@ export const useProtocolTable = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [pagination, setPagination] = useState<PaginationType>({} as PaginationType)
     const [selectedRows, setSelectedRows] = useState([])
+
+    /**
+     * fetch all user from the backend
+     * @author Amr
+     */
+    const fetch = (page: string | null) => {
+        request<ListType<ProjectType>>(getEndpoint('all_protocols'), {params: {page: page ?? 1}}).then(response => {
+            setRows(response.data.payload?.results)
+            setPagination(response.data.payload as PaginationType)
+        })
+    }
+
     /**
      * common hook that controls all navigations
      * @author Amr
@@ -79,6 +91,7 @@ export const useProtocolTable = () => {
         setCommonActions(actions(navigator, ((_selectedRows:any)=>{
             console.log('selectedRows' , selectedRows)
             request<ListType<ProtocolType>>(getEndpoint('clone_protocols'), {ids : selectedRows?.map( (row:ProtocolType) => row.id)} ).then(response => {
+                fetch(searchParams.get('page'))
                 showAlert({
                     type: AlertTypes.SUCCESS,
                     message: `Protocols cloned successfully`
@@ -97,16 +110,7 @@ export const useProtocolTable = () => {
             label: 'Protocols',
             path: "/protocols"
         }])
-    /**
-     * fetch all user from the backend
-     * @author Amr
-     */
-    const fetch = (page: string | null) => {
-        request<ListType<ProjectType>>(getEndpoint('all_protocols'), {params: {page: page ?? 1}}).then(response => {
-            setRows(response.data.payload?.results)
-            setPagination(response.data.payload as PaginationType)
-        })
-    }
+
     /**
      * update the data according to the refresh flag
      */

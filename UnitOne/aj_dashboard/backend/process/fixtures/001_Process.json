@@ -1,0 +1,23 @@
+[
+  {
+    "model": "process.Process",
+    "fields": {
+      "name": "Chop",
+      "type": "choices"
+    }
+  },
+  {
+    "model": "process.Process",
+    "fields": {
+      "name": "Fry",
+      "type": "time"
+    }
+  },
+  {
+    "model": "process.Process",
+    "fields": {
+      "name": "Boil",
+      "type": "time"
+    }
+  }
+]

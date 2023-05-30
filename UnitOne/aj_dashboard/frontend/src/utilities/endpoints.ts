@@ -57,6 +57,10 @@ export default {
         url : 'project/',
         method: HttpMethodTypes.POST
     },
+    clone_project : {
+        url : 'project/clone',
+        method: HttpMethodTypes.POST
+    },
     edit_project : {
         url : 'project/:id',
         method: HttpMethodTypes.PATCH

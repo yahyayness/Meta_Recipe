@@ -126,7 +126,8 @@ export const useProtocolTable = () => {
         navigator,
         pagination,
         setSelectedRows,
-        selectedRows
+        selectedRows,
+        refresh
     }
 
 

@@ -73,6 +73,7 @@ export const useProjectTable = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [pagination, setPagination] = useState<PaginationType>({} as PaginationType)
     const [selectedRows, setSelectedRows] = useState([])
+
     /**
      * common hook that controls all navigations
      * @author Amr
@@ -84,11 +85,7 @@ export const useProjectTable = () => {
      */
     const [commonActions , setCommonActions] = useState([])
 
-    useEffect(()=>{
-        setCommonActions(actions(navigator, ((_selectedRows:any)=>{
-            console.log('selectedRowsssssss' , selectedRows )
-        })) as []);
-    } , [selectedRows])
+
 
 
     /**
@@ -108,8 +105,24 @@ export const useProjectTable = () => {
         request<ListType<ProjectType>>(getEndpoint('all_projects'), {params: {page: page ?? 1}}).then(response => {
             setRows(response.data.payload?.results)
             setPagination(response.data.payload as PaginationType)
+            setSelectedRows([])
         })
     }
+
+    useEffect(()=>{
+        setCommonActions(actions(navigator, ((_selectedRows:any)=>{
+            request<ListType<ProjectType>>(getEndpoint('clone_project'), {ids :  selectedRows.map((row:any) => row?.id)}).then(response => {
+                showAlert({
+                    type: AlertTypes.SUCCESS,
+                    message: `Project cloned successfully`
+                })
+                fetch(searchParams.get('page'))
+                setRefresh((refresh:any) => refresh +1)
+            })
+        })) as []);
+    } , [selectedRows])
+
+
     /**
      * update the data according to the refresh flag
      */
@@ -125,7 +138,8 @@ export const useProjectTable = () => {
         navigator,
         pagination,
         setSelectedRows,
-        selectedRows
+        selectedRows,
+        refresh
     }
 
 

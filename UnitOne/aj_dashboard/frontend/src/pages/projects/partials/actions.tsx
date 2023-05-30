@@ -4,7 +4,7 @@ export const actions = (navigator:any , onDuplicate : any)=> [
     {
         label: 'Duplicate',
         extra: {
-            className: 'primary',
+            className: '',
             onClick : ()=>  onDuplicate()
         }
     },

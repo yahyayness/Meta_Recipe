@@ -12,12 +12,12 @@ import {useUserTable} from "../users/partials/table";
 const Projects:React.FC = () => {
 
 
-    const {rows, request, showAlert, columns, commonActions , setRefresh,navigator ,pagination,setSelectedRows} =  useProjectTable()
+    const {rows, request, showAlert, columns, commonActions , setRefresh,navigator ,pagination,setSelectedRows,refresh} =  useProjectTable()
 
     return (
         <>
             <ListActions actions={commonActions}/>
-            <AppTable columns={columns} rows={rows} actions={tableActions(navigator , request,showAlert , setRefresh)} pagination={pagination} onRowSelect={setSelectedRows} />
+            <AppTable columns={columns} rows={rows} key={refresh} actions={tableActions(navigator , request,showAlert , setRefresh)} pagination={pagination} onRowSelect={setSelectedRows} />
         </>
     );
 }

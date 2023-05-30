@@ -95,7 +95,7 @@ export const useOnSubmitProjectForm = () => {
         for (const key in files) {
             // const values = [ ...(files[key] as FileList).files]
             for (let i = 0; i < files[key].length; i++) {
-                formData.append(key+'[]',files[key][i]);
+                formData.append(key+'',files[key][i]);
             }
             // if (Object.prototype.hasOwnProperty.call(files, key)) {
             //
@@ -117,7 +117,7 @@ export const useOnSubmitProjectForm = () => {
             const user = response?.data?.payload
             showAlert({
                 type: AlertTypes.SUCCESS,
-                message: `Project ${user.name} ${isEdit ? 'updated' : 'added'}  successfully`
+                message: `Project ${isEdit ? 'updated' : 'added'}  successfully`
             })
             navigator('/projects');
         }).catch(error => {

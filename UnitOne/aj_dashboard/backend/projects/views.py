@@ -80,6 +80,7 @@ def ProjectList(request):
 
 
 def import_data(request, project_id):
+    print('heeeeeimport_dataeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
     ## import ingredients data from ingredients files
     if "ingredients" in request.FILES:
         for iF in request.FILES.getlist('ingredients'):
@@ -181,8 +182,9 @@ def import_data(request, project_id):
                     analyticalChemistryExist = analyticalChemistrySerializer.instance
                 else:
                     print(ValidationError(analyticalChemistrySerializer.errors))
-
+    print(request.FILES)
     if 'production_protocol' in request.FILES:
+        print('zohal')
         for ppFile in request.FILES.getlist('production_protocol'):
             ppData = json.loads(ppFile.read())
             production_protocol_list = ppData['protocols']

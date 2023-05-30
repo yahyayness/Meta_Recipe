@@ -40,11 +40,11 @@ const rows = [
     }
 ];
 const Protocol: React.FC = () => {
-    const {rows, request, showAlert, columns, commonActions , setRefresh,navigator ,pagination,setSelectedRows} =  useProtocolTable()
+    const {rows, request, showAlert, columns, commonActions , setRefresh,navigator ,pagination,setSelectedRows,refresh} =  useProtocolTable()
     return (
         <>
             <ListActions actions={commonActions}/>
-            <AppTable columns={columns} rows={rows} actions={tableActions(navigator , request,showAlert , setRefresh)} pagination={pagination} onRowSelect={setSelectedRows}/>
+            <AppTable columns={columns} rows={rows} key={refresh} actions={tableActions(navigator , request,showAlert , setRefresh)} pagination={pagination} onRowSelect={setSelectedRows}/>
         </>
     );
 }

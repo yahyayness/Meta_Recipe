@@ -82,7 +82,8 @@ const ProductAddEdit: React.FC = () => {
                         error={formik.touched.date && Boolean(formik.errors.date)}
                         helperText={formik?.touched?.date && formik?.errors?.date}
                         InputLabelProps={{
-                            style: {fontSize: '13.45px'}
+                            style: {fontSize: '13.45px'},
+                            shrink: true,
                         }}
                         InputProps={{
                             style: {fontSize: '13.45px'}

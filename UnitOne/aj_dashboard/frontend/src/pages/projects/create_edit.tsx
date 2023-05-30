@@ -119,14 +119,14 @@ const ProductAddEdit: React.FC = () => {
                 <Grid container spacing={2} mt={1} ml={1}>
                     <FileUploader label='Ingredients' message='Upload Ingredients' field='ingredients'
                                   fileHandler={fileHandler}/>
-                    <FileUploader label='Panel files' message='Upload panel files ' field='panel'
+                    <FileUploader label='Panel files' message='Upload panel files ' field='sensory_panels'
                                   fileHandler={fileHandler}/>
 
                 </Grid>
                 <Grid container spacing={2} mt={1} ml={1}>
-                    <FileUploader label='Sensor data' message='Upload Sensor Data' field='sensor'
+                    <FileUploader label='Sensor data' message='Upload Sensor Data' field='sensors'
                                   fileHandler={fileHandler}/>
-                    <FileUploader label='Lab equipment data' message='upload equipment data' field='panel'
+                    <FileUploader label='Lab equipment data' message='upload equipment data' field='equipments'
                                   fileHandler={fileHandler}/>
 
                 </Grid>

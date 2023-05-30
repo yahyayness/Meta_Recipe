@@ -4,6 +4,7 @@ from django.utils.translation import gettext as _
 from common.Models.SoftDeleteModel import SoftDeleteModel
 from ingredients.models import Ingredients
 from process.models import Process
+from projects.models import Projects
 
 
 # Create your models here.
@@ -19,6 +20,8 @@ class Protocol(SoftDeleteModel):
     flow = models.JSONField(default=dict)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
+    project = models.ForeignKey(Projects, on_delete=models.CASCADE, related_name='protocols',
+                                null=True)
 
     class Meta:
         db_table = 'protocols'

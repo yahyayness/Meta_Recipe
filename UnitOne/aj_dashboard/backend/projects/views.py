@@ -15,6 +15,8 @@ from ingredients.serializers import IngredientsSerilizer
 from meta_recipe.__serializers.MetaRecipeSerializer import MetaRecipeSerializer
 from meta_recipe.__serializers.MetaRecipeIngredientsSerializer import MetaRecipeIngredientsSerializer
 from meta_recipe.models import MetaRecipe, MetaRecipeIngredients
+from protocols.__serializers.ProtocolSerializer import ProtocolSerializer
+from protocols.__views.ProtocolView import ProtocolView
 from recipe.models import Recipe, RecipeIngredients
 from recipe.__serializers.RecipeSerializer import RecipeSerializer
 from recipe.__serializers.RecipeIngredientsSerializer import RecipeIngredientsSerializer
@@ -179,6 +181,19 @@ def import_data(request, project_id):
                     analyticalChemistryExist = analyticalChemistrySerializer.instance
                 else:
                     print(ValidationError(analyticalChemistrySerializer.errors))
+
+    if 'production_protocol' in request.FILES:
+        for ppFile in request.FILES.getlist('production_protocol'):
+            ppData = json.loads(ppFile.read())
+            production_protocol_list = ppData['protocols']
+            for pp in production_protocol_list:
+                pp['project_id'] = project_id
+                serializer = ProtocolSerializer(data=pp)
+                serializer.is_valid(raise_exception=True)
+                obj = serializer.save()
+                if 'flow' in pp:
+                    protocol_view = ProtocolView()
+                    protocol_view.create_flow(flow=pp['flow'], protocol_id=obj.id)
 
     ## import Projcet data from files
     if "data" in request.FILES:

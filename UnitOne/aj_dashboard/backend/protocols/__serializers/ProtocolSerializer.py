@@ -14,4 +14,4 @@ class ProtocolSerializer(serializers.ModelSerializer):
     class Meta:
         model = Protocol
         fields = ['id', 'description', 'reference_author', 'aliquot_date', 'reagent', 'name', 'processes',
-                  'ingredients', 'flow', 'created_at', 'updated_at']
+                  'ingredients', 'flow', 'created_at', 'updated_at', 'project_id']

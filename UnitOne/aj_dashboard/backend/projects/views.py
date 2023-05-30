@@ -368,9 +368,8 @@ def clone(request):
                                                           value=analytical['value'],
                                                           unit=analytical['unit'],
                                                           )
-            serializer = ProjrctSerilizer(__project, many=False)
             return Response(
-                {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': serializer.data},
+                {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': {}},
                 status=status.HTTP_204_NO_CONTENT)
     except Exception as e:
         raise Exception(str(e))

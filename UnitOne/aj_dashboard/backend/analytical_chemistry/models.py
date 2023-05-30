@@ -1,4 +1,6 @@
 from django.db import models
+
+from projects.models import Projects
 from sample_descriptions.models import SampleDescriptions
 from sensors.models import Sensors
 # Create your models here.
@@ -12,7 +14,9 @@ class AnalyticalChemistry(models.Model):
     variable=models.CharField(max_length=255,null=True,blank=True)
     value=models.CharField(max_length=255,null=True,blank=True)
     unit=models.CharField(max_length=255,null=True,blank=True)
-
+    project = models.ForeignKey(Projects, on_delete=models.CASCADE, related_name='analytical_chemistry',
+                                blank=False,
+                                null=True)
    
 
     def __str__(self):

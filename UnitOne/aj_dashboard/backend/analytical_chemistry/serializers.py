@@ -4,6 +4,10 @@ from sensors.serializers import SensorsSerializers
 from sample_descriptions.serializers import SampleDescriptionsSerializers
 
 class AnalyticalChemistryCreateSerializers(serializers.ModelSerializer):
+    def __init__(self, *args, **kwargs):
+        super(AnalyticalChemistryCreateSerializers, self).__init__(*args, **kwargs)
+        if self.context.get('for_cloning'):
+            self.Meta.fields = ['date','method','assay_component','variable','value','unit']
     class Meta:
         model = AnalyticalChemistry
         fields = ('__all__') 
@@ -14,5 +18,5 @@ class AnalyticalChemistrySerializers(serializers.ModelSerializer):
     sample = SampleDescriptionsSerializers(read_only=True)
     class Meta:
         model = AnalyticalChemistry
-        fields = ['id','sample','sensor','date','method','assay_component','variable','value','unit'] 
+        fields = ['id','sample','sensor','date','method','assay_component','variable','value','unit', 'project']
  

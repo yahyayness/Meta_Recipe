@@ -81,8 +81,8 @@ def ProjectList(request):
 
 def import_data(request, project_id):
     ## import ingredients data from ingredients files
-    if "ingredients" in request.FILES:
-        for iF in request.FILES.getlist('ingredients'):
+    if "ingredients[]" in request.FILES:
+        for iF in request.FILES.getlist('ingredients[]'):
             iData = json.loads(iF.read())
             ingredients_list = iData["ingredients"]
             # print(ingredients_list)
@@ -100,8 +100,8 @@ def import_data(request, project_id):
                         print(ValidationError(Ingserializer.errors))
 
     ## import equipments data from equipments files
-    if "equipments" in request.FILES:
-        for eF in request.FILES.getlist('equipments'):
+    if "equipments[]" in request.FILES:
+        for eF in request.FILES.getlist('equipments[]'):
             eData = json.loads(eF.read())
             equipments_list = eData["equipment"]
             for equ in equipments_list:
@@ -118,8 +118,8 @@ def import_data(request, project_id):
                     else:
                         print(ValidationError(equSerializer.errors))
     ## import sensory_panels data from sensory_panels files
-    if "sensory_panels" in request.FILES:
-        for sPF in request.FILES.getlist('sensory_panels'):
+    if "sensory_panels[]" in request.FILES:
+        for sPF in request.FILES.getlist('sensory_panels[]'):
             sPData = json.loads(sPF.read())
             sensoryPanels_list = sPData["sensory_panels"]
 
@@ -139,8 +139,8 @@ def import_data(request, project_id):
                 else:
                     print(ValidationError(spiSerializer.errors))
     ## import Sensors data from sensors files
-    if "sensors" in request.FILES:
-        for sF in request.FILES.getlist('sensors'):
+    if "sensors[]" in request.FILES:
+        for sF in request.FILES.getlist('sensors[]'):
             sData = json.loads(sF.read())
             sensors_list = sData["sensor_data"]
 
@@ -160,8 +160,8 @@ def import_data(request, project_id):
                         print(ValidationError(sensorSerializer.errors))
 
     ## import analytical_chemistry data from analytical_chemistry files
-    if "analytical_chemistry" in request.FILES:
-        for aCF in request.FILES.getlist('analytical_chemistry'):
+    if "analytical_chemistry[]" in request.FILES:
+        for aCF in request.FILES.getlist('analytical_chemistry[]'):
             aCData = json.loads(aCF.read())
             analytical_chemistry_list = aCData["sensor_data"]
 
@@ -182,8 +182,8 @@ def import_data(request, project_id):
                 else:
                     print(ValidationError(analyticalChemistrySerializer.errors))
 
-    if 'production_protocol' in request.FILES:
-        for ppFile in request.FILES.getlist('production_protocol'):
+    if 'production_protocol[]' in request.FILES:
+        for ppFile in request.FILES.getlist('production_protocol[]'):
             ppData = json.loads(ppFile.read())
             production_protocol_list = ppData['protocols']
             for pp in production_protocol_list:

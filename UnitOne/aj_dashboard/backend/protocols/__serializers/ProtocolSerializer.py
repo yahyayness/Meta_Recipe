@@ -5,9 +5,9 @@ from protocols.models import Protocol
 
 
 class ProtocolSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(max_length=70, required=True, validators=[
-        UniqueValidator(queryset=Protocol.objects.all())
-    ])
+    # name = serializers.CharField(max_length=70, required=True, validators=[
+    #     UniqueValidator(queryset=Protocol.objects.all())
+    # ])
 
     flow = serializers.JSONField(required=False, initial=dict)
 

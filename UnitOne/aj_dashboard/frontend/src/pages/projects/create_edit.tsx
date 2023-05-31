@@ -135,7 +135,7 @@ const ProductAddEdit: React.FC = () => {
                     <FileUploader label='Analytical chemistry' message='Upload analytical chemistry'
                                   field='analytical_chemistry' fileHandler={fileHandler}/>
                     <FileUploader label='Production protocols' message='Select production protocols'
-                                  field='production_protocols' fileHandler={fileHandler}/>
+                                  field='production_protocol' fileHandler={fileHandler}/>
 
                 </Grid>
 

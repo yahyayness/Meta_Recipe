@@ -21,7 +21,7 @@ class Protocol(SoftDeleteModel):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
     project = models.ForeignKey(Projects, on_delete=models.CASCADE, related_name='protocols',
-                                null=True)
+                                null=True, default=None)
 
     class Meta:
         db_table = 'protocols'

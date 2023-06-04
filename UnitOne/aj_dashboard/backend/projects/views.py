@@ -385,8 +385,18 @@ def clone(request):
                                                           value=analytical['value'],
                                                           unit=analytical['unit'],
                                                           )
+
+                for protocol in ex_serializer.data['protocols']:
+                    pro = __project.protocols.create(description=protocol['description'],
+                                                     reference_author=protocol['reference_author'],
+                                                     aliquot_date=protocol['aliquot_date'], reagent=protocol['reagent'],
+                                                     processes=protocol['processes'],
+                                                     ingredients=protocol['ingredients'], flow=protocol['flow'],
+                                                     name=protocol['name'])
+                    protocol_view = ProtocolView()
+                    protocol_view.create_flow(flow=protocol['flow'], protocol_id=pro.id)
             return Response(
                 {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': {}},
                 status=status.HTTP_204_NO_CONTENT)
     except Exception as e:
-        raise Exception(str(e))
+        raise Exception(e)

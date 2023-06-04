@@ -13,5 +13,10 @@ class ProtocolSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Protocol
+        extra_kwargs = {
+            'project': {
+                'required': False,
+            },
+        }
         fields = ['id', 'description', 'reference_author', 'aliquot_date', 'reagent', 'name', 'processes',
-                  'ingredients', 'flow', 'created_at', 'updated_at', 'project', 'project_id']
+                  'ingredients', 'flow', 'created_at', 'updated_at', 'project']

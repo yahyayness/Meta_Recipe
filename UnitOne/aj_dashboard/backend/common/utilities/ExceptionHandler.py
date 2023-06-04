@@ -1,15 +1,33 @@
 from django.http import Http404
 from rest_framework import exceptions
 from rest_framework.exceptions import PermissionDenied, ValidationError, ErrorDetail
+from rest_framework.fields import get_error_detail
 from rest_framework.response import Response
 from rest_framework.serializers import as_serializer_error
 from rest_framework.views import exception_handler
 
+from common.utilities.Exception import ProjectValidationError
+
 
 def custom_exception_handler(exc, context):
-    print(exc)
+    if isinstance(exc, ProjectValidationError):
+        message = exc.default_detail
+        if type(exc.detail) is dict:
+            if len(exc.detail) > 0:
+                first_model_key = list(exc.detail.keys())[0]
+                first_model_value = exc.detail[first_model_key]
+                first_prop_key = list(first_model_value.keys())[0]
+                message = first_model_value[first_prop_key][0]
+
+        return Response({
+            'status': 'error',
+            'code': exc.status_code,
+            'message': message,
+            'payload': exc.detail
+        }, exc.status_code)
+
     if isinstance(exc, ValidationError):
-        
+
         exc = exceptions.ValidationError(as_serializer_error(exc))
         response = exception_handler(exc, context)
         detail = exc.default_detail
@@ -25,7 +43,7 @@ def custom_exception_handler(exc, context):
             'code': response.status_code,
             'message': detail,
             'payload': response.data
-        })
+        }, response.status_code)
 
     if isinstance(exc, Http404):
         exc = exceptions.NotFound()
@@ -42,7 +60,7 @@ def custom_exception_handler(exc, context):
             'code': 500,
             'message': str(exc),
             'payload': {}
-        })
+        }, 500)
 
     detail = exc.default_detail
 

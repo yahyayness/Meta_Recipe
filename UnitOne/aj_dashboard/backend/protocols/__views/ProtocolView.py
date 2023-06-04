@@ -155,7 +155,7 @@ class ProtocolView(GenericViewSet):
                         ProtocolEdge.objects.create(source_node_id=source_id, target_node_id=target_id)
                 return ProtocolSerializer(protocol).data
         except Exception as e:
-            raise Exception(str(e))
+            raise e
 
     @action(detail=False, methods=['POST'], name='clone')
     def clone(self, request, *args, **kwargs):

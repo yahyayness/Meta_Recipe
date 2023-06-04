@@ -95,7 +95,7 @@ export const useOnSubmitProjectForm = () => {
         for (const key in files) {
             // const values = [ ...(files[key] as FileList).files]
             for (let i = 0; i < files[key].length; i++) {
-                formData.append(key+'',files[key][i]);
+                formData.append(key+'[]',files[key][i]);
             }
             // if (Object.prototype.hasOwnProperty.call(files, key)) {
             //

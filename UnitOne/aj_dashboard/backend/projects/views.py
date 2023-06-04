@@ -182,7 +182,7 @@ def ProjectList(request):
                         ppData = json.loads(ppFile.read())
                         production_protocol_list = ppData['protocols']
                         for pp in production_protocol_list:
-                            pp['project_id'] = projectExist.id
+                            pp['project'] = projectExist.id
                             serializer = ProtocolSerializer(data=pp)
                             serializer.is_valid(raise_exception=True)
                             obj = serializer.save()

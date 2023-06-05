@@ -20,3 +20,8 @@ class ProtocolSerializer(serializers.ModelSerializer):
         }
         fields = ['id', 'description', 'reference_author', 'aliquot_date', 'reagent', 'name', 'processes',
                   'ingredients', 'flow', 'created_at', 'updated_at', 'project']
+
+    def to_representation(self, instance):
+        data = super(ProtocolSerializer, self).to_representation(instance)
+        data['project_name'] = instance.project.name if instance.project else None
+        return data

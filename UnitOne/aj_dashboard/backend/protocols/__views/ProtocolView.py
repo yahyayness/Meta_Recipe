@@ -177,3 +177,6 @@ class ProtocolView(GenericViewSet):
             {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': {}},
             status=status.HTTP_200_OK)
 
+    @action(detail=True, methods=['POST'])
+    def test(self, request, *args, **kwargs):
+        return Response({'status': 'success'})

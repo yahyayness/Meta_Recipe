@@ -383,7 +383,7 @@ const useProtocol = () => {
     const onSave = () => {
         let _form = {
             ...form,
-            project_id,
+            project:project_id,
             flow : {
                 nodes: nodes,
                 edges: edges

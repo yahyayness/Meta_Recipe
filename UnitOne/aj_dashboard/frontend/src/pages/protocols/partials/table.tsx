@@ -51,6 +51,10 @@ export const columns = [
     {
         label: 'Date',
         value: 'created_at',
+    },
+    {
+        label: 'Project',
+        value: 'project_name',
     }
 ] as Array<TableColumns>
 

@@ -29,7 +29,7 @@ class Protocol(SoftDeleteModel):
         unique_together = ('name', 'project')
 
     def __str__(self):
-        return self.reference_author
+        return self.name
 
 
 class ProtocolProcess(models.Model):

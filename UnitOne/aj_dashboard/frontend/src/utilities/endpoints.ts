@@ -49,6 +49,10 @@ export default {
         url : 'protocols/:id',
         method: HttpMethodTypes.GET
     },
+    amount_protocol:{
+        url : 'protocols/:id/test',
+        method: HttpMethodTypes.POST
+    },
     update_protocol:{
         url : 'protocols/:id',
         method: HttpMethodTypes.PUT

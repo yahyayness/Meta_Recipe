@@ -11,9 +11,10 @@ import Merge from "./components/merge";
 import Serve from "./components/serve";
 import ProtocolsOptions from "./components/protocols";
 import Process from "./components/process";
-
+import {IconButton} from "@mui/material";
 import useProtocol from "./partials/hooks";
-
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import BasicModal from "./components/protocols/components/extra-amount/index"
 
 const rfStyle = {
     backgroundColor: 'trasparent',
@@ -35,7 +36,7 @@ const EXTRA_HEIGHT = 55;
 
 const CreateEditProtocol: React.FC = () => {
 
-    const { onSave , onDuplicate, nodes , edges,onNodesChange,onEdgesChange, onConnect , addProtocol ,counter}
+    const { onSave , onDuplicate, nodes , edges,onNodesChange,onEdgesChange, onConnect , addProtocol ,counter,openModel,handleOpenModel,ExtraAmountModal}
         = useProtocol();
     return (
         <>
@@ -45,10 +46,11 @@ const CreateEditProtocol: React.FC = () => {
                     <Stack spacing={2} direction="row"  justifyContent="right" className="list-master-actions" width="100%">
                         <Button  variant="text" color="info" onClick={onDuplicate}>Duplicate</Button>
                         <Button variant="text"  color="primary" className='primary' onClick={onSave}>Save</Button>
-
+                        <IconButton  onClick={()=>handleOpenModel(true)} component="label" key={'stack-list-actions'}>
+                            <MoreVertIcon/>
+                        </IconButton>
                     </Stack>
                     <ReactFlow
-
                         nodes={nodes}
                         edges={edges}
                         onNodesChange={onNodesChange}
@@ -59,6 +61,8 @@ const CreateEditProtocol: React.FC = () => {
                         style={rfStyle}
                     />
                 </Box>
+                <ExtraAmountModal
+                /> 
                 <ProtocolsOptions addProtocol={addProtocol}/>
 
             </Stack>

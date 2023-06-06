@@ -11,6 +11,7 @@ import {addParamsToEndpoint, getEndpoint} from "../../../common/http";
 import {ListType, ProjectType, ProtocolType} from "../../../types/ModelTypes";
 import {AlertTypes} from "../../../types/Enums";
 import {ResponseType} from "../../../types/HttpTypes";
+import BasicModal from "../components/protocols/components/extra-amount/index"
 
 /**
  * this hook handles the required operations for ReactFlow lib.
@@ -280,7 +281,8 @@ const useProtocol = () => {
     const {id , project_id} = useParams();
     const isEdit = !!id
     const {request} = useHttp();
-
+    const [openModel, setOpenModel] = useState(false);
+    const handleOpenModel = (value:boolean) => setOpenModel(value);
 
     /**
      * this function binds the required actions to the nodes according
@@ -417,9 +419,13 @@ const useProtocol = () => {
             })
         })
     }
+    const ExtraAmountModal = () => {
+        return BasicModal(openModel,handleOpenModel,id)
+    }
 
+  
 
-    return {onSave, onDuplicate, nodes, edges, onNodesChange, onEdgesChange, onConnect, addProtocol, counter}
+    return {onSave, onDuplicate, nodes, edges, onNodesChange, onEdgesChange, onConnect, addProtocol, counter,openModel,handleOpenModel,ExtraAmountModal}
 
 }
 

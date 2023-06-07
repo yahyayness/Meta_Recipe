@@ -4,6 +4,7 @@
 ### pip install djangorestframework
 ### pip install djangorestframework-simplejwt
 ### pip install django-cors-header
+### pip install -r requirements.txt
 ###  python manage.py runserver
 ### py manage.py makemigrations
 ### python manage.py migrate

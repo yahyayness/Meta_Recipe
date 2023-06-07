@@ -19,7 +19,7 @@ class ProtocolSerializer(serializers.ModelSerializer):
             },
         }
         fields = ['id', 'description', 'reference_author', 'aliquot_date', 'reagent', 'name', 'processes',
-                  'ingredients', 'flow', 'created_at', 'updated_at', 'project']
+                  'ingredients', 'flow', 'created_at', 'updated_at', 'project', 'extra']
 
     def to_representation(self, instance):
         data = super(ProtocolSerializer, self).to_representation(instance)

@@ -200,6 +200,9 @@ class ProtocolView(GenericViewSet):
                                         ingredient__name__iexact=child['data']['value']['name']).update(
                                         quantity=child['data']['value']['amount'])
                     protocol.flow = flow
+                    if (request.data['sugar'] != 0) | (request.data['salt'] != 0) | (request.data['spicy'] != 0):
+                        protocol.extra = {'sugar': request.data['sugar'], 'salt': request.data['salt'],
+                                          'spicy': request.data['spicy']}
                     protocol.save()
                 # ingredient_container = filter(lambda ic: ic['type'] == 'ingredient-container', protocol.flow['nodes'])
                 # print(list(ingredient_container))

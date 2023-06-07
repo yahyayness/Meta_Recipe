@@ -33,14 +33,14 @@ const style = {
      * @author Bilal
      */
 
-export default function BasicModal(open: any, setOpen: Function, protocol_id : any ) {
+export default function BasicModal(open: any, setOpen: Function, protocol_id : any, extra: any ) {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [form , setForm] = useState({});
-  const [sugar , setSugar] = useState(0);
-  const [salt , setSalt] = useState(0);
-  const [spicy , setSpicy] = useState(0);
+  const [sugar , setSugar] = useState(extra?.sugar || 0);
+  const [salt , setSalt] = useState(extra?.salt || 0);
+  const [spicy , setSpicy] = useState(extra?.spicy || 0);
   const {request} = useHttp();
   const {showAlert} = useAlert();
   const {navigator} = useNavigator()
@@ -69,9 +69,9 @@ export default function BasicModal(open: any, setOpen: Function, protocol_id : a
         const protocol = response?.data?.payload
         showAlert({
             type: AlertTypes.SUCCESS,
-            message: `Protocol updated  successfully`
+            message: `Protocol extra updated  successfully`
         })
-        navigator('/protocols');
+        //navigator('/protocols/'+protocol_id);
     })
 }
 
@@ -98,21 +98,22 @@ const handleSpicy = (event: Event, newValue: number | number[]) => {
             <Typography id="modal-modal-title" variant="h6" component="h2">
             Sugar
             </Typography>
-            <Slider  track={false} color={sugar < 0 ? "secondary" : "primary" } min={-50} max={50} onChange={handleSugar} defaultValue={0} aria-label="Default" valueLabelDisplay="on" />
+            <Slider  track={false} color={sugar < 0 ? "secondary" : "primary" } min={-50} max={50} onChange={handleSugar} defaultValue={sugar} aria-label="Default" valueLabelDisplay="on" />
           </Box>
           <Box >
             <Typography id="modal-modal-title" variant="h6" component="h2">
              Salt
             </Typography>
-            <Slider   track={false} min={-50} max={50} color={salt < 0 ? "secondary" : "primary" } onChange={handleSalt} defaultValue={0} aria-label="Default" valueLabelDisplay="on" />
+            <Slider   track={false} min={-50} max={50} color={salt < 0 ? "secondary" : "primary" } onChange={handleSalt} defaultValue={salt} aria-label="Default" valueLabelDisplay="on" />
           </Box>
           <Box >
             <Typography id="modal-modal-title" variant="h6" component="h2">
             Spicy
             </Typography>
-            <Slider   track={false} min={-50} max={50} color={spicy < 0 ? "secondary" : "primary" } onChange={handleSpicy} defaultValue={0} aria-label="Default" valueLabelDisplay="on" />
+            <Slider   track={false} min={-50} max={50} color={spicy < 0 ? "secondary" : "primary" } onChange={handleSpicy} defaultValue={spicy} aria-label="Default" valueLabelDisplay="on" />
           </Box>
           <Button onClick={()=>onSave()} variant="contained">Save</Button>
+          <Button style={{marginLeft:"10px"}} onClick={()=>handleClose()}  >Close</Button>
         </Box>
         
       </Modal>

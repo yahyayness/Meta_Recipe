@@ -264,6 +264,7 @@ const useProtocol = () => {
 
     const [nodes, setNodes] = useState<Array<Node>>([]);
     const [edges, setEdges] = useState<Array<Edge>>([]);
+    const [extra, setExtra] = useState({});
     const [counter, setCounter] = useState<number>(0)
     const {onChildChange, random, onClose} = useCommon(setNodes, setEdges)
     const {
@@ -376,6 +377,7 @@ const useProtocol = () => {
                 setForm(response.data.payload);
                 setNodes(bindActions(response.data.payload.flow.nodes))
                 setEdges(response.data.payload.flow.edges)
+                setExtra(response.data.payload.extra)
 
             })
         }
@@ -420,7 +422,7 @@ const useProtocol = () => {
         })
     }
     const ExtraAmountModal = () => {
-        return BasicModal(openModel,handleOpenModel,id)
+        return BasicModal(openModel,handleOpenModel,id,extra)
     }
 
   

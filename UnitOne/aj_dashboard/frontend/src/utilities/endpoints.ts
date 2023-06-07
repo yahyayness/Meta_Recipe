@@ -50,7 +50,7 @@ export default {
         method: HttpMethodTypes.GET
     },
     amount_protocol:{
-        url : 'protocols/:id/test',
+        url : 'protocols/:id/adjustments',
         method: HttpMethodTypes.POST
     },
     update_protocol:{

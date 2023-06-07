@@ -4,8 +4,10 @@ import string
 from functools import reduce
 from operator import or_
 
+from django.core import serializers
 from django.db import transaction
 from django.db.models import Q
+from django.forms import model_to_dict
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
@@ -178,5 +180,32 @@ class ProtocolView(GenericViewSet):
             status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['POST'])
-    def test(self, request, *args, **kwargs):
-        return Response({'status': 'success'})
+    @transaction.atomic
+    def adjustments(self, request, pk=None, *args, **kwargs):
+        try:
+            with transaction.atomic():
+                params = ['sugar', 'salt', 'spicy', 'water']
+                protocol = Protocol.objects.get(id=pk)
+                flow = protocol.flow
+                if 'nodes' in flow:
+                    for node in flow['nodes']:
+                        if node['type'] == 'ingredient-container':
+                            for child in node['data']['children']:
+                                if child['data']['value']['name'].lower() in params:
+                                    for param in params[:-1]:
+                                        child['data']['value']['amount'] = int(child['data']['value']['amount']) + \
+                                                                           request.data[
+                                                                               param]
+                                    ProtocolIngredient.objects.filter(
+                                        ingredient__name__iexact=child['data']['value']['name']).update(
+                                        quantity=child['data']['value']['amount'])
+                    protocol.flow = flow
+                    protocol.save()
+                # ingredient_container = filter(lambda ic: ic['type'] == 'ingredient-container', protocol.flow['nodes'])
+                # print(list(ingredient_container))
+                return Response(
+                    {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success',
+                     'payload': model_to_dict(protocol)},
+                    status=status.HTTP_200_OK)
+        except Exception as e:
+            raise e

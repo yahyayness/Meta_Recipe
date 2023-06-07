@@ -33,11 +33,10 @@ const style = {
      * @author Bilal
      */
 
-export default function BasicModal(open: any, setOpen: Function, protocol_id : any, extra: any ) {
+export default function BasicModal(open: any, setOpen: Function, protocol_id : any, extra: any, setNodes: any,setEdges: any ,setForm: any) {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [form , setForm] = useState({});
   const [sugar , setSugar] = useState(extra?.sugar || 0);
   const [salt , setSalt] = useState(extra?.salt || 0);
   const [spicy , setSpicy] = useState(extra?.spicy || 0);
@@ -67,6 +66,9 @@ export default function BasicModal(open: any, setOpen: Function, protocol_id : a
     
     request<ProtocolType>(endpoint, _form).then((response) => {
         const protocol = response?.data?.payload
+        setForm(protocol)
+        setNodes(protocol?.flow?.nodes)
+        setEdges(protocol?.flow?.edges)
         showAlert({
             type: AlertTypes.SUCCESS,
             message: `Protocol extra updated  successfully`

@@ -422,7 +422,7 @@ const useProtocol = () => {
         })
     }
     const ExtraAmountModal = () => {
-        return BasicModal(openModel,handleOpenModel,id,extra)
+        return BasicModal(openModel,handleOpenModel,id,extra,setNodes,setEdges,setForm)
     }
 
   

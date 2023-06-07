@@ -7,5 +7,5 @@ from protocols.__views.ProtocolView import ProtocolView
 
 router = DefaultRouter(trailing_slash=False)
 router.register(r'', ProtocolView)
-
+router.register(r'<int:pk>/adjustments', ProtocolView, basename='adjustments')
 urlpatterns = router.urls

@@ -22,6 +22,7 @@ class Protocol(SoftDeleteModel):
     updated_at = models.DateTimeField(auto_now=True, null=True)
     project = models.ForeignKey(Projects, on_delete=models.CASCADE, related_name='protocols',
                                 null=True, default=None)
+    extra = models.JSONField(null=True, blank=False, default=dict)
 
     class Meta:
         db_table = 'protocols'
@@ -29,7 +30,7 @@ class Protocol(SoftDeleteModel):
         unique_together = ('name', 'project')
 
     def __str__(self):
-        return self.reference_author
+        return self.name
 
 
 class ProtocolProcess(models.Model):

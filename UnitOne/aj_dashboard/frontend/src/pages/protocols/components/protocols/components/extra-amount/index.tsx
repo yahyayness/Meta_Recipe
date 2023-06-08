@@ -66,14 +66,17 @@ export default function BasicModal(open: any, setOpen: Function, protocol_id : a
     
     request<ProtocolType>(endpoint, _form).then((response) => {
         const protocol = response?.data?.payload
-        setForm(protocol)
-        setNodes(protocol?.flow?.nodes)
-        setEdges(protocol?.flow?.edges)
+         
+        /* setNodes(protocol?.flow?.nodes)
+        setEdges(protocol?.flow?.edges) */
+        handleClose()
+        window.location.reload();
+
         showAlert({
             type: AlertTypes.SUCCESS,
             message: `Protocol extra updated  successfully`
         })
-        //navigator('/protocols/'+protocol_id);
+         navigator('/protocols/'+protocol_id);
     })
 }
 

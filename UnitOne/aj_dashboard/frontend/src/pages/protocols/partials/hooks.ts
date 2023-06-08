@@ -11,6 +11,7 @@ import {addParamsToEndpoint, getEndpoint} from "../../../common/http";
 import {ListType, ProjectType, ProtocolType} from "../../../types/ModelTypes";
 import {AlertTypes} from "../../../types/Enums";
 import {ResponseType} from "../../../types/HttpTypes";
+import BasicModal from "../components/protocols/components/extra-amount/index"
 
 /**
  * this hook handles the required operations for ReactFlow lib.
@@ -263,6 +264,7 @@ const useProtocol = () => {
 
     const [nodes, setNodes] = useState<Array<Node>>([]);
     const [edges, setEdges] = useState<Array<Edge>>([]);
+    const [extra, setExtra] = useState({});
     const [counter, setCounter] = useState<number>(0)
     const {onChildChange, random, onClose} = useCommon(setNodes, setEdges)
     const {
@@ -280,7 +282,8 @@ const useProtocol = () => {
     const {id , project_id} = useParams();
     const isEdit = !!id
     const {request} = useHttp();
-
+    const [openModel, setOpenModel] = useState(false);
+    const handleOpenModel = (value:boolean) => setOpenModel(value);
 
     /**
      * this function binds the required actions to the nodes according
@@ -374,6 +377,7 @@ const useProtocol = () => {
                 setForm(response.data.payload);
                 setNodes(bindActions(response.data.payload.flow.nodes))
                 setEdges(response.data.payload.flow.edges)
+                setExtra(response.data.payload.extra)
 
             })
         }
@@ -417,9 +421,13 @@ const useProtocol = () => {
             })
         })
     }
+    const ExtraAmountModal = () => {
+        return BasicModal(openModel,handleOpenModel,id,extra,setNodes,setEdges,setForm)
+    }
 
+  
 
-    return {onSave, onDuplicate, nodes, edges, onNodesChange, onEdgesChange, onConnect, addProtocol, counter}
+    return {onSave, onDuplicate, nodes, edges, onNodesChange, onEdgesChange, onConnect, addProtocol, counter,openModel,handleOpenModel,ExtraAmountModal}
 
 }
 

@@ -44,7 +44,8 @@ interface ProtocolType extends ResponseType {
     reagent?: string,
     reference_author?:string,
     updated_at?: string,
-    flow: ProtocolFlowType
+    flow: ProtocolFlowType,
+    extra: {}
 }
 
 interface IngredientType {

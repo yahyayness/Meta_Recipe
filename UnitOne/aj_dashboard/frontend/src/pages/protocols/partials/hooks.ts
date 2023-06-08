@@ -377,8 +377,8 @@ const useProtocol = () => {
                 setForm(response.data.payload);
                 setNodes(bindActions(response.data.payload.flow.nodes))
                 setEdges(response.data.payload.flow.edges)
-                setExtra(response.data.payload.extra)
-
+                setExtra({...response.data.payload.extra})
+                console.log('extra' , extra)
             })
         }
     }, [id])
@@ -421,13 +421,26 @@ const useProtocol = () => {
             })
         })
     }
+
+    const onSaveAdjustment = (response:any)=> {
+        console.log('response' , response.data.payload.flow.nodes)
+        setNodes([...bindActions(response.data.payload.flow.nodes)])
+        setEdges([...response.data.payload.flow.edges])
+        setCounter((counter:number) => counter + 1)
+        handleOpenModel(false)
+        showAlert({
+            type: AlertTypes.SUCCESS,
+            message: `Protocol adjusted successfully`
+        })
+    }
     const ExtraAmountModal = () => {
-        return BasicModal(openModel,handleOpenModel,id,extra,setNodes,setEdges,setForm)
+        // return BasicModal(openModel,handleOpenModel,id,extra,setNodes,setEdges,setForm , bindActions , setCounter,callback)
     }
 
   
 
-    return {onSave, onDuplicate, nodes, edges, onNodesChange, onEdgesChange, onConnect, addProtocol, counter,openModel,handleOpenModel,ExtraAmountModal}
+    return {onSave, onDuplicate, nodes, edges, onNodesChange, onEdgesChange, onConnect, addProtocol,
+        counter,openModel,ExtraAmountModal , onSaveAdjustment ,handleOpenModel,id,extra , setForm}
 
 }
 

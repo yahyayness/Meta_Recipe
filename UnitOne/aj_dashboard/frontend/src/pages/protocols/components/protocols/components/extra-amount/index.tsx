@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {  useState} from "react";
+import {useEffect, useState} from "react";
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -22,7 +22,7 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 400,
   bgcolor: 'background.paper',
-  border: '2px solid #000',
+  // border: '2px solid #000',
   boxShadow: 24,
   p: 4,
 };
@@ -33,13 +33,13 @@ const style = {
      * @author Bilal
      */
 
-export default function BasicModal(open: any, setOpen: Function, protocol_id : any, extra: any, setNodes: any,setEdges: any ,setForm: any) {
+const BasicModal:React.FC<any> = ({open, setOpen, protocol_id , extra, setForm , afterSave}) => {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [sugar , setSugar] = useState(extra?.sugar || 0);
-  const [salt , setSalt] = useState(extra?.salt || 0);
-  const [spicy , setSpicy] = useState(extra?.spicy || 0);
+  const [sugar , setSugar] = useState( 0);
+  const [salt , setSalt] = useState( 0);
+  const [spicy , setSpicy] = useState( 0);
   const {request} = useHttp();
   const {showAlert} = useAlert();
   const {navigator} = useNavigator()
@@ -66,20 +66,24 @@ export default function BasicModal(open: any, setOpen: Function, protocol_id : a
     
     request<ProtocolType>(endpoint, _form).then((response) => {
         const protocol = response?.data?.payload
-         
-        /* setNodes(protocol?.flow?.nodes)
-        setEdges(protocol?.flow?.edges) */
-        handleClose()
-        window.location.reload();
 
-        showAlert({
-            type: AlertTypes.SUCCESS,
-            message: `Protocol extra updated  successfully`
-        })
-         navigator('/protocols/'+protocol_id);
+        // handleClose()
+        // window.location.reload();
+      afterSave(response);
+
+
+
+         // navigator('/protocols/'+protocol_id);
     })
-}
 
+
+}
+   useEffect(()=>{
+     setSalt(extra.salt)
+     setSugar(extra.sugar)
+     setSpicy(extra.spicy)
+     console.log('setOpen' , extra , salt)
+   },[extra])
 const handleSugar = (event: Event, newValue: number | number[]) => {
   setSugar(newValue as number);
 };
@@ -100,7 +104,7 @@ const handleSpicy = (event: Event, newValue: number | number[]) => {
       >
         <Box sx={style}>
           <Box >
-            <Typography id="modal-modal-title" variant="h6" component="h2">
+            <Typography id="modal-modal-title" >
             Sugar
             </Typography>
             <Slider  track={false} color={sugar < 0 ? "secondary" : "primary" } min={-50} max={50} onChange={handleSugar} defaultValue={sugar} aria-label="Default" valueLabelDisplay="on" />
@@ -125,3 +129,5 @@ const handleSpicy = (event: Event, newValue: number | number[]) => {
     </div>
   );
 }
+
+export default BasicModal;

@@ -191,7 +191,8 @@ class ProtocolView(GenericViewSet):
                     for node in flow['nodes']:
                         if node['type'] == 'ingredient-container':
                             for child in node['data']['children']:
-                                if child['data']['value']['name'].lower() in params:
+                                if any(substring in child['data']['value']['name'].lower() for substring in
+                                       (param.lower() for param in params)):
                                     for param in params[:-1]:
                                         child['data']['value']['amount'] = int(child['data']['value']['amount']) + \
                                                                            request.data[

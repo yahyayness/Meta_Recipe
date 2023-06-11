@@ -35,7 +35,7 @@ const AppMenu: React.FC = () => {
     const checkSelectedItem = (path:string)=> {
         if(path == pathname)
             return true;
-        return pathname.replace('/' , '').includes(path??'')
+         return path.replace('/' , '').trim() != '' && pathname.replace('/' , '').includes(path.replace('/', '')??'')
     }
 
 

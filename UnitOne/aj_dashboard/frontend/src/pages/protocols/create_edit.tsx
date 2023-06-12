@@ -36,7 +36,8 @@ const EXTRA_HEIGHT = 55;
 
 const CreateEditProtocol: React.FC = () => {
 
-    const { onSave , onDuplicate, nodes , edges,onNodesChange,onEdgesChange, onConnect , addProtocol ,counter,openModel,handleOpenModel,ExtraAmountModal}
+    const { onSave , onDuplicate, nodes , edges,onNodesChange,onEdgesChange, onConnect , addProtocol ,
+        counter,openModel,handleOpenModel,ExtraAmountModal , onSaveAdjustment , id,extra,setForm}
         = useProtocol();
     return (
         <>
@@ -61,8 +62,14 @@ const CreateEditProtocol: React.FC = () => {
                         style={rfStyle}
                     />
                 </Box>
-                <ExtraAmountModal
-                /> 
+                <BasicModal
+                    open={openModel}
+                    setOpen={handleOpenModel}
+                    protocol_id={id}
+                    extra={extra}
+                    afterSave={onSaveAdjustment}
+                    setForm={setForm}
+                />
                 <ProtocolsOptions addProtocol={addProtocol}/>
 
             </Stack>

@@ -171,9 +171,12 @@ class ProtocolView(GenericViewSet):
         count = Protocol.objects.filter().count()
 
         for id in ids:
+            count = count + 1
             protocol = Protocol.objects.get(id=id)
-            clone_protocol = Protocol.objects.create(name=f"{protocol.name}_clone_{++count}")
-            self.create_flow(flow=protocol.flow, protocol_id=clone_protocol.id)
+            protocol.pk = None
+            protocol.name = f"{protocol.name}_clone_{count}"
+            protocol.save()
+            self.create_flow(flow=protocol.flow, protocol_id=protocol.id)
 
         return Response(
             {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': {}},

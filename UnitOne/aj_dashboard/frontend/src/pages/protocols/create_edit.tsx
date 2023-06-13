@@ -15,6 +15,7 @@ import {IconButton} from "@mui/material";
 import useProtocol from "./partials/hooks";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import BasicModal from "./components/protocols/components/extra-amount/index"
+import ResetModal from "./components/protocols/components/rest/index"
 
 const rfStyle = {
     backgroundColor: 'trasparent',
@@ -37,7 +38,7 @@ const EXTRA_HEIGHT = 55;
 const CreateEditProtocol: React.FC = () => {
 
     const { onSave , onDuplicate, nodes , edges,onNodesChange,onEdgesChange, onConnect , addProtocol ,
-        counter,openModel,handleOpenModel,ExtraAmountModal , onSaveAdjustment , id,extra,setForm}
+        counter,openModel,handleOpenModel,ExtraAmountModal , onSaveAdjustment , id,extra,setForm,openResetModel,handleOpenResetModel,resetprotocol}
         = useProtocol();
     return (
         <>
@@ -48,7 +49,8 @@ const CreateEditProtocol: React.FC = () => {
                         <Button  variant="text" color="info" onClick={onDuplicate}>Duplicate</Button>
                         <Button variant="text"  color="primary" className='primary' onClick={onSave}>Save</Button>
                         <Button variant="text"  color="info"  onClick={()=>handleOpenModel(true)}>adjust</Button>
-                        {/*<IconButton  onClick={()=>handleOpenModel(true)} component="label" key={'stack-list-actions'}>*/}
+                        <Button variant="text"  color="info"  onClick={()=>handleOpenResetModel(true)}>Rest</Button>
+                         {/*<IconButton  onClick={()=>handleOpenModel(true)} component="label" key={'stack-list-actions'}>*/}
                         {/*    <MoreVertIcon/>*/}
                         {/*</IconButton>*/}
                     </Stack>
@@ -70,6 +72,13 @@ const CreateEditProtocol: React.FC = () => {
                     extra={extra}
                     afterSave={onSaveAdjustment}
                     setForm={setForm}
+                />
+                <ResetModal
+                    open={openResetModel}
+                    setOpen={handleOpenResetModel}
+                    protocol_id={id}
+                    resetprotocol={resetprotocol}
+                   
                 />
                 <ProtocolsOptions addProtocol={addProtocol}/>
 

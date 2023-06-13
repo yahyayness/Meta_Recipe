@@ -283,7 +283,9 @@ const useProtocol = () => {
     const isEdit = !!id
     const {request} = useHttp();
     const [openModel, setOpenModel] = useState(false);
+    const [openResetModel, setOpenResetModel] = useState(false);
     const handleOpenModel = (value:boolean) => setOpenModel(value);
+    const handleOpenResetModel = (value:boolean) => setOpenResetModel(value);
 
     /**
      * this function binds the required actions to the nodes according
@@ -437,10 +439,27 @@ const useProtocol = () => {
         // return BasicModal(openModel,handleOpenModel,id,extra,setNodes,setEdges,setForm , bindActions , setCounter,callback)
     }
 
+    const resetprotocol = (id:number) => {
+        if (id) {
+            http<ResponseType<ProtocolType>>(addParamsToEndpoint(getEndpoint('find_protocol'), {id})).then(response => {
+                setForm(response.data.payload);
+                setNodes(bindActions(response.data.payload.flow.nodes))
+                setEdges(response.data.payload.flow.edges)
+                setExtra({...response.data.payload.extra})
+                setCounter((counter:number) => counter + 1)
+                handleOpenResetModel(false)
+                showAlert({
+                    type: AlertTypes.SUCCESS,
+                    message: `Protocol Reset successfully`
+                })
+            })
+        }
+    }
+
   
 
     return {onSave, onDuplicate, nodes, edges, onNodesChange, onEdgesChange, onConnect, addProtocol,
-        counter,openModel,ExtraAmountModal , onSaveAdjustment ,handleOpenModel,id,extra , setForm}
+        counter,openModel,ExtraAmountModal , onSaveAdjustment ,handleOpenModel,id,extra , setForm,openResetModel,handleOpenResetModel,resetprotocol}
 
 }
 

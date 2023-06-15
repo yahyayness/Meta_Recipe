@@ -23,21 +23,17 @@ export const form = (isEdit:boolean): Array<FormFields> => [
     },
     {
         field: 'date',
-        value: '',
+        value: new Date().toISOString().split('T')[0],
         validation: {
             rules: yup
                 .string()
-                .required('Username is required'),
+                .required('Date is required'),
         }
     },
     {
         field: 'description',
         value: '',
-        validation: {
-            rules: yup
-                .string()
-                .required('Description is required'),
-        }
+         
     }
 ]
 

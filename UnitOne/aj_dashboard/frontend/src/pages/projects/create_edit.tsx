@@ -77,7 +77,7 @@ const ProductAddEdit: React.FC = () => {
                         size="small"
                         name="date"
                         type="date"
-                        value={formik.values.date}
+                        value={formik.values.date }
                         onChange={formik.handleChange}
                         error={formik.touched.date && Boolean(formik.errors.date)}
                         helperText={formik?.touched?.date && formik?.errors?.date}

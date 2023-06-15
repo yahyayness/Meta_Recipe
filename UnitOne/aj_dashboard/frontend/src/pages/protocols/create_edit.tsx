@@ -3,7 +3,7 @@ import ReactFlow from 'reactflow';
 import 'reactflow/dist/style.css';
 import './partials/style.scss'
 import IngredientGroup from './components/ingredient/index';
-import {Button, Stack} from "@mui/material";
+import {Button, Stack,TextField} from "@mui/material";
 import Box from "@mui/material/Box";
 import Ingredient from './components/ingredient-row/index'
 import IngredientRow from "./components/ingredient-row/index";
@@ -37,13 +37,32 @@ const EXTRA_HEIGHT = 55;
 const CreateEditProtocol: React.FC = () => {
 
     const { onSave , onDuplicate, nodes , edges,onNodesChange,onEdgesChange, onConnect , addProtocol ,
-        counter,openModel,handleOpenModel,ExtraAmountModal , onSaveAdjustment , id,extra,setForm}
+        counter,openModel,handleOpenModel,ExtraAmountModal , onSaveAdjustment , id,extra,setForm,name,setName}
         = useProtocol();
     return (
         <>
 
             <Stack flexDirection='row'>
                 <Box width="100%" style={{height: '80ch'}} key={'nodes-' + counter}>
+                <Stack spacing={2} direction="row"  justifyContent="space-between" className="list-master-actions" width="100%">
+               
+                <TextField
+                        label="Protocol Name"
+                        id="date"
+                        size="small"
+                        name="name"
+                        type="text"
+                        value={name}
+                        onChange={(e)=>setName(e.target.value)}
+                        InputLabelProps={{
+                            style: {fontSize: '13.45px'},
+                            shrink: true,
+                        }}
+                        InputProps={{
+                            style: {fontSize: '13.45px'}
+                        }}
+
+                    />
                     <Stack spacing={2} direction="row"  justifyContent="right" className="list-master-actions" width="100%">
                         <Button  variant="text" color="info" onClick={onDuplicate}>Duplicate</Button>
                         <Button variant="text"  color="primary" className='primary' onClick={onSave}>Save</Button>
@@ -51,6 +70,9 @@ const CreateEditProtocol: React.FC = () => {
                         {/*<IconButton  onClick={()=>handleOpenModel(true)} component="label" key={'stack-list-actions'}>*/}
                         {/*    <MoreVertIcon/>*/}
                         {/*</IconButton>*/}
+
+                    </Stack>
+
                     </Stack>
                     <ReactFlow
                         nodes={nodes}

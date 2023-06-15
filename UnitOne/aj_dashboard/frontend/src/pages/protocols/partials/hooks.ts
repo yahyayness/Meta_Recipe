@@ -265,6 +265,7 @@ const useProtocol = () => {
     const [nodes, setNodes] = useState<Array<Node>>([]);
     const [edges, setEdges] = useState<Array<Edge>>([]);
     const [extra, setExtra] = useState({});
+    const [name, setName] = useState("");
     const [counter, setCounter] = useState<number>(0)
     const {onChildChange, random, onClose} = useCommon(setNodes, setEdges)
     const {
@@ -378,6 +379,7 @@ const useProtocol = () => {
                 setNodes(bindActions(response.data.payload.flow.nodes))
                 setEdges(response.data.payload.flow.edges)
                 setExtra({...response.data.payload.extra})
+                setName(response.data.payload.name)
                 console.log('extra' , extra)
             })
         }
@@ -388,6 +390,7 @@ const useProtocol = () => {
         let _form = {
             ...form,
             project:project_id,
+            name:name,
             flow : {
                 nodes: nodes,
                 edges: edges
@@ -440,7 +443,7 @@ const useProtocol = () => {
   
 
     return {onSave, onDuplicate, nodes, edges, onNodesChange, onEdgesChange, onConnect, addProtocol,
-        counter,openModel,ExtraAmountModal , onSaveAdjustment ,handleOpenModel,id,extra , setForm}
+        counter,openModel,ExtraAmountModal , onSaveAdjustment ,handleOpenModel,id,extra , setForm,name,setName}
 
 }
 

@@ -68,7 +68,8 @@ export const useProtocolTable = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [pagination, setPagination] = useState<PaginationType>({} as PaginationType)
     const [selectedRows, setSelectedRows] = useState([])
-
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
+    const handeShowDeleteDialog = ()=> setShowDeleteConfirmation(true)
     /**
      * fetch all user from the backend
      * @author Amr
@@ -91,6 +92,16 @@ export const useProtocolTable = () => {
      */
     const [commonActions , setCommonActions] = useState([])
 
+    const deleteProtocols =()=>{
+        console.log('selectedRows' , selectedRows)
+        request<ListType<ProtocolType>>(getEndpoint('delete_protocols'), {ids : selectedRows?.map( (row:ProtocolType) => row.id)} ).then(response => {
+            fetch(searchParams.get('page'))
+            showAlert({
+                type: AlertTypes.SUCCESS,
+                message: `Protocols Deleted successfully`
+            })
+        })
+    }  
     useEffect(()=>{
         setCommonActions(actions(navigator, ((_selectedRows:any)=>{
             console.log('selectedRows' , selectedRows)
@@ -101,7 +112,7 @@ export const useProtocolTable = () => {
                     message: `Protocols cloned successfully`
                 })
             })
-        })) as []);
+        }),handeShowDeleteDialog) as []);
     } , [selectedRows])
 
 
@@ -131,7 +142,10 @@ export const useProtocolTable = () => {
         pagination,
         setSelectedRows,
         selectedRows,
-        refresh
+        refresh,
+        showDeleteConfirmation,
+        setShowDeleteConfirmation,
+        deleteProtocols
     }
 
 

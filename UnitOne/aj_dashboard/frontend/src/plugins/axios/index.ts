@@ -7,7 +7,7 @@ import {useAlert} from "../../common/hooks/alert";
 import {useHttpLoader} from "../../common/hooks/httpLoader";
 
 const axiosInstance: AxiosInstance = axios.create({
-    baseURL: 'http://165.227.132.182:8000/',
+    baseURL: process.env.REACT_APP_SERVER_URL,
     headers: {
         "Content-Type": "application/json"
     }

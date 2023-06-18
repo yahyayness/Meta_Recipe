@@ -45,7 +45,8 @@ interface ProtocolType extends ResponseType {
     reference_author?:string,
     updated_at?: string,
     flow: ProtocolFlowType,
-    extra: object
+    extra: object,
+    project: number
 }
 
 interface IngredientType {

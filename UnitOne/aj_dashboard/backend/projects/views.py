@@ -400,3 +400,13 @@ def clone(request):
                 status=status.HTTP_204_NO_CONTENT)
     except Exception as e:
         raise Exception(e)
+
+
+@api_view(['DELETE'])
+def bulk_destroy(request):
+    ids = request.data.get('ids', [])
+    Projects.objects.filter(id__in=ids).delete()
+    return Response(
+        {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'Projects deleted!', 'payload': {}},
+        status=status.HTTP_200_OK
+    )

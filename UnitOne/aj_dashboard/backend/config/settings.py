@@ -67,12 +67,12 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',  # use the CORS middleware
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000/",
-    "http://165.227.132.182/",
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000/",
+#     "http://165.227.132.182/",
+# ]
 
-# CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'config.urls'
 

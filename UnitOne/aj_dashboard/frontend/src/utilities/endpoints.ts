@@ -46,8 +46,8 @@ export default {
         method: HttpMethodTypes.DELETE
     },
     delete_protocols:{
-        url : 'bulk-destroy/',
-        method: HttpMethodTypes.DELETE
+        url : 'protocols/bulk_destroy',
+        method: HttpMethodTypes.POST
     },
     find_protocol:{
         url : 'protocols/:id',

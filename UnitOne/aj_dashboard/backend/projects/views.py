@@ -402,7 +402,7 @@ def clone(request):
         raise Exception(e)
 
 
-@api_view(['DELETE'])
+@api_view(['POST'])
 def bulk_destroy(request):
     ids = request.data.get('ids', [])
     Projects.objects.filter(id__in=ids).delete()

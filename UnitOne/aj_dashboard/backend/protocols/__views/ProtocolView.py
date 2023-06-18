@@ -9,7 +9,7 @@ from django.db import transaction
 from django.db.models import Q
 from django.forms import model_to_dict
 from rest_framework import status
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -216,3 +216,12 @@ class ProtocolView(GenericViewSet):
                     status=status.HTTP_200_OK)
         except Exception as e:
             raise e
+
+    @action(detail=False, methods=['DELETE'])
+    def bulk_destroy(self, request):
+        ids = request.data.get('ids', [])
+        self.queryset.filter(id__in=ids).delete()
+        return Response(
+            {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'Protocols deleted!', 'payload': {}},
+            status=status.HTTP_200_OK
+        )

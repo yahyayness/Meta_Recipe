@@ -217,7 +217,7 @@ class ProtocolView(GenericViewSet):
         except Exception as e:
             raise e
 
-    @action(detail=False, methods=['DELETE'])
+    @action(detail=False, methods=['POST'])
     def bulk_destroy(self, request):
         ids = request.data.get('ids', [])
         self.queryset.filter(id__in=ids).delete()

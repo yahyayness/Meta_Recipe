@@ -37,7 +37,7 @@ const EXTRA_HEIGHT = 55;
 const CreateEditProtocol: React.FC = () => {
 
     const { onSave, onDuplicate, nodes, edges, onNodesChange, onEdgesChange, onConnect, addProtocol,
-        counter, openModel, handleOpenModel, ExtraAmountModal, onSaveAdjustment, id, extra, setForm, name, setName }
+        counter, openModel, handleOpenModel, ExtraAmountModal, onSaveAdjustment, id, extra, setForm, name, setName,project,setProject, projects }
         = useProtocol();
     return (
         <>
@@ -68,15 +68,26 @@ const CreateEditProtocol: React.FC = () => {
                             id="demo-simple-select"
                             size="small"
                             label="Project"
+                            value={project}
+                            placeholder="No project for this protocol"
                             MenuProps={{
-                                style: { fontSize: '13.45px', width: "250px",  },
-                                 
+                                PaperProps: {
+                                    style: {
+                                      width: 250,
+                                    },
+                                  },
                             }}
-                            /* onChange={handleChange} */
-                        >
-                            <MenuItem value={10}>Ten</MenuItem>
-                            <MenuItem value={20}>Twenty</MenuItem>
-                            <MenuItem value={30}>Thirty</MenuItem>
+                            onChange={(event) => setProject(event.target.value as number)}
+                            >
+                                <MenuItem value="">No Protocol</MenuItem>
+                                {
+                                    projects.map((project) =>{
+                                        return (
+                                            <MenuItem value={project.id}>{project.name}</MenuItem>  
+                                        )
+                                    })
+                                }
+                            
                         </Select>
 
 

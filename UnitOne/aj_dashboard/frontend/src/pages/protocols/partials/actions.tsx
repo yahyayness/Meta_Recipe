@@ -6,7 +6,7 @@ import {AlertTypes} from "../../../types/Enums";
 import {Edge, Node} from "reactflow";
 import {EndpointType, ResponseType} from "../../../types/HttpTypes";
 
-export const actions = (navigator:any , onDuplicate : any)=> [
+export const actions = (navigator:any , onDuplicate : any, onDelete: any )=> [
     {
         label: 'Duplicate',
         extra: {
@@ -23,6 +23,12 @@ export const actions = (navigator:any , onDuplicate : any)=> [
             }
         }
     },
+    {
+        label: 'Delete',
+        extra: {
+            onClick : ()=>  onDelete()
+        }
+    },
     // {
     //     label: 'Compare',
     //     extra: {
@@ -35,7 +41,7 @@ export const actions = (navigator:any , onDuplicate : any)=> [
     {
         component: <IconButton aria-label="upload picture" component="label" key={'stack-list-actions'}>
             <MoreVertIcon/>
-        </IconButton>
+        </IconButton> 
     },
 
 ] as Array<StackActionsType>

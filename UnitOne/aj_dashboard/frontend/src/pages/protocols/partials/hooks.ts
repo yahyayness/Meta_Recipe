@@ -266,6 +266,8 @@ const useProtocol = () => {
     const [edges, setEdges] = useState<Array<Edge>>([]);
     const [extra, setExtra] = useState({});
     const [name, setName] = useState("");
+    const [project, setProject] = useState<number>(-1);
+    const [projects, setProjects] = useState<Array<ProjectType>>([])
     const [counter, setCounter] = useState<number>(0)
     const {onChildChange, random, onClose} = useCommon(setNodes, setEdges)
     const {
@@ -380,7 +382,12 @@ const useProtocol = () => {
                 setEdges(response.data.payload.flow.edges)
                 setExtra({...response.data.payload.extra})
                 setName(response.data.payload.name)
+                setProject(response.data.payload.project)
                 console.log('extra' , extra)
+            })
+
+            http<ListType<ProjectType>>(addParamsToEndpoint(getEndpoint('all_projects'), {params: {}})).then(response => {
+                setProjects(response.data.payload?.results)
             })
         }
     }, [id])
@@ -389,7 +396,7 @@ const useProtocol = () => {
     const onSave = () => {
         let _form = {
             ...form,
-            project:project_id,
+            project:project/* project_id */,
             name:name,
             flow : {
                 nodes: nodes,
@@ -443,7 +450,7 @@ const useProtocol = () => {
   
 
     return {onSave, onDuplicate, nodes, edges, onNodesChange, onEdgesChange, onConnect, addProtocol,
-        counter,openModel,ExtraAmountModal , onSaveAdjustment ,handleOpenModel,id,extra , setForm,name,setName}
+        counter,openModel,ExtraAmountModal , onSaveAdjustment ,handleOpenModel,id,extra , setForm,name,setName,project,setProject,projects}
 
 }
 

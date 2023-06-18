@@ -19,7 +19,11 @@ class AnalyticalChemistry(models.Model):
                                 null=True)
    
 
-    def __str__(self):
-        return self.sensor.name + '' + self.sample.name
+    """ def __str__(self):
+        if self.sensor is not None and self.sample.name is not None:
+            return  self.sensor.name + '' + self.sample.name
+        else:
+            return "" """
+        
 
      

@@ -81,6 +81,10 @@ export default {
         url : 'project/:id',
         method: HttpMethodTypes.DELETE
     },
+    delete_projects : {
+        url : 'project/bulk_destroy',
+        method: HttpMethodTypes.POST
+    },
     find_project : {
         url : 'project/:id',
         method: HttpMethodTypes.GET

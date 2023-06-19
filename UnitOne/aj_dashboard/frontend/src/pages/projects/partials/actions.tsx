@@ -1,6 +1,6 @@
 import {IconButton} from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-export const actions = (navigator:any , onDuplicate : any)=> [
+export const actions = (navigator:any , onDuplicate : any, onDelete: any)=> [
     {
         label: 'Duplicate',
         extra: {
@@ -15,6 +15,12 @@ export const actions = (navigator:any , onDuplicate : any)=> [
             onClick : ()=>{
                 navigator("/projects/create");
             }
+        }
+    },
+    {
+        label: 'Delete',
+        extra: {
+            onClick : ()=>  onDelete()
         }
     },
     // {

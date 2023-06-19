@@ -2,7 +2,7 @@ import DeleteAction from "../../../components/actions/delete";
 import EditAction from "../../../components/actions/edit";
 import {useHttp} from "../../../plugins/axios";
 import {useCallback, useEffect, useState} from "react";
-import {ListType, ProjectType, UserType} from "../../../types/ModelTypes";
+import {ListType, ProjectType, ProtocolType, UserType} from "../../../types/ModelTypes";
 import {useAlert} from "../../../common/hooks/alert";
 import {useSearchParams} from "react-router-dom";
 import {useNavigator} from "../../../common/routes";
@@ -73,20 +73,38 @@ export const useProjectTable = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [pagination, setPagination] = useState<PaginationType>({} as PaginationType)
     const [selectedRows, setSelectedRows] = useState([])
-
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
+    const handeShowDeleteDialog = ()=> setShowDeleteConfirmation(true)
     /**
      * common hook that controls all navigations
      * @author Amr
      */
     const {navigator} = useNavigator();
+
+    /**
+     * delete's Projects actions
+     * @author Bilal
+     */
+    const deleteProjects =()=>{
+        console.log('selectedRows' , selectedRows)
+        request<ListType<ProtocolType>>(getEndpoint('delete_projects'), {ids : selectedRows?.map( (row:ProtocolType) => row.id)} ).then(response => {
+            fetch(searchParams.get('page'))
+            showAlert({
+                type: AlertTypes.SUCCESS,
+                message: `Protocols Deleted successfully`
+            })
+        })
+    }
+
+
+
     /**
      * page's common actions
      * @author Amr
      */
     const [commonActions , setCommonActions] = useState([])
 
-
-
+     
 
     /**
      * set the breadcrumbs of the current page
@@ -119,7 +137,7 @@ export const useProjectTable = () => {
                 fetch(searchParams.get('page'))
                 setRefresh((refresh:any) => refresh +1)
             })
-        })) as []);
+        }),handeShowDeleteDialog) as []);
     } , [selectedRows])
 
 
@@ -139,7 +157,11 @@ export const useProjectTable = () => {
         pagination,
         setSelectedRows,
         selectedRows,
-        refresh
+        refresh,
+        showDeleteConfirmation,
+        setShowDeleteConfirmation,
+        deleteProjects
+        
     }
 
 

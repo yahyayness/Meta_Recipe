@@ -92,6 +92,10 @@ export const useProtocolTable = () => {
      */
     const [commonActions , setCommonActions] = useState([])
 
+     /**
+     * delete's Protocols actions
+     * @author Bilal
+     */
     const deleteProtocols =()=>{
         console.log('selectedRows' , selectedRows)
         request<ListType<ProtocolType>>(getEndpoint('delete_protocols'), {ids : selectedRows?.map( (row:ProtocolType) => row.id)} ).then(response => {
@@ -100,7 +104,7 @@ export const useProtocolTable = () => {
                 type: AlertTypes.SUCCESS,
                 message: `Protocols Deleted successfully`
             })
-        })
+        })  
     }  
     useEffect(()=>{
         setCommonActions(actions(navigator, ((_selectedRows:any)=>{

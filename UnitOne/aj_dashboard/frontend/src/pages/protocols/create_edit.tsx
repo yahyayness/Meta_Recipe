@@ -3,7 +3,7 @@ import ReactFlow from 'reactflow';
 import 'reactflow/dist/style.css';
 import './partials/style.scss'
 import IngredientGroup from './components/ingredient/index';
-import { Button, Stack, TextField, Select, MenuItem } from "@mui/material";
+import {Button, Stack, TextField, Select, MenuItem, FormControl, InputLabel} from "@mui/material";
 import Box from "@mui/material/Box";
 import Ingredient from './components/ingredient-row/index'
 import IngredientRow from "./components/ingredient-row/index";
@@ -63,33 +63,37 @@ const CreateEditProtocol: React.FC = () => {
                             }}
 
                         />
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            size="small"
-                            label="Project"
-                            value={project}
-                            placeholder="No project for this protocol"
-                            MenuProps={{
-                                PaperProps: {
-                                    style: {
-                                      width: 250,
-                                    },
-                                  },
-                            }}
-                            onChange={(event) => setProject(event.target.value as number)}
-                            >
-                                <MenuItem value="">No Protocol</MenuItem>
-                                {
-                                    projects.map((project) =>{
-                                        return (
-                                            <MenuItem value={project.id}>{project.name}</MenuItem>  
-                                        )
-                                    })
-                                }
-                            
-                        </Select>
 
+                        <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
+                            <InputLabel id="demo-simple-select">Project</InputLabel>
+
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                size="small"
+                                label="Project"
+                                value={project}
+                                placeholder="No project for this protocol"
+                                MenuProps={{
+                                    PaperProps: {
+                                        style: {
+                                          width: 250,
+                                        },
+                                      },
+                                }}
+                                onChange={(event) => setProject(event.target.value as number)}
+                                >
+                                    <MenuItem value="">No Protocol</MenuItem>
+                                    {
+                                        projects.map((project) =>{
+                                            return (
+                                                <MenuItem value={project.id}>{project.name}</MenuItem>
+                                            )
+                                        })
+                                    }
+
+                            </Select>
+                        </FormControl>
 
                         <Stack spacing={2} direction="row" justifyContent="right" className="list-master-actions" width="100%">
                             <Button variant="text" color="info" onClick={onDuplicate}>Duplicate</Button>

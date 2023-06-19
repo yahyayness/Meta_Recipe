@@ -23,12 +23,12 @@ export const actions = (navigator:any , onDuplicate : any, onDelete: any )=> [
             }
         }
     },
-    {
+    /* {
         label: 'Delete',
         extra: {
             onClick : ()=>  onDelete()
         }
-    },
+    }, */
     // {
     //     label: 'Compare',
     //     extra: {

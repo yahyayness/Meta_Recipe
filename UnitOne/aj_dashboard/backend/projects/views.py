@@ -1,3 +1,6 @@
+import csv
+import io
+import math
 from functools import reduce
 from operator import or_
 
@@ -11,6 +14,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 
+from common.utilities.Helper import prepare_model_dict
 from ingredients.serializers import IngredientsSerilizer
 from meta_recipe.__serializers.MetaRecipeSerializer import MetaRecipeSerializer
 from meta_recipe.__serializers.MetaRecipeIngredientsSerializer import MetaRecipeIngredientsSerializer
@@ -35,6 +39,7 @@ from common.utilities.Pagination import CustomPagination
 
 # Create your views here.
 import json
+import pandas as pd
 
 
 def getOrCreateIngredientByName(iname):
@@ -67,7 +72,6 @@ def ProjectList(request):
         try:
             with transaction.atomic():
                 # check if Ingredients not Exists Create a new
-                # print(request.data)
                 projectExist = Projects.objects.filter(name=request.data['name']).first()
                 if not projectExist:
                     pSerializer = ProjrctSerilizer(data=request.data)
@@ -78,104 +82,152 @@ def ProjectList(request):
                 ## import ingredients data from ingredients files
                 if "ingredients[]" in request.FILES:
                     for iF in request.FILES.getlist('ingredients[]'):
-                        iData = json.loads(iF.read())
-                        ingredients_list = iData["ingredients"]
-                        # print(ingredients_list)
-                        for ing in ingredients_list:
-                            opj = {"name": ing['name']}
-                            # check if Ingredients not Exists Create a new
-                            try:
-                                ingredientExist = Ingredients.objects.get(name=ing['name'])
-                            except Ingredients.DoesNotExist:
-                                Ingserializer = IngredientsSerilizer(data=opj)
-                                if Ingserializer.is_valid():
-                                    Ingserializer.save()
-                                    ingredientExist = Ingserializer.instance
-                                else:
-                                    print(ValidationError(Ingserializer.errors))
+                        if iF.content_type == 'text/csv':
+                            csv_data = pd.read_csv(
+                                io.StringIO(
+                                    iF.read().decode("utf-8")
+                                )
+                            )
+                            for record in csv_data.to_dict(orient="records"):
+                                try:
+                                    idict = prepare_model_dict(record, ['name'])
+                                    create_or_get_object(idict, IngredientsSerilizer)
+                                except Exception as e:
+                                    raise e
+                        elif iF.content_type == 'application/json':
+                            iData = json.loads(iF.read())
+                            ingredients_list = iData["ingredients"]
+                            # print(ingredients_list)
+                            for ing in ingredients_list:
+                                try:
+                                    idict = prepare_model_dict(ing, ['name'])
+                                    create_or_get_object(idict, IngredientsSerilizer)
+                                except Exception as e:
+                                    raise e
 
                 ## import equipments data from equipments files
                 if "equipments[]" in request.FILES:
+                    fields = ['name', 'type', 'brand', 'model', 'project']
                     for eF in request.FILES.getlist('equipments[]'):
-                        eData = json.loads(eF.read())
-                        equipments_list = eData["equipment"]
-                        for equ in equipments_list:
-                            opj = {'name': equ['name'], 'type': equ['equipment_type'], 'brand': equ['brand'],
-                                   'model': equ['model'], 'project': projectExist.id}
-                            # check if Ingredients not Exists Create a new
-                            try:
-                                equipmentExist = Equipment.objects.get(name=equ['name'])
-                            except Equipment.DoesNotExist:
-                                equSerializer = EquipmentSerializer(data=opj)
-                                if equSerializer.is_valid():
-                                    equSerializer.save()
-                                    equipmentExist = equSerializer.instance
-                                else:
-                                    print(ValidationError(equSerializer.errors))
+                        if eF.content_type == 'text/csv':
+                            csv_data = pd.read_csv(
+                                io.StringIO(
+                                    eF.read().decode("utf-8")
+                                )
+                            )
+                            for record in csv_data.to_dict(orient="records"):
+                                try:
+                                    record['project'] = projectExist.id
+                                    idict = prepare_model_dict(record, fields)
+                                    create_object(idict, EquipmentSerializer)
+                                except Exception as e:
+                                    raise e
+                        elif eF.content_type == 'application/json':
+                            eData = json.loads(eF.read())
+                            equipments_list = eData["equipment"]
+                            for equ in equipments_list:
+                                opj = {'name': equ['name'], 'type': equ['equipment_type'], 'brand': equ['brand'],
+                                       'model': equ['model'], 'project': projectExist.id}
+                                try:
+                                    idict = prepare_model_dict(opj, fields)
+                                    create_object(idict, EquipmentSerializer)
+                                except Exception as e:
+                                    raise e
                 ## import sensory_panels data from sensory_panels files
                 if "sensory_panels[]" in request.FILES:
+                    fields = ['judge', 'data', 'panel_type', 'panel_variable', 'panel_value', 'project']
                     for sPF in request.FILES.getlist('sensory_panels[]'):
-                        sPData = json.loads(sPF.read())
-                        sensoryPanels_list = sPData["sensory_panels"]
+                        if sPF.content_type == 'text/csv':
+                            csv_data = pd.read_csv(
+                                io.StringIO(
+                                    sPF.read().decode("utf-8")
+                                )
+                            )
+                            for record in csv_data.to_dict(orient="records"):
+                                try:
+                                    record['project'] = projectExist.id
+                                    idict = prepare_model_dict(record, fields)
+                                    create_object(idict, SensoryPanelsCreateSerializers)
+                                except Exception as e:
+                                    raise e
+                        elif sPF.content_type == 'application/json':
+                            sPData = json.loads(sPF.read())
+                            sensoryPanels_list = sPData["sensory_panels"]
 
-                        for spi in sensoryPanels_list:
-                            opj = {'judge': spi['judge_id'], 'data': spi['date'],
-                                   'panel_type': spi['panel_type'], 'panel_variable': spi['panel_variable'],
-                                   'panel_value': spi['panel_value'], 'project': projectExist.id}
-                            # check if Ingredients not Exists Create a new
-                            # try:
-                            #    sensoryPanelsExist=SensoryPanel.objects.get(name=equ['name'])
-                            # except SensoryPanel.DoesNotExist:
-                            spiSerializer = SensoryPanelsCreateSerializers(data=opj)
-                            print(spiSerializer.is_valid())
-                            if spiSerializer.is_valid():
-                                spiSerializer.save()
-                                sensoryPanelsExist = spiSerializer.instance
-                            else:
-                                print(ValidationError(spiSerializer.errors))
+                            for spi in sensoryPanels_list:
+                                opj = {'judge': spi['judge_id'], 'data': spi['date'],
+                                       'panel_type': spi['panel_type'], 'panel_variable': spi['panel_variable'],
+                                       'panel_value': spi['panel_value'], 'project': projectExist.id}
+                                try:
+                                    idict = prepare_model_dict(opj, fields)
+                                    create_object(idict, SensoryPanelsCreateSerializers)
+                                except Exception as e:
+                                    raise e
                 ## import Sensors data from sensors files
                 if "sensors[]" in request.FILES:
+                    fields = ['name', 'units', 'project']
                     for sF in request.FILES.getlist('sensors[]'):
-                        sData = json.loads(sF.read())
-                        sensors_list = sData["sensor_data"]
+                        if sF.content_type == 'text/csv':
+                            csv_data = pd.read_csv(
+                                io.StringIO(
+                                    sF.read().decode("utf-8")
+                                )
+                            )
+                            for record in csv_data.to_dict(orient="records"):
+                                try:
+                                    record['project'] = projectExist.id
+                                    idict = prepare_model_dict(record, fields)
+                                    create_object(idict, SensorsCreateSerializers)
+                                except Exception as e:
+                                    raise e
 
-                        for sI in sensors_list:
-                            opj = {'name': sI['name'], 'units': sI['units'],
-                                   'project': projectExist.id}
+                        elif sF.content_type == 'application/json':
+                            sData = json.loads(sF.read())
+                            sensors_list = sData["sensor_data"]
 
-                            # check if sensor not Exists Create a new
-                            try:
-                                sensorsExist = Sensors.objects.get(name=sI['name'])
-                            except Sensors.DoesNotExist:
-                                sensorSerializer = SensorsCreateSerializers(data=opj)
-                                if sensorSerializer.is_valid():
-                                    sensorSerializer.save()
-                                    sensorsExist = sensorSerializer.instance
-                                else:
-                                    print(ValidationError(sensorSerializer.errors))
+                            for sI in sensors_list:
+                                opj = {'name': sI['name'], 'units': sI['units'],
+                                       'project': projectExist.id}
+
+                                # check if sensor not Exists Create a new
+                                try:
+                                    idict = prepare_model_dict(opj, fields)
+                                    create_object(idict, SensorsCreateSerializers)
+                                except Exception as e:
+                                    raise e
 
                 ## import analytical_chemistry data from analytical_chemistry files
                 if "analytical_chemistry[]" in request.FILES:
+                    fields = ['date', 'method', 'assay_component', 'variable', 'value', 'unit', 'project']
                     for aCF in request.FILES.getlist('analytical_chemistry[]'):
-                        aCData = json.loads(aCF.read())
-                        analytical_chemistry_list = aCData["sensor_data"]
+                        if aCF.content_type == 'text/csv':
+                            csv_data = pd.read_csv(
+                                io.StringIO(
+                                    aCF.read().decode("utf-8")
+                                )
+                            )
+                            for record in csv_data.to_dict(orient="records"):
+                                try:
+                                    record['project'] = projectExist.id
+                                    idict = prepare_model_dict(record, fields)
+                                    create_object(idict, AnalyticalChemistryCreateSerializers)
+                                except Exception as e:
+                                    raise e
 
-                        for aCI in analytical_chemistry_list:
-                            opj = {'date': aCI['date'],
-                                   'method': aCI['method'], 'assay_component': aCI['assay_component'],
-                                   'variable': aCI['variable'], 'value': aCI['value'], 'unit': aCI['unit'],
-                                   'project': projectExist.id}
+                        elif aCF.content_type == 'application/json':
+                            aCData = json.loads(aCF.read())
+                            analytical_chemistry_list = aCData["sensor_data"]
 
-                            # check if sensor not Exists Create a new
-                            # try:
-                            #    analyticalChemistryExist=AnalyticalChemistry.objects.get(name=sI['name'])
-                            # except AnalyticalChemistry.DoesNotExist:
-                            analyticalChemistrySerializer = AnalyticalChemistryCreateSerializers(data=opj)
-                            if analyticalChemistrySerializer.is_valid():
-                                analyticalChemistrySerializer.save()
-                                analyticalChemistryExist = analyticalChemistrySerializer.instance
-                            else:
-                                print(ValidationError(analyticalChemistrySerializer.errors))
+                            for aCI in analytical_chemistry_list:
+                                opj = {'date': aCI['date'],
+                                       'method': aCI['method'], 'assay_component': aCI['assay_component'],
+                                       'variable': aCI['variable'], 'value': aCI['value'], 'unit': aCI['unit'],
+                                       'project': projectExist.id}
+                                try:
+                                    idict = prepare_model_dict(opj, fields)
+                                    create_object(idict, AnalyticalChemistryCreateSerializers)
+                                except Exception as e:
+                                    raise e
 
                 if 'production_protocol[]' in request.FILES:
                     for ppFile in request.FILES.getlist('production_protocol[]'):
@@ -286,7 +338,7 @@ def ProjectList(request):
                                     rISerializer.save()
 
                 return Response(
-                    {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': {}},
+                    {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': ProjrctSerilizer(projectExist).data},
                     status=status.HTTP_200_OK)
         except Exception as e:
             raise e
@@ -410,3 +462,21 @@ def bulk_destroy(request):
         {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'Projects deleted!', 'payload': {}},
         status=status.HTTP_200_OK
     )
+
+
+def create_or_get_object(data, serializer):
+    ser = serializer(data=data)
+    if ser.is_valid():
+        instance, _ = ser.get_or_create()
+        return instance
+    else:
+        raise ValidationError(ser.errors)
+
+
+def create_object(data, serializer):
+    ser = serializer(data=data)
+    if ser.is_valid():
+        instance = ser.save()
+        return instance
+    else:
+        raise ValidationError(ser.errors)

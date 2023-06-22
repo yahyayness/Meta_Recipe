@@ -266,7 +266,7 @@ const useProtocol = () => {
     const [edges, setEdges] = useState<Array<Edge>>([]);
     const [extra, setExtra] = useState({});
     const [name, setName] = useState("");
-    const [project, setProject] = useState<number>(-1);
+    const [project, setProject] = useState<number>();
     const [projects, setProjects] = useState<Array<ProjectType>>([])
     const [counter, setCounter] = useState<number>(0)
     const {onChildChange, random, onClose} = useCommon(setNodes, setEdges)
@@ -391,6 +391,16 @@ const useProtocol = () => {
             })
         }
     }, [id])
+
+    /**
+     * fetch projects  
+     * @author Bilal
+     */
+    useEffect(() => {
+            http<ListType<ProjectType>>(addParamsToEndpoint(getEndpoint('all_projects'), {params: {}})).then(response => {
+                setProjects(response.data.payload?.results)
+            })
+    }, [])
 
 
     const onSave = () => {

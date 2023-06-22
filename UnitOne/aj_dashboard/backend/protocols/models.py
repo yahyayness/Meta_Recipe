@@ -23,6 +23,7 @@ class Protocol(SoftDeleteModel):
     project = models.ForeignKey(Projects, on_delete=models.CASCADE, related_name='protocols',
                                 null=True, default=None)
     extra = models.JSONField(null=True, blank=False, default=dict)
+    ingredients_list = models.ManyToManyField(Ingredients, through='ProtocolIngredient', related_name='ingredients_list', blank=True)
 
     class Meta:
         db_table = 'protocols'

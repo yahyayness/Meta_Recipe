@@ -4,10 +4,12 @@ import string
 from functools import reduce
 from operator import or_
 
+import jsonpickle
 from django.core import serializers
 from django.db import transaction, models
 from django.db.models import Q, Count
 from django.forms import model_to_dict
+from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import action, api_view
 from rest_framework.exceptions import ValidationError
@@ -17,6 +19,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet, GenericViewSet
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from common.ml import ml_component
 from common.utilities.Helper import generate_random_string
 from common.utilities.Pagination import CustomPagination
 from ingredients.models import Ingredients
@@ -220,30 +223,13 @@ class ProtocolView(GenericViewSet):
             with transaction.atomic():
                 params = ['sugar', 'salt', 'spicy', 'water']
                 protocol = Protocol.objects.get(id=pk)
-                flow = protocol.flow
-                if 'nodes' in flow:
-                    for node in flow['nodes']:
-                        if node['type'] == 'ingredient-container':
-                            for child in node['data']['children']:
-                                if any(substring in child['data']['value']['name'].lower() for substring in
-                                       (param.lower() for param in params)):
-                                    for param in params[:-1]:
-                                        child['data']['value']['amount'] = int(child['data']['value']['amount']) + \
-                                                                           request.data[
-                                                                               param]
-                                    ProtocolIngredient.objects.filter(
-                                        ingredient__name__iexact=child['data']['value']['name']).update(
-                                        quantity=child['data']['value']['amount'])
-                    protocol.flow = flow
-                    if (request.data['sugar'] != 0) | (request.data['salt'] != 0) | (request.data['spicy'] != 0):
-                        protocol.extra = {'sugar': request.data['sugar'], 'salt': request.data['salt'],
-                                          'spicy': request.data['spicy']}
-                    protocol.save()
+                __protocol = ProtocolSerializer(protocol).data
+
                 # ingredient_container = filter(lambda ic: ic['type'] == 'ingredient-container', protocol.flow['nodes'])
                 # print(list(ingredient_container))
                 return Response(
                     {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success',
-                     'payload': model_to_dict(protocol)},
+                     'payload': ProtocolSerializer(protocol).data},
                     status=status.HTTP_200_OK)
         except Exception as e:
             raise e
@@ -256,3 +242,54 @@ class ProtocolView(GenericViewSet):
             {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'Protocols deleted!', 'payload': {}},
             status=status.HTTP_200_OK
         )
+
+    @action(detail=False, methods=['GET'])
+    def test(self, request):
+        ml = ml_component
+        saved = {
+            "ingredients": [
+                {"name": "frozen strawberries", "quantity": 250, "unit": "g"},
+                {"name": "frozen blueberries", "quantity": 250, "unit": "g"},
+                {"name": "frozen raspberries", "quantity": 250, "unit": "g"},
+                {"name": "milk", "quantity": 250, "unit": "g"},
+                {"name": "honey", "quantity": 15, "unit": "g"},
+                {"name": "banana", "quantity": "250", "unit": "g"}],
+            "sensory_panel": [
+                {"variable": "Fruity", "value": 9.5},
+                {"variable": "Cacao / Chocolate", "value": 1.5},
+                {"variable": "Soft", "value": 7.5},
+                {"variable": "Salty", "value": 2.0},
+                {"variable": "Hard", "value": 4.0},
+                {"variable": "Nutty", "value": 1.5},
+                {"variable": "Cereal", "value": 1.0},
+                {"variable": "Fatty", "value": 0.5},
+                {"variable": "Sticky", "value": 6.5},
+                {"variable": "Dry", "value": 0.5},
+                {"variable": "Crunchy", "value": 2.5},
+                {"variable": "Sweet", "value": 8.5}]
+        }
+
+        changed = {
+            "ingredients": [
+                {"name": "frozen strawberries", "quantity": 250, "unit": "g"},
+                {"name": "frozen blueberries", "quantity": 250, "unit": "g"},
+                {"name": "walnuts", "quantity": 50, "unit": "g"},
+                {"name": "milk", "quantity": 250, "unit": "g"},
+                {"name": "honey", "quantity": 115, "unit": "g"},
+                {"name": "banana", "quantity": "250", "unit": "g"}],
+            "sensory_panel": [
+                {"variable": "Fruity", "value": 9.5},
+                {"variable": "Cacao / Chocolate", "value": 1.5},
+                {"variable": "Soft", "value": 7.5},
+                {"variable": "Salty", "value": 2.0},
+                {"variable": "Hard", "value": 4.0},
+                {"variable": "Nutty", "value": 1.5},
+                {"variable": "Cereal", "value": 1.0},
+                {"variable": "Fatty", "value": 4.5},
+                {"variable": "Sticky", "value": 6.5},
+                {"variable": "Dry", "value": 0.5},
+                {"variable": "Crunchy", "value": 2.5},
+                {"variable": "Sweet", "value": 8.5}]
+        }
+
+        return Response({})

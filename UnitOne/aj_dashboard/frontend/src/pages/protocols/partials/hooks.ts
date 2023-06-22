@@ -1,5 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
 import {addEdge, applyEdgeChanges, applyNodeChanges, Edge, Node} from "reactflow";
+ 
 import {number} from "yup";
 import useBreadcrumb from "../../../common/hooks/breadcrumbs";
 import {actions} from "./actions";
@@ -55,6 +56,26 @@ const useFlowActions = (setNodes: React.Dispatch<React.SetStateAction<Array<Node
     return {onNodesChange, onEdgesChange, onConnect}
 
 }
+
+/**
+ * this hook handles Nodes Loacation 
+ * @author Bilal
+ */
+const useLocation= () => {
+
+    const [x, setx] = useState<number>(0)
+    const [y, sety] = useState<number>(0)
+
+    const getX=()=> x
+    const getY=()=> y
+
+    const updateLocation =()=>{
+        setx(x+0)
+        sety(y+0)
+    } 
+    return {getX,getY,updateLocation}
+
+}
 const useCommon = (setNodes: React.Dispatch<React.SetStateAction<Array<Node>>>, setEdges: React.Dispatch<React.SetStateAction<Array<Edge>>>) => {
     /**
      * this method updates the value of children in the nodes list according to the
@@ -98,8 +119,9 @@ const useCommon = (setNodes: React.Dispatch<React.SetStateAction<Array<Node>>>, 
  * @param onChildChange
  * @author Amr
  */
-const useIngredient = (nodes: Array<Node>, setNodes: (nodes: any) => any, onChildChange: any, onClose: any) => {
 
+const useIngredient = function(nodes: Array<Node>, setNodes: (nodes: any) => any, onChildChange: any, onClose: any ,counter :number,setCounter :any,location:any)   {
+    
     const addIngredient = useCallback((parentId: string) => {
         setNodes((nodes: Array<Node>) => {
             let parentIndex = nodes?.findIndex((node: Node) => node.id == parentId)
@@ -120,17 +142,49 @@ const useIngredient = (nodes: Array<Node>, setNodes: (nodes: any) => any, onChil
         })
     }, [setNodes])
 
+
+    /**
+     * this function handles remove one Ingredient
+     * @param parentId
+     * @param name
+     * @author Bilal
+     */
+
+    const removeIngredient = useCallback( async (parentId: string,id :string) => {
+       await setNodes((nodes: Array<Node>) => {
+            let parentIndex = nodes?.findIndex((node: Node) => node.id == parentId)
+            const updatedNodes = [...nodes]
+            const nextId = parentId + '-' + Math.random();
+            console.log("node ",updatedNodes[parentIndex].data)
+            updatedNodes[parentIndex].data =
+                {
+                    ...updatedNodes[parentIndex].data,
+                    children: [...(updatedNodes[parentIndex].data.children.filter((ing :any)=>{
+                         return ing?.id != id
+                    }) )
+                    ]
+                };
+           
+            return updatedNodes;
+        })
+        setCounter((counter:number) => counter + 1)
+    }, [setNodes])
+
+ 
     const ingredientActions = {
         onClose,
         addAction: addIngredient,
         onChange: onChildChange,
-    }
+        removeIngredient:removeIngredient,
+     }
+
     const addIngredientProtocol = (process: any = {}) => {
+        
         const id = 'ingredient-' + (nodes?.length + 1);
         setNodes((nodes: Array<Node>) => [...nodes, {
             id: id,
             type: 'ingredient-container',
-            position: {x: 10, y: 1},
+            position: {x: location.getX(), y: location.getY()},
             draggable: true,
             height: 100,
             data: {
@@ -141,6 +195,7 @@ const useIngredient = (nodes: Array<Node>, setNodes: (nodes: any) => any, onChil
             }
         }
         ])
+        location.updateLocation()
     }
 
     return {
@@ -156,8 +211,7 @@ const useIngredient = (nodes: Array<Node>, setNodes: (nodes: any) => any, onChil
  * @param random
  * @author Amr
  */
-const useMerge = (setNodes: (nodes: any) => any, random: any, onClose: any) => {
-
+const useMerge = (setNodes: (nodes: any) => any, random: any, onClose: any,location:any) => {
     const mergeActions = {
         onClose,
     }
@@ -166,7 +220,7 @@ const useMerge = (setNodes: (nodes: any) => any, random: any, onClose: any) => {
         setNodes((nodes: Array<Node>) => [...nodes, {
             id: id,
             type: 'merge',
-            position: {x: 10, y: 1},
+            position: {x: location.getX(), y: location.getY()},
             draggable: true,
             height: 100,
             data: {
@@ -175,12 +229,13 @@ const useMerge = (setNodes: (nodes: any) => any, random: any, onClose: any) => {
             }
         }
         ])
+        location.updateLocation()
     }
 
     return {addMerge, mergeActions}
 }
 
-const useServe = (setNodes: (nodes: any) => any, random: any, onClose: any) => {
+const useServe = (setNodes: (nodes: any) => any, random: any, onClose: any,location:any) => {
     const serveActions = {
         onClose,
     }
@@ -189,7 +244,7 @@ const useServe = (setNodes: (nodes: any) => any, random: any, onClose: any) => {
         setNodes((nodes: Array<Node>) => [...nodes, {
             id: id,
             type: 'serve',
-            position: {x: 10, y: 1},
+            position: {x: location.getX(), y: location.getY()},
             draggable: true,
             height: 100,
             data: {
@@ -198,12 +253,13 @@ const useServe = (setNodes: (nodes: any) => any, random: any, onClose: any) => {
             }
         }
         ])
+        location.updateLocation()
     }
 
     return {addServe, serveActions}
 }
 
-const useProcess = (nodes: Array<Node>, setNodes: (nodes: any) => any, onChildChange: any, onClose: any) => {
+const useProcess = (nodes: Array<Node>, setNodes: (nodes: any) => any, onChildChange: any, onClose: any,location:any) => {
     const addProcessChild = useCallback((parentId: string) => {
         setNodes((nodes: Array<Node>) => {
             let parentIndex = nodes?.findIndex((node: Node) => node.id == parentId)
@@ -232,7 +288,7 @@ const useProcess = (nodes: Array<Node>, setNodes: (nodes: any) => any, onChildCh
         setNodes((nodes: Array<Node>) => [...nodes, {
             id: id,
             type: 'process',
-            position: {x: 10, y: 1},
+            position: {x: location.getX(), y: location.getY()},
             draggable: true,
             height: 100,
             data: {
@@ -253,6 +309,7 @@ const useProcess = (nodes: Array<Node>, setNodes: (nodes: any) => any, onChildCh
             }
         }
         ])
+        location.updateLocation()
     }
 
 
@@ -269,15 +326,17 @@ const useProtocol = () => {
     const [project, setProject] = useState<number>();
     const [projects, setProjects] = useState<Array<ProjectType>>([])
     const [counter, setCounter] = useState<number>(0)
+    const [metaRecipesCount, setMetaRecipesCount] = useState<number>(0)
+    const location = useLocation()
     const {onChildChange, random, onClose} = useCommon(setNodes, setEdges)
     const {
         addIngredient,
         addIngredientProtocol,
         ingredientActions
-    } = useIngredient(nodes, setNodes, onChildChange, onClose)
-    const {addMerge, mergeActions} = useMerge(setNodes, random, onClose)
-    const {addServe, serveActions} = useServe(setNodes, random, onClose)
-    const {addProcess, addProcessChild, processActions} = useProcess(nodes, setNodes, onChildChange, onClose)
+    } = useIngredient(nodes, setNodes, onChildChange, onClose,counter,setCounter,location)
+    const {addMerge, mergeActions} = useMerge(setNodes, random, onClose,location)
+    const {addServe, serveActions} = useServe(setNodes, random, onClose,location)
+    const {addProcess, addProcessChild, processActions} = useProcess(nodes, setNodes, onChildChange, onClose,location)
     const {onNodesChange, onEdgesChange, onConnect} = useFlowActions(setNodes, setEdges)
     const [form , setForm] = useState({});
     const {showAlert} = useAlert();
@@ -287,6 +346,11 @@ const useProtocol = () => {
     const {request} = useHttp();
     const [openModel, setOpenModel] = useState(false);
     const handleOpenModel = (value:boolean) => setOpenModel(value);
+    const [rTabsValue, setRTabsValue] = useState(0);
+    const [openSaveAsRicpeModel, setOpenSaveAsRicpeModel] = useState(false);
+    const [saveAsRecipe, setSaveAsRecipe] = useState(false);
+
+
 
     /**
      * this function binds the required actions to the nodes according
@@ -301,7 +365,7 @@ const useProtocol = () => {
             'ingredient-container': ingredientActions,
             'process': processActions,
             serve: serveActions,
-            merge: mergeActions
+            merge: mergeActions,
         }
         // walk through the node list and connect their nodes
         // with suitable actions
@@ -383,12 +447,9 @@ const useProtocol = () => {
                 setExtra({...response.data.payload.extra})
                 setName(response.data.payload.name)
                 setProject(response.data.payload.project)
-                console.log('extra' , extra)
+                setMetaRecipesCount(response.data.payload?.meta_recipes_count)
             })
-
-            http<ListType<ProjectType>>(addParamsToEndpoint(getEndpoint('all_projects'), {params: {}})).then(response => {
-                setProjects(response.data.payload?.results)
-            })
+  
         }
     }, [id])
 
@@ -404,6 +465,22 @@ const useProtocol = () => {
 
 
     const onSave = () => {
+
+        if(metaRecipesCount){
+            setOpenSaveAsRicpeModel(true)
+            if(saveAsRecipe){
+                saveProtocol()
+            }else{
+                return
+            }
+        }else{
+            saveProtocol()
+        }
+        
+    }
+
+    const saveProtocol = () => {
+
         let _form = {
             ...form,
             project:project/* project_id */,
@@ -431,6 +508,7 @@ const useProtocol = () => {
             })
             navigator('/protocols');
         })
+        
     }
 
     const onDuplicate = () => {
@@ -460,7 +538,8 @@ const useProtocol = () => {
   
 
     return {onSave, onDuplicate, nodes, edges, onNodesChange, onEdgesChange, onConnect, addProtocol,
-        counter,openModel,ExtraAmountModal , onSaveAdjustment ,handleOpenModel,id,extra , setForm,name,setName,project,setProject,projects}
+        counter,openModel,ExtraAmountModal , onSaveAdjustment ,handleOpenModel,id,extra , setForm,name,
+        setName,project,setProject,projects,rTabsValue,setRTabsValue,openSaveAsRicpeModel,setOpenSaveAsRicpeModel,setSaveAsRecipe}
 
 }
 

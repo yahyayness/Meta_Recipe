@@ -22,8 +22,9 @@ const handleStyle = { left: 10 };
 
 const Ingredient:React.FC<any> = ({data , isConnectable , id} )=>{
     const [children , setChildren] = useState<Array<Node>>([]);
-
-    const addMoreIngredient = useCallback((event:any)=>{
+   
+     
+     const addMoreIngredient = useCallback((event:any)=>{
         setChildren([...children ,  {
             id: 'A-1',
             type: 'input',
@@ -33,6 +34,16 @@ const Ingredient:React.FC<any> = ({data , isConnectable , id} )=>{
             extent: 'parent',
         }])
     } , [])
+
+       /**
+     * this function handles remove one Ingredient from Ingredient component 
+     * @param name
+     * @author Bilal
+     */
+    const onRemove = (name :string)=>{
+         data?.removeIngredient(id ,name)
+
+    }
 
     const onChange = (childIndex:string, value:IngredientType)=>{
         data.onChange(id ,childIndex, value)
@@ -63,7 +74,7 @@ const Ingredient:React.FC<any> = ({data , isConnectable , id} )=>{
 
 
                 <CardContent>
-                    {data.children?.map((node:any , index:number) => (<IngredientRow data={node} isConnectable={true} index={node.id} key={'ingredient-children-'+index} onChange={onChange}/>))}
+                    {data.children?.map((node:any , index:number) => (<IngredientRow data={node} isConnectable={true} index={node.id} key={'ingredient-children-'+index} onChange={onChange} onRemove={onRemove} />))}
                     {/*<IngredientRow data={data} isConnectable={isConnectable}/>*/}
                 </CardContent>
 

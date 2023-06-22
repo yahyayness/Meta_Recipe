@@ -47,6 +47,7 @@ interface ProtocolType extends ResponseType {
     flow: ProtocolFlowType,
     extra: object,
     project: number
+    meta_recipes_count: number
 }
 
 interface IngredientType {

@@ -451,12 +451,6 @@ const useProtocol = () => {
         }
     }, [id])
 
-    useEffect(() => {
-        http<ListType<ProjectType>>(addParamsToEndpoint(getEndpoint('all_projects'), {params: {}})).then(response => {
-                setProjects(response.data.payload?.results)
-            })
-    }, [])
-
     /**
      * fetch projects  
      * @author Bilal

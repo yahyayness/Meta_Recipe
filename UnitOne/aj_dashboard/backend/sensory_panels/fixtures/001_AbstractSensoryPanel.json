@@ -1,0 +1,74 @@
+[
+  {
+    "model": "sensory_panels.AbstractSensoryPanel",
+    "fields": {
+      "name": "Fruity"
+    }
+  },
+  {
+    "model": "sensory_panels.AbstractSensoryPanel",
+    "fields": {
+      "name": "Cacao / Chocolate"
+    }
+  },
+  {
+    "model": "sensory_panels.AbstractSensoryPanel",
+    "fields": {
+      "name": "Soft"
+    }
+  },
+  {
+    "model": "sensory_panels.AbstractSensoryPanel",
+    "fields": {
+      "name": "Salty"
+    }
+  },
+  {
+    "model": "sensory_panels.AbstractSensoryPanel",
+    "fields": {
+      "name": "Hard"
+    }
+  },
+  {
+    "model": "sensory_panels.AbstractSensoryPanel",
+    "fields": {
+      "name": "Nutty"
+    }
+  },
+  {
+    "model": "sensory_panels.AbstractSensoryPanel",
+    "fields": {
+      "name": "Cereal"
+    }
+  },
+  {
+    "model": "sensory_panels.AbstractSensoryPanel",
+    "fields": {
+      "name": "Fatty"
+    }
+  },
+  {
+    "model": "sensory_panels.AbstractSensoryPanel",
+    "fields": {
+      "name": "Sticky"
+    }
+  },
+  {
+    "model": "sensory_panels.AbstractSensoryPanel",
+    "fields": {
+      "name": "Dry"
+    }
+  },
+  {
+    "model": "sensory_panels.AbstractSensoryPanel",
+    "fields": {
+      "name": "Crunchy"
+    }
+  },
+  {
+    "model": "sensory_panels.AbstractSensoryPanel",
+    "fields": {
+      "name": "Sweet"
+    }
+  }
+]

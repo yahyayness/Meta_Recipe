@@ -392,6 +392,16 @@ const useProtocol = () => {
         }
     }, [id])
 
+    /**
+     * fetch projects  
+     * @author Bilal
+     */
+    useEffect(() => {
+            http<ListType<ProjectType>>(addParamsToEndpoint(getEndpoint('all_projects'), {params: {}})).then(response => {
+                setProjects(response.data.payload?.results)
+            })
+    }, [])
+
 
     const onSave = () => {
         let _form = {

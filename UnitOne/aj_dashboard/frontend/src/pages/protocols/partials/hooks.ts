@@ -326,6 +326,7 @@ const useProtocol = () => {
     const [project, setProject] = useState<number>();
     const [projects, setProjects] = useState<Array<ProjectType>>([])
     const [counter, setCounter] = useState<number>(0)
+    const [metaRecipesCount, setMetaRecipesCount] = useState<number>(0)
     const location = useLocation()
     const {onChildChange, random, onClose} = useCommon(setNodes, setEdges)
     const {
@@ -347,6 +348,7 @@ const useProtocol = () => {
     const handleOpenModel = (value:boolean) => setOpenModel(value);
     const [rTabsValue, setRTabsValue] = useState(0);
     const [openSaveAsRicpeModel, setOpenSaveAsRicpeModel] = useState(false);
+    const [saveAsRecipe, setSaveAsRecipe] = useState(false);
 
 
 
@@ -445,7 +447,7 @@ const useProtocol = () => {
                 setExtra({...response.data.payload.extra})
                 setName(response.data.payload.name)
                 setProject(response.data.payload.project)
-                console.log('extra' , extra)
+                setMetaRecipesCount(response.data.payload?.meta_recipes_count)
             })
   
         }
@@ -464,10 +466,21 @@ const useProtocol = () => {
 
     const onSave = () => {
 
-       /*  if(true){
+        if(metaRecipesCount){
             setOpenSaveAsRicpeModel(true)
-            
-        } */
+            if(saveAsRecipe){
+                saveProtocol()
+            }else{
+                return
+            }
+        }else{
+            saveProtocol()
+        }
+        
+    }
+
+    const saveProtocol = () => {
+
         let _form = {
             ...form,
             project:project/* project_id */,
@@ -495,6 +508,7 @@ const useProtocol = () => {
             })
             navigator('/protocols');
         })
+        
     }
 
     const onDuplicate = () => {
@@ -524,7 +538,8 @@ const useProtocol = () => {
   
 
     return {onSave, onDuplicate, nodes, edges, onNodesChange, onEdgesChange, onConnect, addProtocol,
-        counter,openModel,ExtraAmountModal , onSaveAdjustment ,handleOpenModel,id,extra , setForm,name,setName,project,setProject,projects,rTabsValue,setRTabsValue,openSaveAsRicpeModel,setOpenSaveAsRicpeModel}
+        counter,openModel,ExtraAmountModal , onSaveAdjustment ,handleOpenModel,id,extra , setForm,name,
+        setName,project,setProject,projects,rTabsValue,setRTabsValue,openSaveAsRicpeModel,setOpenSaveAsRicpeModel,setSaveAsRecipe}
 
 }
 

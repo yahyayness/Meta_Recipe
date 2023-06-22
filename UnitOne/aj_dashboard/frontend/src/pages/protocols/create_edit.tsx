@@ -49,7 +49,8 @@ const CreateEditProtocol: React.FC = () => {
 
     const { onSave, onDuplicate, nodes, edges, onNodesChange, onEdgesChange, onConnect, addProtocol,
         counter, openModel, handleOpenModel, ExtraAmountModal, onSaveAdjustment, id, extra, setForm,
-         name, setName, project, setProject, projects, rTabsValue,setRTabsValue,openSaveAsRicpeModel,setOpenSaveAsRicpeModel }
+         name, setName, project, setProject, projects, rTabsValue,setRTabsValue,openSaveAsRicpeModel,
+         setOpenSaveAsRicpeModel,setSaveAsRecipe }
         = useProtocol();
 
 
@@ -140,7 +141,7 @@ const CreateEditProtocol: React.FC = () => {
                     open={openSaveAsRicpeModel}
                     setOpen={(status : boolean) => setOpenSaveAsRicpeModel(status)}
                     message="Are you need to save protocol as recipe "
-                    onSave={()=>{}}
+                    onSave={(status : boolean) => setSaveAsRecipe(status)}
                 />
 
                 <Box width='20%' className="protocols-items" mr={-3} mt={-11}>

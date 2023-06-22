@@ -445,7 +445,7 @@ const useProtocol = () => {
                 setForm(response.data.payload);
                 setNodes(bindActions(response.data.payload.flow.nodes))
                 setEdges(response.data.payload.flow.edges)
-                setExtra({...response.data.payload.extra})
+                setExtra({...response.data.payload.custom_sensory_panels})
                 setName(response.data.payload.name)
                 setProject(response.data.payload.project)
                 setMetaRecipesCount(response.data.payload?.meta_recipes_count)

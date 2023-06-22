@@ -46,6 +46,7 @@ interface ProtocolType extends ResponseType {
     updated_at?: string,
     flow: ProtocolFlowType,
     extra: object,
+    custom_sensory_panels: object,
     project: number
     meta_recipes_count: number
 }

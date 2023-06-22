@@ -4,14 +4,15 @@ import {FormControl, InputAdornment, OutlinedInput} from "@mui/material";
 import {Handle, Position, useReactFlow} from "reactflow";
 import target from '../../../../images/target.svg'
 import {IngredientType} from "../../../../types/ModelTypes";
+import { IconButton,} from "@mui/material";
+import CancelIcon from '@mui/icons-material/Cancel';
 
-
-const IngredientRow:React.FC<any> = ({ data, isConnectable, index  , onChange})=>{
+const IngredientRow:React.FC<any> = ({ data, isConnectable, index  , onChange, onRemove})=>{
     const [value , setValue] = useState<IngredientType>((data?.data.value ?? {}) as IngredientType)
     const [amount , setAmount] = useState(data?.data?.value?.amount ?? '')
     const [name , setName] = useState(data?.data?.value?.name ?? '')
     const [unit, setUnit] = useState(data?.data?.value?.unit ?? 'g')
-
+  
     /**
      * this object includes the set methods of component's states
      * so, you can call whatever set method you want by passing the name of state
@@ -25,6 +26,7 @@ const IngredientRow:React.FC<any> = ({ data, isConnectable, index  , onChange})=
         }
         return  setMethods[name]
     }
+
     /**
      * handle the changes of component's inputs
      * @param event
@@ -43,8 +45,13 @@ const IngredientRow:React.FC<any> = ({ data, isConnectable, index  , onChange})=
     return (
 
         <Grid container spacing={0}>
+            <Grid item xs={1} className='handle-container-nopdding'  >
+            <IconButton aria-label="settings"   onClick={()=> onRemove(data?.id)}>
+                <CancelIcon className='deleteingicon' />
+            </IconButton>       
 
-            <Grid item xs={7} width='7ch' >
+            </Grid>
+            <Grid item xs={6} width='7ch' >
                 <FormControl sx={{ m: 1}} variant="outlined"   size="small"  >
                     <OutlinedInput
                         value={name}

@@ -27,6 +27,7 @@ const App: React.FC = () => {
     useEffect(() => {
         const path = location.pathname;
         setCurrentLayout(path?.includes('auth') ? Layouts.auth : Layouts.app)
+        console.log('path',path)
         // Perform other actions based on the route change
     }, [location?.pathname]);
     return (

@@ -3,7 +3,7 @@ import ReactFlow from 'reactflow';
 import 'reactflow/dist/style.css';
 import './partials/style.scss'
 import IngredientGroup from './components/ingredient/index';
-import {Button, Stack, TextField, Select, MenuItem, FormControl, InputLabel} from "@mui/material";
+import { Button, Stack, TextField, Select, MenuItem, FormControl, InputLabel, Tabs, Tab } from "@mui/material";
 import Box from "@mui/material/Box";
 import Ingredient from './components/ingredient-row/index'
 import IngredientRow from "./components/ingredient-row/index";
@@ -15,6 +15,9 @@ import { IconButton } from "@mui/material";
 import useProtocol from "./partials/hooks";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import BasicModal from "./components/protocols/components/extra-amount/index"
+import MessageModal from "./components/protocols/components/save-as-racipt/index"
+import {a11yProps,TabPanel} from "../protocols/components/tabs/index"
+import DropdownMenu from "../../components/menu/index";
 
 const rfStyle = {
     backgroundColor: 'trasparent',
@@ -32,13 +35,24 @@ const nodeTypes = {
     process: Process
 };
 
+const menuList = [
+    {
+        name:"Save As Recipe",
+        action:()=>{}
+    },
+];
+
+
 const EXTRA_HEIGHT = 55;
 
 const CreateEditProtocol: React.FC = () => {
 
     const { onSave, onDuplicate, nodes, edges, onNodesChange, onEdgesChange, onConnect, addProtocol,
-        counter, openModel, handleOpenModel, ExtraAmountModal, onSaveAdjustment, id, extra, setForm, name, setName,project,setProject, projects }
+        counter, openModel, handleOpenModel, ExtraAmountModal, onSaveAdjustment, id, extra, setForm,
+         name, setName, project, setProject, projects, rTabsValue,setRTabsValue,openSaveAsRicpeModel,setOpenSaveAsRicpeModel }
         = useProtocol();
+
+
     return (
         <>
 
@@ -77,20 +91,20 @@ const CreateEditProtocol: React.FC = () => {
                                 MenuProps={{
                                     PaperProps: {
                                         style: {
-                                          width: 250,
+                                            width: 250,
                                         },
-                                      },
+                                    },
                                 }}
                                 onChange={(event) => setProject(event.target.value as number)}
-                                >
-                                    <MenuItem value="">No Protocol</MenuItem>
-                                    {
-                                        projects.map((project) =>{
-                                            return (
-                                                <MenuItem value={project.id}>{project.name}</MenuItem>
-                                            )
-                                        })
-                                    }
+                            >
+                                <MenuItem value="">No Protocol</MenuItem>
+                                {
+                                    projects.map((project) => {
+                                        return (
+                                            <MenuItem value={project.id}>{project.name}</MenuItem>
+                                        )
+                                    })
+                                }
 
                             </Select>
                         </FormControl>
@@ -99,10 +113,7 @@ const CreateEditProtocol: React.FC = () => {
                             <Button variant="text" color="info" onClick={onDuplicate}>Duplicate</Button>
                             <Button variant="text" color="primary" className='primary' onClick={onSave}>Save</Button>
                             <Button variant="text" color="info" onClick={() => handleOpenModel(true)}>adjust</Button>
-                            {/*<IconButton  onClick={()=>handleOpenModel(true)} component="label" key={'stack-list-actions'}>*/}
-                            {/*    <MoreVertIcon/>*/}
-                            {/*</IconButton>*/}
-
+                           {/*  <DropdownMenu menuList={menuList}/> */}
                         </Stack>
 
                     </Stack>
@@ -125,7 +136,29 @@ const CreateEditProtocol: React.FC = () => {
                     afterSave={onSaveAdjustment}
                     setForm={setForm}
                 />
-                <ProtocolsOptions addProtocol={addProtocol} />
+                <MessageModal
+                    open={openSaveAsRicpeModel}
+                    setOpen={(status : boolean) => setOpenSaveAsRicpeModel(status)}
+                    message="Are you need to save protocol as recipe "
+                    onSave={()=>{}}
+                />
+
+                <Box width='20%' className="protocols-items" mr={-3} mt={-11}>
+                    <Tabs value={rTabsValue} onChange={(event: React.SyntheticEvent, newValue: number)=>setRTabsValue(newValue)} aria-label="basic tabs example">
+                        <Tab label="Add" {...a11yProps(0)} />
+                        <Tab label="Design" {...a11yProps(1)} />
+                        <Tab label="Generate" {...a11yProps(2)} />
+                    </Tabs>
+                    <TabPanel value={rTabsValue} index={0}>
+                        <ProtocolsOptions addProtocol={addProtocol} />
+                    </TabPanel>
+                    <TabPanel value={rTabsValue} index={1}>
+                        Item Two
+                    </TabPanel>
+                    <TabPanel value={rTabsValue} index={2}>
+                        Item Three
+                    </TabPanel>
+                </Box>
 
             </Stack>
         </>

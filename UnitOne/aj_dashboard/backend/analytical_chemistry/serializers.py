@@ -7,7 +7,8 @@ class AnalyticalChemistryCreateSerializers(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super(AnalyticalChemistryCreateSerializers, self).__init__(*args, **kwargs)
         if self.context.get('for_cloning'):
-            self.Meta.fields = ['date','method','assay_component','variable','value','unit']
+            self.fields.pop('id')
+            self.fields.pop('project')
     class Meta:
         model = AnalyticalChemistry
         fields = ('__all__') 

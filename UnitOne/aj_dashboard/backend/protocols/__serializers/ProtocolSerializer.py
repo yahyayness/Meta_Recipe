@@ -24,4 +24,5 @@ class ProtocolSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super(ProtocolSerializer, self).to_representation(instance)
         data['project_name'] = instance.project.name if instance.project else None
+        data['meta_recipes_count'] = instance.protocol_meta_recipes.count()
         return data

@@ -33,7 +33,7 @@ const style = {
      * @author Bilal
      */
 
-const BasicModal:React.FC<any> = ({open, setOpen, protocol_id , extra, setForm , afterSave}) => {
+const BasicModal:React.FC<any> = ({open, setOpen, protocol_id , sensory, setSensory , afterSave}) => {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -43,7 +43,7 @@ const BasicModal:React.FC<any> = ({open, setOpen, protocol_id , extra, setForm ,
   const {request} = useHttp();
   const {showAlert} = useAlert();
   const {navigator} = useNavigator()
-
+ 
   
   /**
      * Save protocal Amount
@@ -53,9 +53,9 @@ const BasicModal:React.FC<any> = ({open, setOpen, protocol_id , extra, setForm ,
   const onSave = () => {
     let _form = {
       protocol:protocol_id,
-      sugar:sugar,
-      salt:salt,
-      spicy:spicy,
+      sugar:sensory?.sugar,
+      salt:sensory?.salt,
+      spicy:sensory?.spicy,
     }
     console.log('form', _form, JSON.stringify(_form))
     // change the endpoint according to the isEdit flag
@@ -78,21 +78,18 @@ const BasicModal:React.FC<any> = ({open, setOpen, protocol_id , extra, setForm ,
 
 
 }
-   useEffect(()=>{
-     setSalt(extra.salt)
-     setSugar(extra.sugar)
-     setSpicy(extra.spicy)
+  /*  useEffect(()=>{
+     
+     setSensory({...extra })
      console.log('setOpen' , extra , salt)
-   },[extra])
-const handleSugar = (event: Event, newValue: number | number[]) => {
+   },[extra]) */
+
+const handleSensory = (event: Event, newValue: number | number[], key : string) => {
   setSugar(newValue as number);
-};
-const handleSalt = (event: Event, newValue: number | number[]) => {
-  setSalt(newValue as number);
-};
-const handleSpicy = (event: Event, newValue: number | number[]) => {
-  setSpicy(newValue as number);
-};
+  setSensory({...sensory ,[key]:newValue })
+}; 
+
+ 
   return (
     <div>
 
@@ -107,21 +104,21 @@ const handleSpicy = (event: Event, newValue: number | number[]) => {
             <Typography id="modal-modal-title" >
             Sugar
             </Typography>
-            <Slider  track={false} color={sugar < 0 ? "secondary" : "primary" } min={-50} max={50} onChange={handleSugar} defaultValue={sugar} aria-label="Default" valueLabelDisplay="on" />
+            <Slider  track={false} color={sugar < 0 ? "secondary" : "primary" } min={-50} max={50} onChange={(e,v)=>handleSensory(e,v,"sugar")} defaultValue={sensory?.sugar} aria-label="Default" valueLabelDisplay="on" />
           </Box>
           <Box >
             <Typography id="modal-modal-title" variant="h6" component="h2">
              Salt
             </Typography>
-            <Slider   track={false} min={-50} max={50} color={salt < 0 ? "secondary" : "primary" } onChange={handleSalt} defaultValue={salt} aria-label="Default" valueLabelDisplay="on" />
+            <Slider   track={false} min={-50} max={50} color={salt < 0 ? "secondary" : "primary" } onChange={(e,v)=>handleSensory(e,v,"salt")} defaultValue={sensory?.salt} aria-label="Default" valueLabelDisplay="on" />
           </Box>
           <Box >
             <Typography id="modal-modal-title" variant="h6" component="h2">
             Spicy
             </Typography>
-            <Slider   track={false} min={-50} max={50} color={spicy < 0 ? "secondary" : "primary" } onChange={handleSpicy} defaultValue={spicy} aria-label="Default" valueLabelDisplay="on" />
+            <Slider   track={false} min={-50} max={50} color={spicy < 0 ? "secondary" : "primary" } onChange={(e,v)=>handleSensory(e,v,"spicy")} defaultValue={sensory?.spicy} aria-label="Default" valueLabelDisplay="on" />
           </Box>
-          <Button onClick={()=>onSave()} variant="contained">Save</Button>
+          <Button onClick={()=>afterSave()} variant="contained">Save</Button>
           <Button style={{marginLeft:"10px"}} onClick={()=>handleClose()}  >Close</Button>
         </Box>
         

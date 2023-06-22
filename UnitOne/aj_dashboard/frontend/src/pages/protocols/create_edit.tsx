@@ -48,9 +48,9 @@ const EXTRA_HEIGHT = 55;
 const CreateEditProtocol: React.FC = () => {
 
     const { onSave, onDuplicate, nodes, edges, onNodesChange, onEdgesChange, onConnect, addProtocol,
-        counter, openModel, handleOpenModel, ExtraAmountModal, onSaveAdjustment, id, extra, setForm,
+        counter, openModel, handleOpenModel, ExtraAmountModal, saveSensory, id, extra, setExtra, setForm,
          name, setName, project, setProject, projects, rTabsValue,setRTabsValue,openSaveAsRicpeModel,
-         setOpenSaveAsRicpeModel,setSaveAsRecipe }
+         setOpenSaveAsRicpeModel,saveAsRecipe }
         = useProtocol();
 
 
@@ -133,15 +133,16 @@ const CreateEditProtocol: React.FC = () => {
                     open={openModel}
                     setOpen={handleOpenModel}
                     protocol_id={id}
-                    extra={extra}
-                    afterSave={onSaveAdjustment}
+                    sensory={extra}
+                    setSensory={setExtra}
+                    afterSave={saveSensory}
                     setForm={setForm}
                 />
                 <MessageModal
                     open={openSaveAsRicpeModel}
                     setOpen={(status : boolean) => setOpenSaveAsRicpeModel(status)}
-                    message="Are you need to save protocol as recipe "
-                    onSave={(status : boolean) => setSaveAsRecipe(status)}
+                    message="The protocol will be as recipe are you sure ? "
+                    onSave={saveAsRecipe}
                 />
 
                 <Box width='20%' className="protocols-items" mr={-3} mt={-11}>

@@ -30,6 +30,7 @@ from protocols.__serializers.ProtocolSerializer import ProtocolSerializer
 from protocols.models import Protocol, ProtocolNode, ProtocolEdge, ProtocolIngredient, ProtocolProcess
 from recipe.__views import RecipeFlowView
 from recipe.models import Recipe, RecipeIngredients
+from sensory_panels.models import AbstractSensoryPanel
 
 
 class ProtocolView(GenericViewSet):
@@ -224,9 +225,22 @@ class ProtocolView(GenericViewSet):
                 params = ['sugar', 'salt', 'spicy', 'water']
                 protocol = Protocol.objects.get(id=pk)
                 __protocol = ProtocolSerializer(protocol).data
-
+                if not len(__protocol['custom_sensory_panels']):
+                    panels = AbstractSensoryPanel.objects.only('name')
+                    for panel in panels:
+                        protocol.custom_sensory_panels.create(variable=panel.name)
+                saved_ingredients = []
+                changed_ingredients = []
+                saved_panels = []
+                changed_panels = []
+                changed_flow = request.data.get('flow', {})
+                for ing in __protocol['protocol_ingredient']:
+                    saved_ingredients.append({'name': ing['ingredient_name'], 'quantity': ing['quantity'], 'unit': ing['unit']})
+                for panel in __protocol['custom_sensory_panels']:
+                    saved_panels.append({'variable': panel['variable'], 'value': panel['value']})
                 # ingredient_container = filter(lambda ic: ic['type'] == 'ingredient-container', protocol.flow['nodes'])
                 # print(list(ingredient_container))
+
                 return Response(
                     {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success',
                      'payload': ProtocolSerializer(protocol).data},

@@ -3,7 +3,8 @@ from rest_framework.validators import UniqueValidator
 
 from ingredients.serializers import IngredientsSerilizer
 from protocols.__serializers.ProtocolIngredient import ProtocolIngredientSerializer
-from protocols.models import Protocol
+from protocols.__serializers.ProtocolSensoryPanel import ProtocolSensoryPanelSerializer
+from protocols.models import Protocol, ProtocolSensoryPanel
 
 
 class ProtocolSerializer(serializers.ModelSerializer):
@@ -14,6 +15,7 @@ class ProtocolSerializer(serializers.ModelSerializer):
     flow = serializers.JSONField(required=False, initial=dict)
     # ingredients_list = IngredientsSerilizer(many=True, read_only=True)
     protocol_ingredient = ProtocolIngredientSerializer(many=True, read_only=True)
+    custom_sensory_panels = ProtocolSensoryPanelSerializer(many=True, read_only=True)
 
     class Meta:
         model = Protocol
@@ -23,7 +25,7 @@ class ProtocolSerializer(serializers.ModelSerializer):
             },
         }
         fields = ['id', 'description', 'reference_author', 'aliquot_date', 'reagent', 'name', 'processes',
-                  'ingredients', 'flow', 'created_at', 'updated_at', 'project', 'extra', 'protocol_ingredient']
+                  'ingredients', 'flow', 'created_at', 'updated_at', 'project', 'extra', 'protocol_ingredient', 'custom_sensory_panels']
 
     def to_representation(self, instance):
         data = super(ProtocolSerializer, self).to_representation(instance)

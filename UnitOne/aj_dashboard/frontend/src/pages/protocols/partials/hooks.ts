@@ -266,7 +266,7 @@ const useProtocol = () => {
     const [edges, setEdges] = useState<Array<Edge>>([]);
     const [extra, setExtra] = useState({});
     const [name, setName] = useState("");
-    const [project, setProject] = useState<number>(-1);
+    const [project, setProject] = useState<number>();
     const [projects, setProjects] = useState<Array<ProjectType>>([])
     const [counter, setCounter] = useState<number>(0)
     const {onChildChange, random, onClose} = useCommon(setNodes, setEdges)

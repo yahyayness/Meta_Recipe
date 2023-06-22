@@ -5,8 +5,8 @@ from functools import reduce
 from operator import or_
 
 from django.core import serializers
-from django.db import transaction
-from django.db.models import Q
+from django.db import transaction, models
+from django.db.models import Q, Count
 from django.forms import model_to_dict
 from rest_framework import status
 from rest_framework.decorators import action, api_view
@@ -25,6 +25,7 @@ from meta_recipe.models import MetaRecipe
 from process.models import Process
 from protocols.__serializers.ProtocolSerializer import ProtocolSerializer
 from protocols.models import Protocol, ProtocolNode, ProtocolEdge, ProtocolIngredient, ProtocolProcess
+from recipe.__views import RecipeFlowView
 from recipe.models import Recipe, RecipeIngredients
 
 
@@ -59,14 +60,27 @@ class ProtocolView(GenericViewSet):
             status=status.HTTP_200_OK)
 
     def update(self, request, pk, *args, **kwargs):
-        protocol = Protocol.objects.get(id=pk)
-        serializer = ProtocolSerializer(instance=protocol, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        obj = serializer.save()
-        obj.protocol_processes.all().delete()
-        obj.protocol_nodes.all().delete()
-        obj.protocol_ingredient.all().delete()
-        result = self.create_flow(flow=request.data['flow'], protocol_id=obj.id)
+        # protocol = Protocol.objects.get(id=pk)
+        result = {}
+        protocol = Protocol.objects.annotate(num_protocol_meta_recipes=models.Count('protocol_meta_recipes')).get(id=pk)
+        if not protocol.num_protocol_meta_recipes:
+            serializer = ProtocolSerializer(instance=protocol, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            obj = serializer.save()
+            obj.protocol_processes.all().delete()
+            obj.protocol_nodes.all().delete()
+            obj.protocol_ingredient.all().delete()
+            result = self.create_flow(flow=request.data['flow'], protocol_id=obj.id)
+        else:
+            try:
+                last_id = Recipe.objects.latest('id')
+                name = f"Recipe-{last_id.id + 1}"
+            except Recipe.DoesNotExist:
+                name = 'Recipe-0'
+            meta = protocol.protocol_meta_recipes.get()
+            recipe = meta.recipes_for_meta.create(name=name, protocol=protocol)
+            recipe_flow = RecipeFlowView
+            recipe_flow.create_recipe_flow(flow=request.data['flow'], recipe_id=recipe.id)
         return Response(
             {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': result},
             status=status.HTTP_200_OK)

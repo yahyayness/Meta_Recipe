@@ -18,5 +18,5 @@ class SensoryPanelsSerializers(serializers.ModelSerializer):
      sample_id=SampleDescriptionsCreateSerializers(read_only=True)
      class Meta:
         model = SensoryPanel
-        fields = ['id','judge','data','sample_id','panel_type','panel_variable','panel_value', 'project']
+        fields = ['id','judge','date','sample_id','panel_type','panel_variable','panel_value', 'project']
  

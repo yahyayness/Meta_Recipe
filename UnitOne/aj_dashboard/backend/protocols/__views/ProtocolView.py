@@ -49,6 +49,12 @@ class ProtocolView(GenericViewSet):
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         obj = serializer.save()
+        try:
+            last_id = MetaRecipe.objects.latest('id')
+            meta_name = f"Meta-{last_id.id + 1}"
+        except MetaRecipe.DoesNotExist:
+            meta_name = 'Meta-0'
+        obj.protocol_meta_recipes.create(name=meta_name)
         flow = {}
         if 'flow' in request.data:
             flow = request.data['flow']
@@ -74,11 +80,22 @@ class ProtocolView(GenericViewSet):
         else:
             try:
                 last_id = Recipe.objects.latest('id')
-                name = f"Recipe-{last_id.id + 1}"
+                recipe_name = f"Recipe-{last_id.id + 1}"
             except Recipe.DoesNotExist:
-                name = 'Recipe-0'
+                recipe_name = 'Recipe-0'
+
+            try:
+                last_id = MetaRecipe.objects.latest('id')
+                meta_name = f"Meta-{last_id.id + 1}"
+            except MetaRecipe.DoesNotExist:
+                meta_name = 'Meta-0'
+
             meta = protocol.protocol_meta_recipes.get()
-            recipe = meta.recipes_for_meta.create(name=name, protocol=protocol)
+
+            if not meta:
+                meta = protocol.protocol_meta_recipes.create(name=meta_name)
+
+            recipe = meta.recipes_for_meta.create(name=recipe_name, protocol=protocol)
             recipe_flow = RecipeFlowView
             recipe_flow.create_recipe_flow(flow=request.data['flow'], recipe_id=recipe.id)
         return Response(

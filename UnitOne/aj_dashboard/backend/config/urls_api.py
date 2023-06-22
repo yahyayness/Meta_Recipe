@@ -17,6 +17,7 @@ urlpatterns = [
     path('recipes/', include('recipe.urls')),
     path('protocols/', include('protocols.urls')),
     path('equipments/', include('equipments.urls')),
+    path('sensory-panels/', include('sensory_panels.urls')),
 ]
 
 if settings.DEBUG:

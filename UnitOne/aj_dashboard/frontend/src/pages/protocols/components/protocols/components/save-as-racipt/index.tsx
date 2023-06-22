@@ -67,6 +67,7 @@ const MessageModal:React.FC<any> = ({message,open,setOpen,onSave}) => {
             <Typography id="modal-modal-title" variant="h6" component="h2">
                 {message}
             </Typography>
+            <br/>
            </Box>
           <Button onClick={()=>save()} variant="contained">Save</Button>
           <Button style={{marginLeft:"10px"}} onClick={()=>handleClose()}  >Close</Button>

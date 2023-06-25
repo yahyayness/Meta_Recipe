@@ -68,17 +68,42 @@ export const useUserTable = () => {
     const [refresh, setRefresh] = useState(0)
     const [searchParams, setSearchParams] = useSearchParams();
     const [pagination ,setPagination] = useState<PaginationType>({} as PaginationType)
-
+    const [selectedRows, setSelectedRows] = useState([])
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
+    const handeShowDeleteDialog = ()=> setShowDeleteConfirmation(true)
     /**
      * common hook that controls all navigations
      * @author Amr
      */
     const {navigator} = useNavigator();
+   
+    
+
+    const [commonActions , setCommonActions] = useState([])
+
     /**
+    * delete's Protocols actions
+    * @author Bilal
+    */
+   const deleteUsers =()=>{
+       console.log('selectedRows' , selectedRows)
+       request<ListType<UserType>>(getEndpoint('delete_users'), {ids : selectedRows?.map( (row:UserType) => row.id)} ).then(response => {
+           fetch(searchParams.get('page'))
+           showAlert({
+               type: AlertTypes.SUCCESS,
+               message: `Protocols Deleted successfully`
+           })
+       })  
+   }  
+ 
+   /**
      * page's common actions
-     * @author Amr
+     * @author Bilal
      */
-    const _actions = actions(navigator)
+   useEffect(()=>{
+       setCommonActions(actions(navigator,handeShowDeleteDialog) as []);
+   } , [selectedRows])
+
     /**
      * set the breadcrumbs of the current page
      * @author Amr
@@ -103,7 +128,8 @@ export const useUserTable = () => {
      */
     useEffect(() => fetch(searchParams.get('page')), [refresh , searchParams.get('page')])
 
-    return {rows, request, showAlert, columns, _actions , setRefresh,navigator , pagination}
+    return {rows, request, showAlert, columns, setSelectedRows, commonActions , setRefresh,navigator ,
+        pagination, showDeleteConfirmation,setShowDeleteConfirmation,deleteUsers}
 
 
 }

@@ -3,15 +3,17 @@ import ListActions from '../../components/stack-actions'
 import AppTable from "../../components/table";
 import {Pagination, Stack} from "@mui/material";
 import AppPagination from "../../components/table/pagination";
+import AppDialog from "../../components/dialog/index";
 
 const Users:React.FC = () => {
 
-   const {rows, request, showAlert, columns, _actions , setRefresh,navigator ,pagination} =  useUserTable()
+   const {rows, request, showAlert, columns, commonActions , setRefresh,navigator ,pagination, setSelectedRows, showDeleteConfirmation,setShowDeleteConfirmation,deleteUsers} =  useUserTable()
 
     return (
         <>
-            <ListActions actions={_actions}/>
-            <AppTable columns={columns} rows={rows} actions={tableActions(navigator , request,showAlert , setRefresh)} pagination={pagination}/>
+            <AppDialog title="Confirmation" message="Are you sure that you want to delete this Users?" open={showDeleteConfirmation} setOpen={setShowDeleteConfirmation} ok={()=>deleteUsers()}/>
+            <ListActions actions={commonActions}/>
+            <AppTable columns={columns} rows={rows} actions={tableActions(navigator , request,showAlert , setRefresh)} pagination={pagination} onRowSelect={setSelectedRows}/>
         </>
     );
 }

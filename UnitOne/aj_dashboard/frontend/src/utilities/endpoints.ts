@@ -29,6 +29,10 @@ export default {
         url : 'users/:id',
         method: HttpMethodTypes.DELETE
     },
+    delete_users:{
+        url : 'users/bulk_destroy',
+        method: HttpMethodTypes.POST
+    },
     add_protocol : {
         url : 'protocols/',
         method: HttpMethodTypes.POST

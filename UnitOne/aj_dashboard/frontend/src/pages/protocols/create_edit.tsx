@@ -54,9 +54,10 @@ const CreateEditProtocol: React.FC = () => {
 
 
     const { onSave, onDuplicate, nodes, edges, onNodesChange, onEdgesChange, onConnect, addProtocol,
-        counter, openModel, handleOpenModel, ExtraAmountModal, onSaveAdjustment, id, extra, setForm,
+        counter, openModel, handleOpenModel, ExtraAmountModal, saveSensory, id, extra, setExtra, setForm,
          name, setName, project, setProject, projects, rTabsValue,setRTabsValue,openSaveAsRicpeModel,
-         setOpenSaveAsRicpeModel,setSaveAsRecipe  , form , handleFormChanges}
+         setOpenSaveAsRicpeModel  , form ,saveAsRecipe, handleFormChanges , isEdit}
+
         = useProtocol();
 
 
@@ -97,64 +98,11 @@ const CreateEditProtocol: React.FC = () => {
 
             <Stack flexDirection='row'>
                 <Box width="100%" style={{ height: '80ch' }} key={'nodes-' + counter}>
-                    <Stack spacing={2} direction="row" justifyContent="space-between" className="list-master-actions" width="100%">
-
-                        <TextField
-                            label="Protocol Name"
-                            id="date"
-                            size="small"
-                            name="name"
-                            type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            InputLabelProps={{
-                                style: { fontSize: '13.45px' },
-                                shrink: true,
-                            }}
-                            InputProps={{
-                                style: { fontSize: '13.45px' }
-                            }}
-
-                        />
-
-                        <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
-                            <InputLabel id="demo-simple-select">Project</InputLabel>
-
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                size="small"
-                                label="Project"
-                                value={project}
-                                placeholder="No project for this protocol"
-                                MenuProps={{
-                                    PaperProps: {
-                                        style: {
-                                            width: 250,
-                                        },
-                                    },
-                                }}
-                                onChange={(event) => setProject(event.target.value as number)}
-                            >
-                                <MenuItem value="">No Protocol</MenuItem>
-                                {
-                                    projects.map((project , index) => {
-                                        return (
-                                            <MenuItem value={project.id} key={`project${index}`}>{project.name}</MenuItem>
-                                        )
-                                    })
-                                }
-
-                            </Select>
-                        </FormControl>
-
-                        <Stack spacing={2} direction="row" justifyContent="right" className="list-master-actions" width="100%">
-                            <Button variant="text" color="info" onClick={onDuplicate}>Duplicate</Button>
-                            <Button variant="text" color="primary" className='primary' onClick={onSave}>Save</Button>
-                            <Button variant="text" color="info" onClick={() => handleOpenModel(true)}>adjust</Button>
-                           {/*  <DropdownMenu menuList={menuList}/> */}
-                        </Stack>
-
+                    <Stack spacing={2} direction="row" justifyContent="right" className="list-master-actions" width="100%">
+                        <Button variant="text" color="info" onClick={onDuplicate}>Duplicate</Button>
+                        <Button variant="text" color="primary" className='primary' onClick={onSave}>Save</Button>
+                        {isEdit && <Button variant="text" color="info" onClick={() => handleOpenModel(true)}>adjust</Button>}
+                        {/*  <DropdownMenu menuList={menuList}/> */}
                     </Stack>
                     <ReactFlow
                         nodes={nodes}
@@ -171,15 +119,16 @@ const CreateEditProtocol: React.FC = () => {
                     open={openModel}
                     setOpen={handleOpenModel}
                     protocol_id={id}
-                    extra={extra}
-                    afterSave={onSaveAdjustment}
+                    sensory={extra}
+                    setSensory={setExtra}
+                    afterSave={saveSensory}
                     setForm={setForm}
                 />
                 <MessageModal
                     open={openSaveAsRicpeModel}
                     setOpen={(status : boolean) => setOpenSaveAsRicpeModel(status)}
-                    message="Are you need to save protocol as recipe "
-                    onSave={(status : boolean) => setSaveAsRecipe(status)}
+                    message="The protocol will be as recipe are you sure ? "
+                    onSave={saveAsRecipe}
                 />
 
 

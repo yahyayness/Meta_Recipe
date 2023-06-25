@@ -104,7 +104,6 @@ def ProjectList(request):
                                     create_or_get_object(idict, IngredientsSerilizer)
                                 except Exception as e:
                                     raise e
-
                 ## import equipments data from equipments files
                 if "equipments[]" in request.FILES:
                     fields = ['name', 'type', 'brand', 'model', 'project']
@@ -130,6 +129,7 @@ def ProjectList(request):
                                        'model': equ['model'], 'project': projectExist.id}
                                 try:
                                     idict = prepare_model_dict(opj, fields)
+                                    print(idict)
                                     create_object(idict, EquipmentSerializer)
                                 except Exception as e:
                                     raise e

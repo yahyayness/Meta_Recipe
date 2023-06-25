@@ -11,9 +11,9 @@ class EquipmentSerializer(serializers.ModelSerializer):
             self.fields.pop('id')
             self.fields.pop('project')
 
-    name = serializers.CharField(max_length=225, required=True, validators=[
-        UniqueValidator(queryset=Equipment.objects.all())
-    ])
+    # name = serializers.CharField(max_length=225, required=True, validators=[
+    #     UniqueValidator(queryset=Equipment.objects.all())
+    # ])
 
     class Meta:
         model = Equipment

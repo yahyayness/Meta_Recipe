@@ -70,8 +70,8 @@ const useLocation= () => {
     const getY=()=> y
 
     const updateLocation =()=>{
-        setx(x+0)
-        sety(y+0)
+        setx(x+30)
+        sety(y+30)
     } 
     return {getX,getY,updateLocation}
 
@@ -321,7 +321,8 @@ const useProtocol = () => {
 
     const [nodes, setNodes] = useState<Array<Node>>([]);
     const [edges, setEdges] = useState<Array<Edge>>([]);
-    const [extra, setExtra] = useState({});
+    const [extra, setExtra] = useState<any>([]);
+    /* const [sensory , setSensory] = useState<any>({ }); */
     const [name, setName] = useState("");
     const [project, setProject] = useState<number>();
     const [projects, setProjects] = useState<Array<ProjectType>>([])
@@ -348,7 +349,7 @@ const useProtocol = () => {
     const handleOpenModel = (value:boolean) => setOpenModel(value);
     const [rTabsValue, setRTabsValue] = useState(0);
     const [openSaveAsRicpeModel, setOpenSaveAsRicpeModel] = useState(false);
-    const [saveAsRecipe, setSaveAsRecipe] = useState(false);
+   
 
 
 
@@ -444,7 +445,8 @@ const useProtocol = () => {
                 setForm(response.data.payload);
                 setNodes(bindActions(response.data.payload.flow.nodes))
                 setEdges(response.data.payload.flow.edges)
-                setExtra({...response.data.payload.extra})
+                console.log(response.data.payload.custom_sensory_panels)
+                setExtra([...response.data.payload.custom_sensory_panels])
                 setName(response.data.payload.name)
                 setProject(response.data.payload.project)
                 setMetaRecipesCount(response.data.payload?.meta_recipes_count)
@@ -464,21 +466,34 @@ const useProtocol = () => {
     }, [])
 
 
+    /**
+     * save protocol As Recipe  
+     * @author Bilal
+     */
+    const saveAsRecipe = () => {
+        saveProtocol()
+        setOpenSaveAsRicpeModel(false)
+    }
+
+    /**
+     * on save protocol check if save As Recipe  (show message )or as protocol  
+     * @author Bilal
+     */
     const onSave = () => {
 
         if(metaRecipesCount){
             setOpenSaveAsRicpeModel(true)
-            if(saveAsRecipe){
-                saveProtocol()
-            }else{
-                return
-            }
+            
         }else{
             saveProtocol()
         }
         
     }
 
+    /**
+     * save protocol   
+     * @author Bilal
+     */
     const saveProtocol = () => {
 
         let _form = {
@@ -520,6 +535,42 @@ const useProtocol = () => {
         })
     }
 
+
+       /**
+     * save sensory   
+     * @author Bilal
+     */
+       const saveSensory = () => {
+        let protocol_id=id
+        let _form = {
+            protocol:protocol_id,
+            sensors:extra,
+            name:name,
+            flow : {
+                nodes: nodes,
+                edges: edges
+            }
+          }
+          console.log('form', _form, JSON.stringify(_form))
+          // change the endpoint according to the isEdit flag
+          const endpoint = addParamsToEndpoint(getEndpoint('amount_protocol'), {
+            protocol_id,
+            id: protocol_id
+          }) 
+          
+          request<ProtocolType>(endpoint, _form).then((response) => {
+              const protocol = response?.data?.payload
+      
+              // handleClose()
+              // window.location.reload();
+              onSaveAdjustment(response);
+      
+      
+      
+               // navigator('/protocols/'+protocol_id);
+          })
+    }
+
     const onSaveAdjustment = (response:any)=> {
         console.log('response' , response.data.payload.flow.nodes)
         setNodes([...bindActions(response.data.payload.flow.nodes)])
@@ -553,8 +604,8 @@ const useProtocol = () => {
   
 
     return {onSave, onDuplicate, nodes, edges, onNodesChange, onEdgesChange, onConnect, addProtocol,
-        counter,openModel,ExtraAmountModal , onSaveAdjustment ,handleOpenModel,id,extra , setForm,name,
-        setName,project,setProject,projects,rTabsValue,setRTabsValue,openSaveAsRicpeModel,setOpenSaveAsRicpeModel,setSaveAsRecipe , form , handleFormChanges}
+        counter,openModel,ExtraAmountModal , saveSensory ,handleOpenModel,id,extra,setExtra , setForm,name,
+        setName,project,setProject,projects,rTabsValue,setRTabsValue,openSaveAsRicpeModel,setOpenSaveAsRicpeModel,saveAsRecipe   , form , handleFormChanges , isEdit}
 
 }
 

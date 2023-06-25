@@ -23,6 +23,8 @@ class Protocol(SoftDeleteModel):
     project = models.ForeignKey(Projects, on_delete=models.CASCADE, related_name='protocols',
                                 null=True, default=None)
     extra = models.JSONField(null=True, blank=False, default=dict)
+    ingredients_list = models.ManyToManyField(Ingredients, through='ProtocolIngredient',
+                                              related_name='ingredients_list', blank=True)
 
     class Meta:
         db_table = 'protocols'
@@ -129,3 +131,19 @@ class ProtocolIngredient(models.Model):
 
     def __str__(self):
         return f"{self.unit}  >> {self.quantity}"
+
+
+class ProtocolSensoryPanel(models.Model):
+    protocol = models.ForeignKey(Protocol, on_delete=models.CASCADE, related_name='custom_sensory_panels',
+                                 blank=False,
+                                 null=False)
+    variable = models.CharField(max_length=225, null=False, blank=False)
+    value = models.FloatField(default=0)
+
+    class Meta:
+        db_table = 'protocol_sensory_panels'
+        verbose_name = 'ProtocolSensoryPanel'
+        unique_together = ('protocol', 'variable')
+
+    def __str__(self):
+        return f"{self.variable}  >> {self.value}"

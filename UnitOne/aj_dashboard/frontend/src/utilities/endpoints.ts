@@ -89,4 +89,8 @@ export default {
         url : 'project/:id',
         method: HttpMethodTypes.GET
     },
+    all_sensors : {
+        url : 'sensory-panels/abstract',
+        method: HttpMethodTypes.GET
+    } ,
 }

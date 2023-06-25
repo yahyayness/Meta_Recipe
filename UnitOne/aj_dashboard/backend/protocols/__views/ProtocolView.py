@@ -116,7 +116,7 @@ class ProtocolView(GenericViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        if not len(instance.custom_sensory_panels.all()):
+        if not instance.custom_sensory_panels.count():
             panels = AbstractSensoryPanel.objects.only('name')
             for panel in panels:
                 instance.custom_sensory_panels.create(variable=panel.name)

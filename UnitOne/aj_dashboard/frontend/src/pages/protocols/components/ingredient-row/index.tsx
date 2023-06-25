@@ -45,9 +45,9 @@ const IngredientRow:React.FC<any> = ({ data, isConnectable, index  , onChange, o
     return (
 
         <Grid container spacing={0}>
-            <Grid item xs={1} className='handle-container-nopdding'  >
-            <IconButton aria-label="settings"   onClick={()=> onRemove(data?.id)}>
-                <CancelIcon className='deleteingicon' />
+            <Grid item xs={1} className='handle-container-nopdding handle-container'  >
+            <IconButton aria-label="settings"   onClick={()=> onRemove(data?.id)} >
+                <CancelIcon className='deleteingicon' sx={{ fontSize: 40 }}  />
             </IconButton>       
 
             </Grid>

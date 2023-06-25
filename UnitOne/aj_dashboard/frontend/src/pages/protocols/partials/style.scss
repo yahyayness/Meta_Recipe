@@ -10,9 +10,7 @@
 .deleteingicon{
   
   color: #ee1414;
-  font-size: 19.82574px;
-  top: 2px !important;
-  position: absolute  !important;
+  font-size: 18px;
  }
 
 .node-item{
@@ -92,11 +90,12 @@ background-color: transparent;
 }
 
 .handle-container-nopdding{
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  right: 10px;
+  padding-top: -1px;
+  position: relative;
+  padding: 0;
+  /* bottom: 43px; */
+  top: -2px;
+  left: 2px;
  
 }
 

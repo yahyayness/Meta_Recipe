@@ -338,7 +338,7 @@ const useProtocol = () => {
     const {addServe, serveActions} = useServe(setNodes, random, onClose,location)
     const {addProcess, addProcessChild, processActions} = useProcess(nodes, setNodes, onChildChange, onClose,location)
     const {onNodesChange, onEdgesChange, onConnect} = useFlowActions(setNodes, setEdges)
-    const [form , setForm] = useState({});
+    const [form , setForm] = useState<any>({});
     const {showAlert} = useAlert();
     const {navigator} = useNavigator()
     const {id , project_id} = useParams();
@@ -535,11 +535,26 @@ const useProtocol = () => {
         // return BasicModal(openModel,handleOpenModel,id,extra,setNodes,setEdges,setForm , bindActions , setCounter,callback)
     }
 
+    const handleFormChanges = (name: string , project: number)=>{
+        setForm((form:any) => {
+            return {
+                ...form ,
+                name,
+                project
+            }
+        })
+
+        setProject(project)
+
+        console.log("deeep shit",name , project , form)
+
+    }
+
   
 
     return {onSave, onDuplicate, nodes, edges, onNodesChange, onEdgesChange, onConnect, addProtocol,
         counter,openModel,ExtraAmountModal , onSaveAdjustment ,handleOpenModel,id,extra , setForm,name,
-        setName,project,setProject,projects,rTabsValue,setRTabsValue,openSaveAsRicpeModel,setOpenSaveAsRicpeModel,setSaveAsRecipe}
+        setName,project,setProject,projects,rTabsValue,setRTabsValue,openSaveAsRicpeModel,setOpenSaveAsRicpeModel,setSaveAsRecipe , form , handleFormChanges}
 
 }
 

@@ -276,8 +276,9 @@ class ProtocolView(GenericViewSet):
                                                 item["name"] == child['data']['value']['name'])
                                 child['data']['value']['amount'] = ing_dict['quantity']
                     __protocol = self.create_flow(flow=flow, protocol_id=pk)
-                for panel in changed_panels:
-                    ProtocolSensoryPanel.objects.filter(protocol=protocol, variable=panel['variable']).update(value=panel['value'])
+                for panel in result['sensory_panel']:
+                    ProtocolSensoryPanel.objects.filter(protocol=protocol, variable=panel['variable']).update(
+                        value=panel['value'])
                 return Response(
                     {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success',
                      'payload': __protocol},

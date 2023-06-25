@@ -70,8 +70,8 @@ const useLocation= () => {
     const getY=()=> y
 
     const updateLocation =()=>{
-        setx(x+0)
-        sety(y+0)
+        setx(x+30)
+        sety(y+30)
     } 
     return {getX,getY,updateLocation}
 

@@ -74,7 +74,7 @@ const BasicModal: React.FC<any> = ({ open, setOpen, protocol_id, sensory, setSen
 
   }
   useEffect(() => {
-    http<ListType<ProjectType>>(addParamsToEndpoint(getEndpoint('all_sensors'), { params: { page_size: 12 } })).then(response => {
+    http<ListType<ProjectType>>(getEndpoint('all_sensors'), { params: { page_size: 12 } }).then(response => {
       setSensorsList(response.data.payload?.results)
     })
 

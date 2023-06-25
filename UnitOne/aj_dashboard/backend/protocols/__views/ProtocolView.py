@@ -116,6 +116,10 @@ class ProtocolView(GenericViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
+        if not instance.custom_sensory_panels.count():
+            panels = AbstractSensoryPanel.objects.only('name')
+            for panel in panels:
+                instance.custom_sensory_panels.create(variable=panel.name)
         serializer = ProtocolSerializer(instance)
         return Response({
             'status': 'success', 'code': status.HTTP_400_BAD_REQUEST, 'message': 'success',

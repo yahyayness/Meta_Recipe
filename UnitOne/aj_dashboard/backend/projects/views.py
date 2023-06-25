@@ -129,13 +129,12 @@ def ProjectList(request):
                                        'model': equ['model'], 'project': projectExist.id}
                                 try:
                                     idict = prepare_model_dict(opj, fields)
-                                    print(idict)
                                     create_object(idict, EquipmentSerializer)
                                 except Exception as e:
                                     raise e
                 ## import sensory_panels data from sensory_panels files
                 if "sensory_panels[]" in request.FILES:
-                    fields = ['judge', 'data', 'panel_type', 'panel_variable', 'panel_value', 'project']
+                    fields = ['judge', 'date', 'panel_type', 'panel_variable', 'panel_value', 'project']
                     for sPF in request.FILES.getlist('sensory_panels[]'):
                         if sPF.content_type == 'text/csv':
                             csv_data = pd.read_csv(
@@ -155,7 +154,7 @@ def ProjectList(request):
                             sensoryPanels_list = sPData["sensory_panels"]
 
                             for spi in sensoryPanels_list:
-                                opj = {'judge': spi['judge_id'], 'data': spi['date'],
+                                opj = {'judge': spi['judge_id'], 'date': spi['date'],
                                        'panel_type': spi['panel_type'], 'panel_variable': spi['panel_variable'],
                                        'panel_value': spi['panel_value'], 'project': projectExist.id}
                                 try:

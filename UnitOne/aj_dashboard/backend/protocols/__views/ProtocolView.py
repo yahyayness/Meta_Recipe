@@ -238,9 +238,25 @@ class ProtocolView(GenericViewSet):
                     saved_ingredients.append({'name': ing['ingredient_name'], 'quantity': ing['quantity'], 'unit': ing['unit']})
                 for panel in __protocol['custom_sensory_panels']:
                     saved_panels.append({'variable': panel['variable'], 'value': panel['value']})
+
+                if 'nodes' in changed_flow:
+                    for node in changed_flow['nodes']:
+                        if node['type'] == 'ingredient-container':
+                            for child in node['data']['children']:
+                                ing_name = child['data']['value']['name']
+                                ing_amount = child['data']['value']['amount']
+                                ing_unit = 'g'
+                                changed_ingredients.append({'name': ing_name, 'quantity': ing_amount, 'unit': ing_unit})
+
+                print(changed_ingredients)
                 # ingredient_container = filter(lambda ic: ic['type'] == 'ingredient-container', protocol.flow['nodes'])
                 # print(list(ingredient_container))
-
+                saved = {
+                    'ingredients': saved_ingredients,
+                    'sensory_panel': saved_panels
+                }
+                ml = ml_component
+                result = ml.predict(saved_state=saved, changed_state=saved)
                 return Response(
                     {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success',
                      'payload': ProtocolSerializer(protocol).data},

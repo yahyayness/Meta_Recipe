@@ -287,7 +287,7 @@ class ProtocolView(GenericViewSet):
                 {"name": "frozen raspberries", "quantity": 250, "unit": "g"},
                 {"name": "milk", "quantity": 250, "unit": "g"},
                 {"name": "honey", "quantity": 15, "unit": "g"},
-                {"name": "banana", "quantity": "250", "unit": "g"}],
+                {"name": "banana", "quantity": 250, "unit": "g"}],
             "sensory_panel": [
                 {"variable": "Fruity", "value": 9.5},
                 {"variable": "Cacao / Chocolate", "value": 1.5},
@@ -310,7 +310,7 @@ class ProtocolView(GenericViewSet):
                 {"name": "walnuts", "quantity": 50, "unit": "g"},
                 {"name": "milk", "quantity": 250, "unit": "g"},
                 {"name": "honey", "quantity": 115, "unit": "g"},
-                {"name": "banana", "quantity": "250", "unit": "g"}],
+                {"name": "banana", "quantity": 250, "unit": "g"}],
             "sensory_panel": [
                 {"variable": "Fruity", "value": 9.5},
                 {"variable": "Cacao / Chocolate", "value": 1.5},
@@ -325,5 +325,5 @@ class ProtocolView(GenericViewSet):
                 {"variable": "Crunchy", "value": 2.5},
                 {"variable": "Sweet", "value": 8.5}]
         }
-
-        return Response({})
+        result = ml.predict(saved_state=saved, changed_state=changed)
+        return Response(result)

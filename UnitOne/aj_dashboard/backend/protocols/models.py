@@ -143,6 +143,7 @@ class ProtocolSensoryPanel(models.Model):
     class Meta:
         db_table = 'protocol_sensory_panels'
         verbose_name = 'ProtocolSensoryPanel'
+        unique_together = ('protocol', 'variable')
 
     def __str__(self):
         return f"{self.variable}  >> {self.value}"

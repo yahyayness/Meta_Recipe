@@ -544,7 +544,7 @@ const useProtocol = () => {
         let protocol_id=id
         let _form = {
             protocol:protocol_id,
-            sensors:{...extra},
+            sensors:extra,
             name:name,
             flow : {
                 nodes: nodes,

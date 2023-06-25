@@ -321,7 +321,7 @@ const useProtocol = () => {
 
     const [nodes, setNodes] = useState<Array<Node>>([]);
     const [edges, setEdges] = useState<Array<Edge>>([]);
-    const [extra, setExtra] = useState<any>({ });
+    const [extra, setExtra] = useState<any>([]);
     /* const [sensory , setSensory] = useState<any>({ }); */
     const [name, setName] = useState("");
     const [project, setProject] = useState<number>();
@@ -445,7 +445,8 @@ const useProtocol = () => {
                 setForm(response.data.payload);
                 setNodes(bindActions(response.data.payload.flow.nodes))
                 setEdges(response.data.payload.flow.edges)
-                setExtra({...response.data.payload.custom_sensory_panels})
+                console.log(response.data.payload.custom_sensory_panels)
+                setExtra([...response.data.payload.custom_sensory_panels])
                 setName(response.data.payload.name)
                 setProject(response.data.payload.project)
                 setMetaRecipesCount(response.data.payload?.meta_recipes_count)

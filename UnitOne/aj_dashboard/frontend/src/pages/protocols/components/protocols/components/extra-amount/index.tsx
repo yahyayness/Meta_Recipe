@@ -80,8 +80,8 @@ const BasicModal: React.FC<any> = ({ open, setOpen, protocol_id, sensory, setSen
 
   }, [])
 
-  const handleSensory = (event: Event, newValue: number | number[], key: string) => {
-    setSensory({ ...sensory, [key]: newValue })
+  const handleSensory = (event: Event, newValue: number | number[], key: string,id : number) => {
+      setSensory(sensory.map((el:any) => (el.id === id ? {...el, ["value"]:newValue} : el)))
   };
 
   useEffect(() => {
@@ -101,12 +101,13 @@ const BasicModal: React.FC<any> = ({ open, setOpen, protocol_id, sensory, setSen
       >
         <Box sx={style}>
           {sensorsList?.map((sensor:any) => {
-            return (
+            let sValue= sensory?.length ? sensory?.find((s:any)=> s?.variable == sensor.name) : {}
+             return (
               <Box key={sensor.id}>
                 <Typography id="modal-modal-title" >
                   {sensor.name}
                 </Typography>
-                <Slider track={false} color={sensory[''+sensor.name] < 5 ? "secondary" : "primary"} step={.5} min={0} max={10} onChange={(e, v) => handleSensory(e, v, sensor.name)} defaultValue={sensory.find((s:any)=> s?.name == sensor?.name).value || defaultValue} aria-label="Default" valueLabelDisplay="on" />
+                <Slider track={false} color={sensory[''+sensor.name] < 5 ? "secondary" : "primary"} step={.5} min={0} max={10} onChange={(e, v) => handleSensory(e, v, sensor.name,sValue?.id)} value={sValue?.value } aria-label="Default" valueLabelDisplay="on" />
               </Box>
             )
           })}

@@ -2,6 +2,7 @@ import {NavLink} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import {Breadcrumbs as Bread} from "@mui/material";
+import Toolbar from "@mui/material/Toolbar";
 
 const Breadcrumbs:React.FC = ()=>{
     /**
@@ -23,11 +24,20 @@ const Breadcrumbs:React.FC = ()=>{
     },  [(state as any).breadcrumbs])
 
     return (
-        <Bread aria-label="breadcrumb">
-            {
-                (breadcrumbs || [] ).map((item:BreadcrumbType , index:number) =>  <NavLink key={'bread-'+index} className={[`breadcrumb-item` , item?.hasOwnProperty('isCurrent') && item?.isCurrent == true ? 'active' :  ''].join(" ")} to={item.path}>{item.label}</NavLink>)
+        <>
+            {breadcrumbs.length > 0 &&
+                <Toolbar>
+                    <Bread aria-label="breadcrumb">
+                        {
+                            (breadcrumbs || [] ).map((item:BreadcrumbType , index:number) =>  <NavLink key={'bread-'+index} className={[`breadcrumb-item` , item?.hasOwnProperty('isCurrent') && item?.isCurrent == true ? 'active' :  ''].join(" ")} to={item.path}>{item.label}</NavLink>)
+                        }
+                    </Bread>
+                </Toolbar>
             }
-        </Bread>
+
+        </>
+
+
     );
 }
 

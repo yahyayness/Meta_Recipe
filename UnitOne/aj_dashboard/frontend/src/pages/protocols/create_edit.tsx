@@ -160,39 +160,7 @@ const CreateEditProtocol: React.FC = () => {
                             }
                         ]
                     }></AppTabs>
-                    {/*<TabContext value={value} key={`tab-${value}`}>*/}
-                    {/*    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>*/}
-                    {/*        <TabList onChange={handleChange} aria-label="lab API tabs example"  scrollButtons={true}  variant="scrollable">*/}
-                    {/*            <Tab label="Item One" value="1" />*/}
-                    {/*            <Tab label="Item Two" value="2" />*/}
-                    {/*            <Tab label="Item Three" value="3" />*/}
-                    {/*        </TabList>*/}
-                    {/*    </Box>*/}
-                    {/*    <TabPanel value="1" >*/}
-                    {/*        <ProtocolsOptions addProtocol={addProtocol}  allProjects={projects} protocolName={name} />*/}
-                    {/*    </TabPanel>*/}
-                    {/*    <TabPanel value="2">Item Two</TabPanel>*/}
-                    {/*    <TabPanel value="3">Item Three</TabPanel>*/}
-                    {/*</TabContext>*/}
                 </Box>
-
-
-                {/*<Box width='20%' className="protocols-items" mr={-3} mt={-11}>*/}
-                {/*    <Tabs value={rTabsValue} onChange={(event: React.SyntheticEvent, newValue: number)=>setRTabsValue(newValue)} aria-label="basic tabs example">*/}
-                {/*        <Tab label="Add" {...a11yProps(0)} />*/}
-                {/*        <Tab label="Design" {...a11yProps(1)} />*/}
-                {/*        <Tab label="Generate" {...a11yProps(2)} />*/}
-                {/*    </Tabs>*/}
-                {/*    <TabPanel value={rTabsValue} value={0}>*/}
-                {/*        <ProtocolsOptions addProtocol={addProtocol}  allProjects={projects} protocolName={name}/>*/}
-                {/*    </TabPanel>*/}
-                {/*    <TabPanel value={rTabsValue} value={1}>*/}
-                {/*        Item Two*/}
-                {/*    </TabPanel>*/}
-                {/*    <TabPanel value={rTabsValue} value={2}>*/}
-                {/*        Item Three*/}
-                {/*    </TabPanel>*/}
-                {/*</Box>*/}
 
             </Stack>
         </>

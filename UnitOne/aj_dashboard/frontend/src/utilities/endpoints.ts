@@ -97,4 +97,24 @@ export default {
         url : 'sensory-panels/abstract',
         method: HttpMethodTypes.GET
     } ,
+    find_setup : {
+        url : 'setups/:id',
+        method: HttpMethodTypes.GET
+    },
+    update_setup:{
+        url : 'setups/:id',
+        method: HttpMethodTypes.PUT
+    },
+    add_setup : {
+        url : 'setups/',
+        method: HttpMethodTypes.POST
+    },
+    delete_setup : {
+        url : 'setups/:id',
+        method: HttpMethodTypes.DELETE
+    },
+    all_setups : {
+        url : 'setups/',
+        method: HttpMethodTypes.GET
+    } ,
 }

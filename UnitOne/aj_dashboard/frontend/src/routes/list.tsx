@@ -155,6 +155,18 @@ const routes: Array<RouteType> = [
                 name: 'all-setups',
                 label: ''
             },
+            {
+                path: "/create",
+                component: React.lazy(() => import('../pages/setup/create_edit')),
+                name: 'create-setups',
+                label: ''
+            },
+            {
+                path: "/:id",
+                component: React.lazy(() => import('../pages/setup/create_edit')),
+                name: 'create-setups',
+                label: ''
+            },
         ]
     },
     {

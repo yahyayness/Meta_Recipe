@@ -13,7 +13,7 @@ import {useEffect, useMemo, useState} from "react";
 
 export const form = (isEdit: boolean = false): Array<FormFields> => [
     {
-        field: 'level_of_operations',
+        field: 'operation_level',
         value: '',
         validation: {
             rules: yup
@@ -22,7 +22,7 @@ export const form = (isEdit: boolean = false): Array<FormFields> => [
         }
     },
     {
-        field: 'cuisine_requirements_profile',
+        field: 'cuisine_requirement_profile',
         value: '',
         validation: {
             rules: yup
@@ -49,6 +49,8 @@ export const useOnSubmitSetupForm = () => {
     const {showAlert} = useAlert();
     const {navigator} = useNavigator()
     const {id} = useParams();
+    /* const id = 1; */
+
     const isEdit = !!id
     const {request} = useHttp();
 
@@ -60,11 +62,11 @@ export const useOnSubmitSetupForm = () => {
      * @author Amr
      */
     const onSubmit = (values: any, {setSubmitting, setErrors}: any) => {
-        console.log("values",values);
+        
         let _form = {...values}
         delete _form.password_confirmation;
         // change the endpoint according to the isEdit flag
-        const endpoint = isEdit? addParamsToEndpoint(getEndpoint('update_user'), {id}) : getEndpoint('add_user')
+        const endpoint = isEdit? addParamsToEndpoint(getEndpoint('update_setup'), {id}) : getEndpoint('add_setup')
         /**
          * save user
          * @author Amr
@@ -73,9 +75,9 @@ export const useOnSubmitSetupForm = () => {
             const user = response?.data?.payload
             showAlert({
                 type: AlertTypes.SUCCESS,
-                message: `User ${user.first_name + ' ' + user.last_name} ${isEdit ? 'updated' : 'added'}  successfully`
+                message: `Setup  ${isEdit ? 'updated' : 'added'}  successfully`
             })
-            navigator('/users');
+            navigator('/setup');
         }).catch(error => {
             setErrors(error.response.data.payload);
         })
@@ -87,14 +89,14 @@ export const useOnSubmitSetupForm = () => {
 
 
     useEffect(() => {
-        /* if (id) {
-            http<ResponseType<UserType>>(addParamsToEndpoint(getEndpoint('find_user'), {id})).then(response => {
+        if (id) {
+            http<ResponseType<UserType>>(addParamsToEndpoint(getEndpoint('find_setup'), {id})).then(response => {
                 // setForm(loadForm(id , response.data.payload));
                 formik.setValues(response.data.payload as any)
             })
         }else{
             formik.setValues(initialValues)
-        } */
+        }
     }, [id])
 
     return {formik}

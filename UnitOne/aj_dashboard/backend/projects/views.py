@@ -21,6 +21,7 @@ from meta_recipe.__serializers.MetaRecipeIngredientsSerializer import MetaRecipe
 from meta_recipe.models import MetaRecipe, MetaRecipeIngredients
 from protocols.__serializers.ProtocolSerializer import ProtocolSerializer
 from protocols.__views.ProtocolView import ProtocolView
+from protocols.models import ProtocolSensoryPanel
 from recipe.models import Recipe, RecipeIngredients
 from recipe.__serializers.RecipeSerializer import RecipeSerializer
 from recipe.__serializers.RecipeIngredientsSerializer import RecipeIngredientsSerializer
@@ -28,7 +29,7 @@ from .serializers import ProjrctSerilizer
 from ingredients.models import Ingredients
 from equipments.models import Equipment
 from equipments.__serializers.Equipment import EquipmentSerializer
-from sensory_panels.models import SensoryPanel
+from sensory_panels.models import SensoryPanel, AbstractSensoryPanel
 from sensory_panels.serializers import SensoryPanelsCreateSerializers, SensoryPanelsSerializers
 from .models import Projects
 from sensors.models import Sensors
@@ -91,7 +92,7 @@ def ProjectList(request):
                             for record in csv_data.to_dict(orient="records"):
                                 try:
                                     idict = prepare_model_dict(record, ['name'])
-                                    create_or_get_object(idict, IngredientsSerilizer)
+                                    create_or_get_object(idict, IngredientsSerilizer, ['name'])
                                 except Exception as e:
                                     raise e
                         elif iF.content_type == 'application/json':
@@ -101,7 +102,7 @@ def ProjectList(request):
                             for ing in ingredients_list:
                                 try:
                                     idict = prepare_model_dict(ing, ['name'])
-                                    create_or_get_object(idict, IngredientsSerilizer)
+                                    create_or_get_object(idict, IngredientsSerilizer, ['name'])
                                 except Exception as e:
                                     raise e
                 ## import equipments data from equipments files
@@ -129,13 +130,12 @@ def ProjectList(request):
                                        'model': equ['model'], 'project': projectExist.id}
                                 try:
                                     idict = prepare_model_dict(opj, fields)
-                                    print(idict)
                                     create_object(idict, EquipmentSerializer)
                                 except Exception as e:
                                     raise e
                 ## import sensory_panels data from sensory_panels files
                 if "sensory_panels[]" in request.FILES:
-                    fields = ['judge', 'data', 'panel_type', 'panel_variable', 'panel_value', 'project']
+                    fields = ['judge', 'date', 'panel_type', 'panel_variable', 'panel_value', 'project']
                     for sPF in request.FILES.getlist('sensory_panels[]'):
                         if sPF.content_type == 'text/csv':
                             csv_data = pd.read_csv(
@@ -147,7 +147,8 @@ def ProjectList(request):
                                 try:
                                     record['project'] = projectExist.id
                                     idict = prepare_model_dict(record, fields)
-                                    create_object(idict, SensoryPanelsCreateSerializers)
+                                    update_or_create_object(idict, SensoryPanelsCreateSerializers,
+                                                            ['panel_variable', 'project'])
                                 except Exception as e:
                                     raise e
                         elif sPF.content_type == 'application/json':
@@ -155,12 +156,13 @@ def ProjectList(request):
                             sensoryPanels_list = sPData["sensory_panels"]
 
                             for spi in sensoryPanels_list:
-                                opj = {'judge': spi['judge_id'], 'data': spi['date'],
+                                opj = {'judge': spi['judge_id'], 'date': spi['date'],
                                        'panel_type': spi['panel_type'], 'panel_variable': spi['panel_variable'],
                                        'panel_value': spi['panel_value'], 'project': projectExist.id}
                                 try:
                                     idict = prepare_model_dict(opj, fields)
-                                    create_object(idict, SensoryPanelsCreateSerializers)
+                                    update_or_create_object(idict, SensoryPanelsCreateSerializers,
+                                                            ['panel_variable', 'project'])
                                 except Exception as e:
                                     raise e
                 ## import Sensors data from sensors files
@@ -230,6 +232,8 @@ def ProjectList(request):
                                     raise e
 
                 if 'production_protocol[]' in request.FILES:
+                    project_sensory_panels = projectExist.sensory_panels.all()
+                    abstract_panels = AbstractSensoryPanel.objects.only('name')
                     for ppFile in request.FILES.getlist('production_protocol[]'):
                         ppData = json.loads(ppFile.read())
                         production_protocol_list = ppData['protocols']
@@ -241,104 +245,19 @@ def ProjectList(request):
                             if 'flow' in pp:
                                 protocol_view = ProtocolView()
                                 protocol_view.create_flow(flow=pp['flow'], protocol_id=obj.id)
-
-                ## import Projcet data from files
-                if "data" in request.FILES:
-                    for f in request.FILES.getlist('data'):
-                        data = json.loads(f.read())
-                        ingredients_list = data["ingredients"]
-                        # print(ingredients_list)
-                        for ing in ingredients_list:
-                            # quantity_values=ing['quantity'].split()
-                            opj = {"name": ing['name']}
-                            # check if Ingredients not Exists Create a new
-                            try:
-                                ingredientExist = Ingredients.objects.get(name=ing['name'])
-                            except Ingredients.DoesNotExist:
-                                Ingserializer = IngredientsSerilizer(data=opj)
-                                if Ingserializer.is_valid():
-                                    Ingserializer.save()
-                                else:
-                                    print(ValidationError(spiSerializer.errors))
-
-                        # Save metaRecipe  Data
-                        metaRecipe = data["meta_recipe"]
-
-                        metaRecipeExist = {}
-                        try:
-                            metaRecipeExist = MetaRecipe.objects.get(name=metaRecipe['name'])
-                        except MetaRecipe.DoesNotExist:
-                            metaRecipeserializer = MetaRecipeSerializer(
-                                data={'name': metaRecipe['name'], 'project': projectExist.id})
-                            if metaRecipeserializer.is_valid():
-                                metaRecipeserializer.save()
-                                metaRecipeExist = metaRecipeserializer.instance
-
-                        meta_recipe_ingredients_list = metaRecipe["meta_recipe_ingredients"]
-                        # print(meta_recipe_ingredients_list)
-                        for mRIItem in meta_recipe_ingredients_list:
-
-                            # get Ingredients if not Exists Create a new
-                            mRIngredient = getOrCreateIngredientByName(mRIItem['ingredient_name'])
-                            mRDependentIngredient = getOrCreateIngredientByName(
-                                mRIItem['dependent_ingredient_name'])
-
-                            mRI = {
-                                'meta_recipe': metaRecipeExist.id,
-                                'ingredient': mRIngredient.id,
-                                'min': float(mRIItem['min']),
-                                'max': float(mRIItem['mx']),
-                                'dependent_ingredient': mRDependentIngredient.id,
-                                'unit': mRIItem['unit'],
-                            }
-
-                            # savemeta recipe ingredients
-                            mRISerializer = MetaRecipeIngredientsSerializer(data=mRI)
-                            if mRISerializer.is_valid():
-                                mRISerializer.save()
-
-                        # Save metaRecipe Recipes
-                        print(metaRecipe)
-                        recipes_list = metaRecipe["recipes"]
-                        print("22")
-                        for rcipeItem in recipes_list:
-                            print(rcipeItem)
-                            recipeExist = {}
-                            try:
-                                recipeExist = Recipe.objects.get(name=rcipeItem['name'])
-                            except Recipe.DoesNotExist:
-                                recipeopject = {
-                                    'name': rcipeItem['name'],
-                                    'meta_recipe': metaRecipeExist.id,
-                                    'protocol': 1,
-                                }
-                                recipeserializer = RecipeSerializer(data=recipeopject)
-                                print(recipeserializer.is_valid())
-                                if recipeserializer.is_valid():
-                                    recipeserializer.save()
-                                    recipeExist = recipeserializer.instance
-                                else:
-                                    print(ValidationError(spiSerializer.errors))
-
-                            recipe_ingredients = rcipeItem["recipe_ingredients"]
-                            for rIng in recipe_ingredients:
-                                print(rIng)
-                                rIngredient = getOrCreateIngredientByName(rIng['ingredient_name'])
-
-                                rI = {
-                                    'recipe': recipeExist.id,
-                                    'ingredient': rIngredient.id,
-                                    'unit': rIng['unit'],
-                                    'amount': rIng['amount'],
-                                }
-
-                                # savemeta recipe ingredients
-                                rISerializer = RecipeIngredientsSerializer(data=rI)
-                                if rISerializer.is_valid():
-                                    rISerializer.save()
-
+                            sensory_panel_labels = []
+                            if len(list(project_sensory_panels)):
+                                for panel in project_sensory_panels:
+                                    sensory_panel_labels.append(panel.panel_variable)
+                                    obj.custom_sensory_panels.create(
+                                        variable=panel.panel_variable,
+                                        value=panel.panel_value)
+                            for panel in abstract_panels:
+                                if panel.name not in sensory_panel_labels:
+                                    obj.custom_sensory_panels.create(variable=panel.name)
                 return Response(
-                    {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': ProjrctSerilizer(projectExist).data},
+                    {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success',
+                     'payload': ProjrctSerilizer(projectExist).data},
                     status=status.HTTP_200_OK)
         except Exception as e:
             raise e
@@ -464,10 +383,10 @@ def bulk_destroy(request):
     )
 
 
-def create_or_get_object(data, serializer):
+def create_or_get_object(data, serializer, unique_fields=[]):
     ser = serializer(data=data)
     if ser.is_valid():
-        instance, _ = ser.get_or_create()
+        instance, _ = ser.get_or_create(unique_fields)
         return instance
     else:
         raise ValidationError(ser.errors)
@@ -477,6 +396,15 @@ def create_object(data, serializer):
     ser = serializer(data=data)
     if ser.is_valid():
         instance = ser.save()
+        return instance
+    else:
+        raise ValidationError(ser.errors)
+
+
+def update_or_create_object(data, serializer, unique_fields=[]):
+    ser = serializer(data=data)
+    if ser.is_valid():
+        instance, _ = ser.update_or_create(unique_fields)
         return instance
     else:
         raise ValidationError(ser.errors)

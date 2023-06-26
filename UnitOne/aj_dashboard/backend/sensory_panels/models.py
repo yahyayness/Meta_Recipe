@@ -13,7 +13,7 @@ class SensoryPanel(models.Model):
     judge = models.UUIDField(null=True, blank=True)
     panel_type = models.CharField(max_length=255, null=True, blank=True)
     panel_variable = models.CharField(max_length=255, null=True, blank=True)
-    panel_value = models.CharField(max_length=255, null=True, blank=True)
+    panel_value = models.FloatField(default=0)
     project = models.ForeignKey(Projects, on_delete=models.CASCADE, related_name='sensory_panels',
                                 blank=False,
                                 null=True)
@@ -21,6 +21,8 @@ class SensoryPanel(models.Model):
     def __str__(self):
         return self.panel_type if self.panel_type else ''
 
+    class Meta:
+        unique_together = ('panel_variable', 'project')
 
 class AbstractSensoryPanel(models.Model):
     name = models.CharField(max_length=225, unique=True)

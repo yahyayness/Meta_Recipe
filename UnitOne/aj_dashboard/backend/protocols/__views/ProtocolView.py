@@ -26,6 +26,7 @@ from ingredients.models import Ingredients
 from ingredients.serializers import IngredientsSerilizer
 from meta_recipe.models import MetaRecipe
 from process.models import Process
+from projects.models import Projects
 from protocols.__serializers.ProtocolSerializer import ProtocolSerializer
 from protocols.models import Protocol, ProtocolNode, ProtocolEdge, ProtocolIngredient, ProtocolProcess, \
     ProtocolSensoryPanel
@@ -65,6 +66,16 @@ class ProtocolView(GenericViewSet):
             flow = request.data['flow']
         else:
             flow = request.data
+
+        if obj.project_id:
+            project = Projects.objects.get(id=obj.project_id)
+            project_sensory_panels = project.sensory_panels.all()
+            if len(list(project_sensory_panels)):
+                for panel in project_sensory_panels:
+                    obj.custom_sensory_panels.create(
+                        variable=panel.panel_variable,
+                        value=panel.panel_value)
+
         result = self.create_flow(flow=flow, protocol_id=obj.id)
         return Response(
             {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': result},
@@ -143,6 +154,9 @@ class ProtocolView(GenericViewSet):
                 protocol = Protocol.objects.get(id=protocol_id)
                 protocol.flow = flow
                 protocol.save()
+                protocol.protocol_processes.all().delete()
+                protocol.protocol_nodes.all().delete()
+                protocol.protocol_ingredient.all().delete()
                 protocol.refresh_from_db()
                 nodes = {}
                 if 'nodes' in flow:

@@ -575,12 +575,13 @@ const useProtocol = () => {
         console.log('response' , response.data.payload.flow.nodes)
         setNodes([...bindActions(response.data.payload.flow.nodes)])
         setEdges([...response.data.payload.flow.edges])
-        setCounter((counter:number) => counter + 1)
+        setExtra([...response.data.payload.custom_sensory_panels])
         handleOpenModel(false)
         showAlert({
             type: AlertTypes.SUCCESS,
             message: `Protocol adjusted successfully`
         })
+        setCounter((counter:number) => counter + 1)
     }
     const ExtraAmountModal = () => {
         // return BasicModal(openModel,handleOpenModel,id,extra,setNodes,setEdges,setForm , bindActions , setCounter,callback)
@@ -594,7 +595,7 @@ const useProtocol = () => {
                 project
             }
         })
-
+        setName(name)
         setProject(project)
 
         console.log("deeep shit",name , project , form)

@@ -21,6 +21,8 @@ class SensoryPanel(models.Model):
     def __str__(self):
         return self.panel_type if self.panel_type else ''
 
+    class Meta:
+        unique_together = ('panel_variable', 'project')
 
 class AbstractSensoryPanel(models.Model):
     name = models.CharField(max_length=225, unique=True)

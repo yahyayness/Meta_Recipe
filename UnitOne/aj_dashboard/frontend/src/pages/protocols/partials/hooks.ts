@@ -594,7 +594,7 @@ const useProtocol = () => {
                 project
             }
         })
-
+        setName(name)
         setProject(project)
 
         console.log("deeep shit",name , project , form)

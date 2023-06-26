@@ -13,7 +13,7 @@ class SensoryPanel(models.Model):
     judge = models.UUIDField(null=True, blank=True)
     panel_type = models.CharField(max_length=255, null=True, blank=True)
     panel_variable = models.CharField(max_length=255, null=True, blank=True)
-    panel_value = models.CharField(max_length=255, null=True, blank=True)
+    panel_value = models.FloatField(default=0)
     project = models.ForeignKey(Projects, on_delete=models.CASCADE, related_name='sensory_panels',
                                 blank=False,
                                 null=True)

@@ -1,0 +1,9 @@
+from rest_framework import serializers
+
+from setup.models import Setup
+
+
+class SetupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Setup
+        fields = ['operation_level', 'cuisine_requirement_profile', 'culinary_cultural_profile']

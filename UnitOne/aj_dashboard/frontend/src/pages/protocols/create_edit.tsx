@@ -101,7 +101,7 @@ const CreateEditProtocol: React.FC = () => {
                     <Stack spacing={2} direction="row" justifyContent="right" className="list-master-actions" width="100%">
                         <Button variant="text" color="info" onClick={onDuplicate}>Duplicate</Button>
                         <Button variant="text" color="primary" className='primary' onClick={onSave}>Save</Button>
-                        {isEdit && <Button variant="text" color="info" onClick={() => handleOpenModel(true)}>adjust</Button>}
+                        {isEdit && <Button variant="text" color="info" onClick={() => handleOpenModel(true)}>Predict</Button>}
                         {/*  <DropdownMenu menuList={menuList}/> */}
                     </Stack>
                     <ReactFlow

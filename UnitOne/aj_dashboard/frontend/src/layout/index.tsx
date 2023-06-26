@@ -53,9 +53,7 @@ const AppLayout: React.FC = () => {
 
             >
 
-                <Toolbar>
-                    <Breadcrumbs/>
-                </Toolbar>
+                <Breadcrumbs/>
                 <Container maxWidth="xl" >
                     <Outlet/>
                 </Container>

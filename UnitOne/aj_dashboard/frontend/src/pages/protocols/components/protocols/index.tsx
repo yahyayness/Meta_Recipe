@@ -64,7 +64,8 @@ const ProtocolsOptions: React.FC<any> = ({addProtocol , protocolName, allProject
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         size="small"
-                        label="Project"
+                        label="Project
+                        "
                         placeholder="No project for this protocol"
                         MenuProps={{
                             PaperProps: {

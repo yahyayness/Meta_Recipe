@@ -11,13 +11,15 @@ import './partials/style.scss'
 import ReportStatistics from "./components/statistics";
 import Avatar from "@mui/material/Avatar";
 import {ExpandMore} from "@mui/icons-material";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useChartsData } from "./partials/charts";
 
 import {ResponsiveRadar} from '@nivo/radar'
 import {ResponsiveBullet} from '@nivo/bullet'
 import ReportCharts from "./components/charts";
 import ProductProcess from "./components/product-process";
 import useBreadcrumb from "../../common/hooks/breadcrumbs";
+import { ProjectType, ProtocolType } from "../../types/ModelTypes";
 
 
 const data = [
@@ -233,7 +235,21 @@ const barData = [
 
 const Report: React.FC = () => {
 
+    const { projects, protocols, duration, chartData, emouthData } = useChartsData();
+
     const [expanded, setExpanded] = React.useState(false);
+    const [selectedProject, setSelectedProject] = useState<ProjectType|null>(null);
+    const [selectedProtocols, setSelectedProtocols] = useState<string[]>([]);
+
+    useEffect(() => {
+        setSelectedProject(projects[0])
+    }, [projects])
+
+    useEffect(() => {
+        if (selectedProject) {
+            setSelectedProtocols(protocols.filter(p => p.project === selectedProject?.id).map(p => p.name));
+        }
+    }, [selectedProject])
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -251,10 +267,16 @@ const Report: React.FC = () => {
 
     return (
         <Box>
-            <ReportStatistics/>
-            <ReportCharts/>
-            <ProductProcess/>
-
+            {selectedProject ? (
+                <>
+                    <ReportStatistics selectedProject={selectedProject} selectedProtocols={selectedProtocols} duration={duration} />
+                    <ReportCharts chartData={chartData} keys={selectedProtocols} emouthData={emouthData} />
+                    <ProductProcess/>
+                </>
+            ) : (
+                <p>Loading...</p>
+            )}
+            
         </Box>
     )
 }

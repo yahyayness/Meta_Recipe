@@ -13,6 +13,8 @@ import {ListType, ProjectType, ProtocolType} from "../../../types/ModelTypes";
 import {AlertTypes} from "../../../types/Enums";
 import {ResponseType} from "../../../types/HttpTypes";
 import BasicModal from "../components/protocols/components/extra-amount/index"
+import { useDispatch } from "react-redux";
+import { setBreadcrumbs } from "../../../plugins/redux/reducers/breadcrumbs";
 
 /**
  * this hook handles the required operations for ReactFlow lib.
@@ -318,6 +320,8 @@ const useProcess = (nodes: Array<Node>, setNodes: (nodes: any) => any, onChildCh
 
 const useProtocol = () => {
 
+    const dispatch = useDispatch();
+
 
     const [nodes, setNodes] = useState<Array<Node>>([]);
     const [edges, setEdges] = useState<Array<Edge>>([]);
@@ -389,7 +393,7 @@ const useProtocol = () => {
             path: "/protocols"
         },
         {
-            label: '230201-v01 Vegan Croissant',
+            label: 'new-protocol',
             path: "/protocols/create",
             isCurrent: true
         }
@@ -451,9 +455,26 @@ const useProtocol = () => {
                 setProject(response.data.payload.project)
                 setMetaRecipesCount(response.data.payload?.meta_recipes_count)
             })
-  
         }
     }, [id])
+
+    /**
+     * dispatch protocol name after name is fetched 
+     * @author 
+     */
+    useEffect(() => {
+        dispatch(setBreadcrumbs([
+            {
+                label: 'Protocols',
+                path: "/protocols"
+            },
+            {
+                label: !!name ? name : 'new-protocol',
+                path: "/protocols/create",
+                isCurrent: true
+            }
+        ]))
+    }, [name]);
 
     /**
      * fetch projects  

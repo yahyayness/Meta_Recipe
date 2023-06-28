@@ -98,7 +98,7 @@ export const useOnSubmitProjectForm = () => {
             // }
         }
 
-        console.log('Form' , formData)
+        console.log('Form' , ...formData)
         // change the endpoint according to the isEdit flag
         const endpoint = isEdit? addParamsToEndpoint(getEndpoint('edit_project'), {id}) : getEndpoint('add_project')
         /**

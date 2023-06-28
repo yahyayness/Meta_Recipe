@@ -37,7 +37,7 @@ const Emouth:React.FC<any> = ({data})=> {
                             stacked: true,
                             reverse: false
                         }}
-                        yFormat=" >-.2f"
+                        // yFormat=" >-.2f"
                         axisTop={null}
                         axisRight={null}
                         // axisBottom={{
@@ -60,7 +60,7 @@ const Emouth:React.FC<any> = ({data})=> {
                         pointColor={{ theme: 'background' }}
                         pointBorderWidth={1}
                         pointBorderColor={{ from: 'serieColor' }}
-                        pointLabelYOffset={-12}
+                        // pointLabelYOffset={-12}
                         useMesh={true}
                         legends={[
                             {

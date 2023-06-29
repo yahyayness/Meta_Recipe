@@ -8,6 +8,8 @@ const PersonalSensory:React.FC<any> = ({data, keys, colors})=>{
 
     const custom = keys.map((item: string, index: number) => ({id: item, label: item, color: colors[index]}))
 
+    console.log('DATA', data, keys);
+
     return (
         <Grid item xs={3}>
             <Card className='chart-card'>

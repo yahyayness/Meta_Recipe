@@ -241,25 +241,20 @@ const colors = [
 
 const Report: React.FC = () => {
 
-    const { projects, protocols, duration, chartData, emouthData } = useChartsData();
+    const { project, duration, panelists, chartData, emouthData } = useChartsData();
 
     const [expanded, setExpanded] = React.useState(false);
-    const [selectedProject, setSelectedProject] = useState<ProjectType|null>(null);
     const [selectedProtocols, setSelectedProtocols] = useState<string[]>([]);
-
-    useEffect(() => {
-        setSelectedProject(projects[0])
-    }, [projects])
-
-    useEffect(() => {
-        if (selectedProject) {
-            setSelectedProtocols(protocols.filter(p => p.project === selectedProject?.id).map(p => p.name));
-        }
-    }, [selectedProject])
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
+
+    useEffect(() => {
+        if (project) {
+            setSelectedProtocols(project?.protocols.map((p: any) => p.name));
+        }
+    }, [project])
 
     /**
      * set the breadcrumbs of the current page
@@ -269,13 +264,16 @@ const Report: React.FC = () => {
         {
             label: 'Reports',
             path: "/reports"
-        }])
+        }
+    ]);
+
+    console.log('CHART', chartData);
 
     return (
         <Box>
-            {selectedProject ? (
+            {!!project ? (
                 <>
-                    <ReportStatistics selectedProject={selectedProject} selectedProtocols={selectedProtocols} duration={duration} colors={colors} />
+                    <ReportStatistics selectedProject={project} selectedProtocols={selectedProtocols} duration={duration} panelists={panelists} colors={colors} />
                     <ReportCharts chartData={chartData} keys={selectedProtocols} emouthData={emouthData} colors={colors} />
                     <ProductProcess/>
                 </>

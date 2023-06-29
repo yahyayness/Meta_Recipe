@@ -7,9 +7,9 @@ import { useEffect, useState } from "react";
 export const useChartsData = () => {
     const { request } = useHttp();
 
-    const [projects, setProjects] = useState<ProjectType[]>([]);
-    const [protocols, setProtocols] = useState<ProtocolType[]>([]);
+    const [project, setProject] = useState<ProjectType|null>(null);
     const [duration, setDuration] = useState<number>(0);
+    const [panelists, setPanelists] = useState<number>(0);
     const [chartData, setChartData] = useState<any[]>([]);
     const [emouthData, setEmouthData] = useState<any[]>([]);
 
@@ -22,13 +22,9 @@ export const useChartsData = () => {
         try {
             const projectResponse = await request<ListType<ProjectType>>(getEndpoint('all_projects'));
             const _projects = projectResponse.data.payload?.results;
-            setProjects(_projects);
+            setProject(_projects[0]);
 
-            const protocolResponse = await request<ListType<ProtocolType>>(getEndpoint('all_protocols'));
-            const _protocols = protocolResponse.data.payload?.results;
-            setProtocols(_protocols);
-
-            formChartData(_protocols, _projects);
+            formChartData(_projects[0]);
             
         } catch (error) {
             throw error
@@ -42,16 +38,22 @@ export const useChartsData = () => {
      * convert project and protocol data to chart data
      * 
      */
-    const formChartData = (protocols: ProtocolType[], projects: ProjectType[]) => {
+    const formChartData = (project: ProjectType) => {
         const data: any = [];
         const emouth: any = [];
         let pIndex = 0;
 
-        protocols = protocols.filter(p => p.project === projects[0].id);
+        const {protocols}: any = project;
+
+        let _panelists = 0;
+        if (project.sensory_panels) {
+            _panelists = project.sensory_panels.filter((value, index, array) => array.indexOf(value) === index).length;
+        };
 
         for (let protocol of protocols) {
             const {sensory_panel}:any = protocol.extra;
 
+            if (!sensory_panel) continue;
             /**
              * line graph data
              * 
@@ -89,6 +91,7 @@ export const useChartsData = () => {
 
         setChartData(data);
         setEmouthData(emouth);
+        setPanelists(_panelists);
     }
 
     useEffect(() => {
@@ -96,9 +99,9 @@ export const useChartsData = () => {
     }, [])
 
     return {
-        projects,
-        protocols,
+        project,
         duration,
+        panelists,
         chartData,
         emouthData
     }

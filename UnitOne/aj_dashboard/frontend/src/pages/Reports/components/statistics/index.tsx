@@ -8,11 +8,13 @@ const ReportStatistics = ({
     selectedProject,
     selectedProtocols,
     duration,
+    panelists,
     colors
 }: { 
     selectedProject: ProjectType,
     selectedProtocols: string[],
     duration: number,
+    panelists: number,
     colors: string[]
 })=>{
 
@@ -52,7 +54,7 @@ const ReportStatistics = ({
             <Grid item xs={4}>
                 <Paper variant="outlined" className='report-statistic'>
                     <Typography variant="h5">
-                        60+
+                        {panelists}
                     </Typography>
                     <Typography variant="caption" display="block" gutterBottom>
                         Panelists

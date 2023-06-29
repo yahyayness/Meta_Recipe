@@ -52,17 +52,18 @@ const rows = [
     createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
 
-const ProductProcess: React.FC = () => {
+const ProductProcess: React.FC<any> = ({ processData }) => {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         console.log('value' , value)
         setValue(newValue);
     };
+
     return (
         <Grid container spacing={3} mt={1}>
             <Grid item xs={8}>
-                <Card style={{ opacity: 0.4 }}>
+                <Card style={{ opacity: 0.4, pointerEvents: 'none' }}>
 
                     <CardContent className='chart-card-content product-card'>
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -257,7 +258,7 @@ const ProductProcess: React.FC = () => {
                 </Card>
             </Grid>
             <Grid item xs={4}>
-                <Card className='chart-card  report-process-table' style={{ opacity: 0.4 }}>
+                <Card className='chart-card  report-process-table' >
 
                     <CardContent className='chart-card-content report-process-table'>
                         <AppTable columns={ [
@@ -282,14 +283,7 @@ const ProductProcess: React.FC = () => {
                                 label: 'P3',
                                 value: 'p3',
                             }
-                        ] as Array<TableColumns>} rows={[
-                            {
-                                process : 'Baking temperature (C)',
-                                p1: '200',
-                                p2: '180',
-                                p3: '200'
-                            }
-                        ]} actions={[]} pagination={{}} showStaticColumn={false} />
+                        ] as Array<TableColumns>} rows={processData} actions={[]} pagination={{}} showStaticColumn={false} />
                     </CardContent>
                 </Card>
             </Grid>

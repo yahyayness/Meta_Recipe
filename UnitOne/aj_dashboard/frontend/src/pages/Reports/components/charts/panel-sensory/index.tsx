@@ -8,8 +8,6 @@ const PersonalSensory:React.FC<any> = ({data, keys, colors})=>{
 
     const custom = keys.map((item: string, index: number) => ({id: item, label: item, color: colors[index]}))
 
-    console.log('DATA', data, keys);
-
     return (
         <Grid item xs={3}>
             <Card className='chart-card'>
@@ -30,11 +28,11 @@ const PersonalSensory:React.FC<any> = ({data, keys, colors})=>{
                         keys={keys}
                         indexBy="taste"
                         valueFormat=" >-.2f"
-                        margin={{top: 70, right: 80, bottom: 40, left: 80}}
+                        margin={{top: 30, right: 40, bottom: 60, left: 40}}
                         borderColor={{from: 'color'}}
                         gridLevels={7}
                         gridShape="linear"
-                        gridLabelOffset={20}
+                        gridLabelOffset={5}
                         dotSize={4}
                         dotColor={{from: 'color', modifiers: []}}
                         dotBorderWidth={3}
@@ -51,8 +49,8 @@ const PersonalSensory:React.FC<any> = ({data, keys, colors})=>{
                             {
                                 anchor: 'bottom-left',
                                 direction: 'column',
-                                translateX: -70,
-                                translateY: -70,
+                                translateX: -20,
+                                translateY: -40,
                                 itemWidth: 80,
                                 itemHeight: 20,
                                 itemTextColor: '#999',

@@ -241,7 +241,7 @@ const colors = [
 
 const Report: React.FC = () => {
 
-    const { project, duration, panelists, chartData, emouthData } = useChartsData();
+    const { project, duration, panelists, chartData, emouthData, processData } = useChartsData();
 
     const [expanded, setExpanded] = React.useState(false);
     const [selectedProtocols, setSelectedProtocols] = useState<string[]>([]);
@@ -267,7 +267,7 @@ const Report: React.FC = () => {
         }
     ]);
 
-    console.log('CHART', chartData);
+    console.log('PROCESS', processData);
 
     return (
         <Box>
@@ -275,7 +275,7 @@ const Report: React.FC = () => {
                 <>
                     <ReportStatistics selectedProject={project} selectedProtocols={selectedProtocols} duration={duration} panelists={panelists} colors={colors} />
                     <ReportCharts chartData={chartData} keys={selectedProtocols} emouthData={emouthData} colors={colors} />
-                    <ProductProcess/>
+                    <ProductProcess processData={processData} />
                 </>
             ) : (
                 <p>Loading...</p>

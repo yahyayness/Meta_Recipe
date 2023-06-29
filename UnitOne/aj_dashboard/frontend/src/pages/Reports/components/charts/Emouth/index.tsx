@@ -28,7 +28,7 @@ const Emouth:React.FC<any> = ({data, colors})=> {
                 <CardContent  className='chart-card-content'>
                     <ResponsiveLine
                         data={data}
-                        margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+                        margin={{ top: 10, right: 30, bottom: 110, left: 30 }}
                         xScale={{ type: 'point' }}
                         yScale={{
                             type: 'linear',
@@ -40,14 +40,11 @@ const Emouth:React.FC<any> = ({data, colors})=> {
                         // yFormat=" >-.2f"
                         axisTop={null}
                         axisRight={null}
-                        // axisBottom={{
-                        //     tickSize: 5,
-                        //     tickPadding: 5,
-                        //     tickRotation: 0,
-                        //     legend: 'transportation',
-                        //     legendOffset: 36,
-                        //     legendPosition: 'middle'
-                        // }}
+                        axisBottom={{
+                            tickSize: 5,
+                            tickPadding: 5,
+                            tickRotation: 45,
+                        }}
                         // axisLeft={{
                         //     tickSize: 5,
                         //     tickPadding: 5,
@@ -67,14 +64,14 @@ const Emouth:React.FC<any> = ({data, colors})=> {
                         }}
                         legends={[
                             {
-                                anchor: 'bottom-left',
-                                direction: 'row',
+                                anchor: 'bottom-right',
+                                direction: 'column',
                                 justify: false,
-                                translateX: 20,
-                                translateY: 50,
+                                translateX: -100,
+                                translateY: 110,
                                 itemsSpacing: 0,
                                 itemDirection: 'left-to-right',
-                                itemWidth: 80,
+                                itemWidth: 100,
                                 itemHeight: 20,
                                 itemOpacity: 0.75,
                                 symbolSize: 12,

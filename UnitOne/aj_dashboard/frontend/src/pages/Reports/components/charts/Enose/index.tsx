@@ -28,11 +28,11 @@ const Enose:React.FC<any> = ({data, keys, colors})=>{
                         keys={keys}
                         indexBy="taste"
                         valueFormat=" >-.2f"
-                        margin={{top: 70, right: 80, bottom: 40, left: 80}}
+                        margin={{top: 30, right: 40, bottom: 60, left: 40}}
                         borderColor={{from: 'color'}}
                         gridLevels={7}
                         gridShape="linear"
-                        gridLabelOffset={20}
+                        gridLabelOffset={5}
                         dotSize={9}
                         dotColor={{theme: 'background'}}
                         dotBorderWidth={3}
@@ -50,8 +50,8 @@ const Enose:React.FC<any> = ({data, keys, colors})=>{
                             {
                                 anchor: 'bottom-left',
                                 direction: 'column',
-                                translateX: -70,
-                                translateY: -70,
+                                translateX: -20,
+                                translateY: -40,
                                 itemWidth: 80,
                                 itemHeight: 20,
                                 itemTextColor: '#999',

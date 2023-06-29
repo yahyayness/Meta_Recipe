@@ -12,6 +12,7 @@ export const useChartsData = () => {
     const [panelists, setPanelists] = useState<number>(0);
     const [chartData, setChartData] = useState<any[]>([]);
     const [emouthData, setEmouthData] = useState<any[]>([]);
+    const [processData, setProcessData] = useState<any[]>([]);
 
     /**
      * fetch all project and protocols data from backend
@@ -41,9 +42,15 @@ export const useChartsData = () => {
     const formChartData = (project: ProjectType) => {
         const data: any = [];
         const emouth: any = [];
+        const processes: any = [];
         let pIndex = 0;
 
-        const {protocols}: any = project;
+        console.log('PROJECt', project);
+
+        //TODO: key chart keys from here
+
+        let {protocols}: any = project;
+        protocols = protocols.slice(0, 3);
 
         let _panelists = 0;
         if (project.sensory_panels) {
@@ -52,6 +59,8 @@ export const useChartsData = () => {
 
         for (let protocol of protocols) {
             const {sensory_panel}:any = protocol.extra;
+
+            
 
             if (!sensory_panel) continue;
             /**
@@ -66,7 +75,7 @@ export const useChartsData = () => {
                     "y": item.value,
                 }))
             };
-            emouth.push(emouthData);
+            emouth.unshift(emouthData);
 
             /**
              * rotational graph data
@@ -83,15 +92,55 @@ export const useChartsData = () => {
                         [protocol.name]: sensor.value
                     });
                 }
-
-                
             }
+
+
+            /**
+             * processes data
+             * 
+             */
+            const _processes = protocol.processes;
+            for (let process of _processes) {
+                let index = processes.findIndex((p: any) => p["process"] === process.name)
+
+                if (index > -1) {
+                    if (process.name === 'preheat_oven') {
+                        processes[index]['p' + (pIndex + 1)] = process.arguments.temperature.value;
+                    }
+
+                    if (process.name === 'bake') {
+                        processes[index]['p' + (pIndex + 1)] = process.arguments.duration.value;
+                    }
+                    
+                } else {
+                    if (process.name === 'preheat_oven') {
+                        processes.push({
+                            "process":process.name,
+                            ['p' + (pIndex + 1)]: process.arguments.temperature.value
+                        });
+                    }
+
+                    if (process.name === 'bake') {
+                        processes.push({
+                            "process":process.name,
+                            ['p' + (pIndex + 1)]: process.arguments.duration.value
+                        });
+                    }
+                    
+                }
+            }
+
+
+
+
+
             pIndex++;
         }
 
         setChartData(data);
         setEmouthData(emouth);
         setPanelists(_panelists);
+        setProcessData(processes);
     }
 
     useEffect(() => {
@@ -103,7 +152,8 @@ export const useChartsData = () => {
         duration,
         panelists,
         chartData,
-        emouthData
+        emouthData,
+        processData
     }
 }
 

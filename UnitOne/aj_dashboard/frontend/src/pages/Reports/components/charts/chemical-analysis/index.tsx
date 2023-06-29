@@ -5,7 +5,7 @@ import React from "react";
 
 const ChemicalAnalysis:React.FC = ()=> {
     return (      <Grid item xs={5}>
-        <Card className='chart-card' style={{ opacity: 0.4 }}>
+        <Card className='chart-card' style={{ opacity: 0.4, pointerEvents: 'none' }}>
             <CardHeader
                 className='chart-card-header'
                 action={

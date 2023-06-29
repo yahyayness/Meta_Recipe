@@ -28,7 +28,7 @@ export const useChartsData = () => {
             const _protocols = protocolResponse.data.payload?.results;
             setProtocols(_protocols);
 
-            formChartData(_protocols);
+            formChartData(_protocols, _projects);
             
         } catch (error) {
             throw error
@@ -42,10 +42,12 @@ export const useChartsData = () => {
      * convert project and protocol data to chart data
      * 
      */
-    const formChartData = (protocols: ProtocolType[]) => {
+    const formChartData = (protocols: ProtocolType[], projects: ProjectType[]) => {
         const data: any = [];
         const emouth: any = [];
         let pIndex = 0;
+
+        protocols = protocols.filter(p => p.project === projects[0].id);
 
         for (let protocol of protocols) {
             const {sensory_panel}:any = protocol.extra;

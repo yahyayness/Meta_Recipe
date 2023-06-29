@@ -7,11 +7,13 @@ import { ProjectType, ProtocolType } from "../../../../types/ModelTypes";
 const ReportStatistics = ({ 
     selectedProject,
     selectedProtocols,
-    duration
+    duration,
+    colors
 }: { 
     selectedProject: ProjectType,
     selectedProtocols: string[],
-    duration: number
+    duration: number,
+    colors: string[]
 })=>{
 
     return (
@@ -73,9 +75,3 @@ const ReportStatistics = ({
     );
 }
 export default ReportStatistics;
-
-const colors = [
-    '#FF6F67',
-    '#FFAF68',
-    '#66B2FE'
-]

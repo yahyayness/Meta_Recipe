@@ -8,7 +8,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import {ResponsiveLine} from "@nivo/line";
 
-const Emouth:React.FC<any> = ({data})=> {
+const Emouth:React.FC<any> = ({data, colors})=> {
     return (
         <Grid item xs={6}>
             <Card className='chart-card'>
@@ -34,7 +34,7 @@ const Emouth:React.FC<any> = ({data})=> {
                             type: 'linear',
                             min: 'auto',
                             max: 'auto',
-                            stacked: true,
+                            stacked: false,
                             reverse: false
                         }}
                         // yFormat=" >-.2f"
@@ -62,9 +62,12 @@ const Emouth:React.FC<any> = ({data})=> {
                         pointBorderColor={{ from: 'serieColor' }}
                         // pointLabelYOffset={-12}
                         useMesh={true}
+                        colors={{
+                            datum: 'color'
+                        }}
                         legends={[
                             {
-                                anchor: 'bottom',
+                                anchor: 'bottom-left',
                                 direction: 'row',
                                 justify: false,
                                 translateX: 20,

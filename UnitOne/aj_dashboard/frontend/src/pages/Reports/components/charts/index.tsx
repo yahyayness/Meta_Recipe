@@ -497,13 +497,13 @@ const emouthData = [
     }
 ]
 
-const ReportCharts = ({ chartData, emouthData, keys }: { chartData: any[], emouthData: any[], keys: string[]}) => {
+const ReportCharts = ({ chartData, emouthData, keys, colors }: { chartData: any[], emouthData: any[], keys: string[], colors: string[]}) => {
     return (
         <>
             <Grid container spacing={3} className='chart-container' mt={1}>
-                <PersonalSensory data={chartData} keys={keys} />
-                <Enose data={chartData} keys={keys} />
-                <Emouth data={emouthData}/>
+                <PersonalSensory data={chartData} keys={keys} colors={colors} />
+                <Enose data={chartData} keys={keys} colors={colors} />
+                <Emouth data={emouthData} colors={colors} />
             </Grid>
             <Grid container spacing={2} mt={1}>
                 <RecipeAnalysis data={barData}/>

@@ -62,7 +62,7 @@ const ProductProcess: React.FC = () => {
     return (
         <Grid container spacing={3} mt={1}>
             <Grid item xs={8}>
-                <Card>
+                <Card style={{ opacity: 0.4 }}>
 
                     <CardContent className='chart-card-content product-card'>
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -257,7 +257,7 @@ const ProductProcess: React.FC = () => {
                 </Card>
             </Grid>
             <Grid item xs={4}>
-                <Card className='chart-card  report-process-table'>
+                <Card className='chart-card  report-process-table' style={{ opacity: 0.4 }}>
 
                     <CardContent className='chart-card-content report-process-table'>
                         <AppTable columns={ [

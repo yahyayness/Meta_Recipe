@@ -59,7 +59,7 @@ export const useChartsData = () => {
                 "color": colors[pIndex],
                 "data": sensory_panel.map((item: any) => ({
                     "x": item.variable,
-                    "y": item.value
+                    "y": item.value,
                 }))
             };
             emouth.push(emouthData);
@@ -82,6 +82,7 @@ export const useChartsData = () => {
 
                 
             }
+            pIndex++;
         }
 
         setChartData(data);

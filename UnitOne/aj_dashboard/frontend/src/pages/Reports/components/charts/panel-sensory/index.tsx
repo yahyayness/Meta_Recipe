@@ -4,7 +4,9 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {ResponsiveRadar} from "@nivo/radar";
 import React from "react";
 
-const PersonalSensory:React.FC<any> = ({data, keys})=>{
+const PersonalSensory:React.FC<any> = ({data, keys, colors})=>{
+
+    const custom = keys.map((item: string, index: number) => ({id: item, label: item, color: colors[index]}))
 
     return (
         <Grid item xs={3}>
@@ -35,13 +37,18 @@ const PersonalSensory:React.FC<any> = ({data, keys})=>{
                         dotColor={{from: 'color', modifiers: []}}
                         dotBorderWidth={3}
                         dotLabelYOffset={-13}
-                        colors={{scheme: 'nivo'}}
+                        colors={({
+                            key,
+                            index
+                          }) => {
+                            return colors[index];
+                        }}
                         blendMode="multiply"
                         motionConfig="wobbly"
                         legends={[
                             {
-                                anchor: 'bottom',
-                                direction: 'row',
+                                anchor: 'bottom-left',
+                                direction: 'column',
                                 translateX: -70,
                                 translateY: -70,
                                 itemWidth: 80,
@@ -56,7 +63,8 @@ const PersonalSensory:React.FC<any> = ({data, keys})=>{
                                             itemTextColor: '#000'
                                         }
                                     }
-                                ]
+                                ],
+                                data: custom
                             }
                         ]}
                     />

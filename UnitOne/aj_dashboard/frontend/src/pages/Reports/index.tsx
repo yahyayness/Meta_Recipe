@@ -232,6 +232,12 @@ const barData = [
     }
 ]
 
+const colors = [
+    '#FF6F67',
+    '#FFAF68',
+    '#66B2FE'
+]
+
 
 const Report: React.FC = () => {
 
@@ -269,8 +275,8 @@ const Report: React.FC = () => {
         <Box>
             {selectedProject ? (
                 <>
-                    <ReportStatistics selectedProject={selectedProject} selectedProtocols={selectedProtocols} duration={duration} />
-                    <ReportCharts chartData={chartData} keys={selectedProtocols} emouthData={emouthData} />
+                    <ReportStatistics selectedProject={selectedProject} selectedProtocols={selectedProtocols} duration={duration} colors={colors} />
+                    <ReportCharts chartData={chartData} keys={selectedProtocols} emouthData={emouthData} colors={colors} />
                     <ProductProcess/>
                 </>
             ) : (

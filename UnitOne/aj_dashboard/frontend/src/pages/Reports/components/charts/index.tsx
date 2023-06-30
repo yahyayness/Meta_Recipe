@@ -501,12 +501,16 @@ const ReportCharts = ({
     chartData, 
     emouthData, 
     recipeData,
+    textureData,
+    textureScale,
     keys, 
     colors 
 }: { 
     chartData: any[], 
     emouthData: any[], 
     recipeData: any[],
+    textureData: any[],
+    textureScale: number,
     keys: string[], 
     colors: string[]
 }) => {
@@ -519,7 +523,7 @@ const ReportCharts = ({
             </Grid>
             <Grid container spacing={2} mt={1}>
                 <RecipeAnalysis data={recipeData} />
-                <ChemicalAnalysis/>
+                <ChemicalAnalysis data={textureData} scale={textureScale} />
             </Grid>
         </>
 

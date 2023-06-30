@@ -4,7 +4,56 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { ResponsiveBar } from "@nivo/bar";
 import React from "react";
 
-const ChemicalAnalysis:React.FC = ()=> {
+const ChemicalAnalysis:React.FC<any> = ({ data, scale })=> {
+
+    const getTspanGroups = (value: string, maxLineLength: number, maxLines: number = 2) => {
+        const words = value.split(' ')
+        
+        type linesAcc = {
+            lines: string[],
+            currLine: string
+        }
+
+        //reduces the words into lines of maxLineLength
+        const assembleLines: linesAcc = words.reduce( (acc: linesAcc, word: string) => {
+            //if the current line isn't empty and the word + current line is larger than the allowed line size, create a new line and update current line
+            if ( (word + acc.currLine).length > maxLineLength && acc.currLine !== '') {
+                return {
+                    lines: acc.lines.concat([acc.currLine]),
+                    currLine: word
+                }
+            }
+            //otherwise add the word to the current line
+            return {
+                ...acc,
+                currLine: acc.currLine + ' ' + word 
+            } 
+            
+        }, {lines: [], currLine: ''})
+
+        //add the ending state of current line (the last line) to lines
+        const allLines = assembleLines.lines.concat([assembleLines.currLine])
+
+        //for now, only take first 2 lines due to tick spacing and possible overflow
+        const lines = allLines.slice(0, maxLines)
+        let children: JSX.Element[] = []
+        let dy = 0
+
+        lines.forEach( (lineText, i) => {
+            children.push(
+                <tspan x={0} dy={dy} key={i}>
+                    {
+                        // if on the second line, and that line's length is within 3 of the max length, add ellipsis
+                        (1 === i && allLines.length > 2) ? lineText.slice(0, maxLineLength - 3) + '...' : lineText
+                    }
+                </tspan> 
+            )
+            //increment dy to render next line text below
+            dy += 15
+        });
+
+        return children
+    }
 
     return (      <Grid item xs={5}>
         <Card className='chart-card'>
@@ -15,7 +64,7 @@ const ChemicalAnalysis:React.FC = ()=> {
                         <MoreVertIcon/>
                     </IconButton>
                 }
-                title="Chemical analysis"
+                title="Physical analysis"
             />
 
             <CardContent className='chart-card-content'>
@@ -23,10 +72,10 @@ const ChemicalAnalysis:React.FC = ()=> {
             <ResponsiveBar
                 data={data}
                 keys={[
-                    'hot dog',
-                    'burger',
+                    'Hardness',
+                    'Fracturability',
                 ]}
-                indexBy="country"
+                indexBy="protocol"
                 margin={{ top: 10, right: 60, bottom: 70, left: 60 }}
                 padding={0.3}
                 valueScale={{ type: 'linear' }}
@@ -45,29 +94,86 @@ const ChemicalAnalysis:React.FC = ()=> {
                     ]
                 }}
                 axisTop={null}
+                // axisBottom={{
+                //     tickSize: 5,
+                //     tickPadding: 5,
+                //     tickRotation: 0,
+                //     legend: 'Protocol',
+                //     legendPosition: 'middle',
+                //     legendOffset: 32
+                // }}
                 axisBottom={{
-                    tickSize: 5,
-                    tickPadding: 5,
-                    tickRotation: 0,
-                    legend: 'country',
+                    legend: 'Protocol',
                     legendPosition: 'middle',
-                    legendOffset: 32
+                    legendOffset: 40,
+                    renderTick: ({
+                        opacity,
+                        textAnchor,
+                        textX,
+                        textY,
+                        value,
+                        x,
+                        y
+                      }) => {
+                        return (
+                          <g
+                            transform={`translate(${x},${y})`}
+                            style={{ opacity }}
+                          >
+                            <text
+                                style={{
+                                    fontSize: 12,
+                                    fill: '#999'
+                                }}
+                                textAnchor={textAnchor}
+                                transform={`translate(${textX},${textY})`}
+                            >
+                              {getTspanGroups(value, 10, 2)}
+                            </text>
+                          </g>
+                        )
+                    }
                 }}
                 axisLeft={{
                     tickSize: 5,
                     tickPadding: 5,
                     tickRotation: 0,
-                    legend: 'food',
+                    legend: 'Hardness (g)',
                     legendPosition: 'middle',
-                    legendOffset: -40
+                    legendOffset: -50
                 }}
                 axisRight={{
                     tickSize: 5,
                     tickPadding: 5,
                     tickRotation: 0,
-                    legend: 'food',
+                    legend: 'Fracturability (mm)',
                     legendPosition: 'middle',
-                    legendOffset: 40
+                    legendOffset: 50,
+                    renderTick: ({
+                        value,
+                        textX,
+                        textY,
+                        textAnchor,
+                        x,
+                        y,
+                      }) => {
+                        return (
+                          <g
+                            transform={`translate(${x},${y})`}
+                          >
+                            <text
+                                style={{
+                                    fontSize: 12,
+                                    fill: '#999'
+                                }}
+                                textAnchor={textAnchor}
+                                transform={`translate(${textX},${textY})`}
+                            >
+                              {Math.round((value / scale) * 100) / 100}
+                            </text>
+                          </g>
+                        )
+                    }
                 }}
                 enableLabel={false}
                 labelSkipWidth={12}
@@ -105,6 +211,37 @@ const ChemicalAnalysis:React.FC = ()=> {
                         ]
                     }
                 ]}
+                // tooltip={(tooltip) => {
+                //     console.log('TOOL', tooltip)
+                //     return <div></div>
+                // }}
+                tooltip={({
+                    id,
+                    value,
+                    color,
+                    indexValue
+                  }) => 
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        padding: 8, 
+                        background: 'white',
+                        border: '0.5px solid grey',
+                        borderRadius: 10}}>
+                        <span style={{ fontSize: 12, padding: 0, margin: 0 }}>{indexValue}</span>
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',}}>
+                            <span style={{ background: color, height: 12, width: 12, marginRight: 8}}></span>
+                            <strong style={{ fontSize: 12, lineHeight: 1}}>
+                                {id}: {id === 'Fracturability' ? value / scale : value}
+                            </strong>
+                        </div>
+                        
+                    </div>
+                }
                 role="application"
                 ariaLabel="Nivo bar chart demo"
                 groupMode="grouped"
@@ -117,54 +254,3 @@ const ChemicalAnalysis:React.FC = ()=> {
 
 export default ChemicalAnalysis;
 
-const data = [
-    {
-      "country": "AD",
-      "hot dog": 75,
-      "hot dogColor": 'rgb(42, 159, 222)',
-      "burger": 21,
-      "burgerColor": "rgb(26, 214, 176)",
-    },
-    {
-      "country": "AE",
-      "hot dog": 21,
-      "hot dogColor": 'rgb(42, 159, 222)',
-      "burger": 151,
-      "burgerColor": "rgb(26, 214, 176)",
-    },
-    {
-      "country": "AF",
-      "hot dog": 180,
-      "hot dogColor": 'rgb(42, 159, 222)',
-      "burger": 4,
-      "burgerColor": "rgb(26, 214, 176)",
-    },
-    {
-      "country": "AG",
-      "hot dog": 72,
-      "hot dogColor": 'rgb(42, 159, 222)',
-      "burger": 197,
-      "burgerColor": "rgb(26, 214, 176)",
-    },
-    {
-      "country": "AI",
-      "hot dog": 162,
-      "hot dogColor": 'rgb(42, 159, 222)',
-      "burger": 190,
-      "burgerColor": "rgb(26, 214, 176)",
-    },
-    {
-      "country": "AL",
-      "hot dog": 83,
-      "hot dogColor": 'rgb(42, 159, 222)',
-      "burger": 90,
-      "burgerColor": "rgb(26, 214, 176)",
-    },
-    {
-      "country": "AM",
-      "hot dog": 106,
-      "hot dogColor": 'rgb(42, 159, 222)',
-      "burger": 188,
-      "burgerColor": "rgb(26, 214, 176)",
-    }
-  ]

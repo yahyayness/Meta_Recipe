@@ -15,6 +15,9 @@ export const useChartsData = () => {
     const [emouthData, setEmouthData] = useState<any[]>([]);
     const [processData, setProcessData] = useState<any[]>([]);
     const [recipeData, setRecipeData] = useState<any[]>([]);
+    const [nutritionData, setNutritionData] = useState<any[]>([]);
+    const [textureData, setTextureData] = useState<any[]>([]);
+    const [textureScale, setTextureScale] = useState<number>(1);
 
     /**
      * fetch all project and protocols data from backend
@@ -45,11 +48,15 @@ export const useChartsData = () => {
         const data: any = [];
         const emouth: any = [];
         const processes: any = [{
-            process: "Preheat Oven (°C)"
+            process: "Preheat Oven",
+            parameter: "Temperature (°C)"
         }, {
-            process: "Baking (minutes)"
+            process: "Baking",
+            parameter: 'Duration (minutes)'
         }];
         let recipeAnalysis: any = [];
+        let nutrition: any = [];
+        let texture: any = [];
         let pIndex = 0;
 
         console.log('PROJECT', project);
@@ -104,7 +111,9 @@ export const useChartsData = () => {
              */
             const ingredients = protocol.ingredients;
             for (let ing of ingredients) {
-                let index = recipeAnalysis.findIndex((data: any) => data["id"] === ing.ingredient_id)
+                let index = recipeAnalysis.findIndex((data: any) => data["id"] === ing.ingredient_id);
+
+                // TODO: check for multiple same ingredient ids for the same protocol
 
                 if (index > -1) {
                     recipeAnalysis[index]['p' + (pIndex + 1)] = ing.quantity;
@@ -146,7 +155,59 @@ export const useChartsData = () => {
             }
 
             pIndex++;
+
+            /**
+             * nutrition data
+             * 
+             */
+            let {nutritional_info} = protocol.extra;
+
+            if (!!nutritional_info) {
+                let _nutrition: any = {
+                    name: protocol.name
+                };
+                for (let nutr of nutritional_info) {
+                    switch (nutr.variable) {
+                        case 'Energy kcal':
+                            _nutrition.calories = nutr.quantity;
+                            break;
+                        case 'Fat':
+                            _nutrition.fat = nutr.quantity;
+                            break;
+                        case 'Carbohydrates':
+                            _nutrition.carbs = nutr.quantity;
+                            break;
+                        case 'Protein':
+                        _nutrition.protein = nutr.quantity;
+                        break;
+                    }
+                }
+
+                nutrition.push(_nutrition);
+            }
+
+            /**
+             * texture data
+             * 
+             */
+            let {texture_metrics} = protocol.extra;
+            let _texture: any = {
+                "protocol": protocol.name,
+                "HardnessColor": 'rgb(42, 159, 222)',
+                "FracturabilityColor": 'rgb(26, 214, 176)',
+            };
+
+            texture_metrics.forEach((item: any) => {
+                _texture[item.variable] = item.variable === 'Fracturability' ? item.quantity : item.quantity
+            });
+            texture.push(_texture);
         }
+
+        let maxHardness = Math.max(...texture.map((item:any) => item.Hardness));
+        let maxFracturability =  Math.max(...texture.map((item:any) => item.Fracturability));
+        let _scale = maxHardness / maxFracturability;
+
+        let _texture = texture.map((item: any) => ({...item, Fracturability: item.Fracturability * _scale}))
 
         let _recipeData = recipeAnalysis.sort((acc: any, cur: any) => cur.total - acc.total).slice(0, 5)
                 .map((item: any) => ({ 
@@ -167,6 +228,9 @@ export const useChartsData = () => {
         setPanelists(_panelists);
         setProcessData(processes);
         setRecipeData(_recipeData);
+        setNutritionData(nutrition);
+        setTextureData(_texture);
+        setTextureScale(_scale);
     }
 
     useEffect(() => {
@@ -181,7 +245,10 @@ export const useChartsData = () => {
         chartData,
         emouthData,
         processData,
-        recipeData
+        recipeData,
+        nutritionData,
+        textureData,
+        textureScale,
     }
 }
 

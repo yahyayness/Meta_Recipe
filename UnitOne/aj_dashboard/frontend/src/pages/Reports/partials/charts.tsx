@@ -204,7 +204,7 @@ export const useChartsData = () => {
         }
 
         let maxHardness = Math.max(...texture.map((item:any) => item.Hardness));
-        let maxFracturability =  Math.max(...texture.map((item:any) => item.Fracturability));
+        let maxFracturability =  Math.ceil(Math.max(...texture.map((item:any) => item.Fracturability)) / 5) * 5;
         let _scale = maxHardness / maxFracturability;
 
         let _texture = texture.map((item: any) => ({...item, Fracturability: item.Fracturability * _scale}))

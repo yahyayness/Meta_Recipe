@@ -236,7 +236,7 @@ const ChemicalAnalysis:React.FC<any> = ({ data, scale })=> {
                             justifyContent: 'center',}}>
                             <span style={{ background: color, height: 12, width: 12, marginRight: 8}}></span>
                             <strong style={{ fontSize: 12, lineHeight: 1}}>
-                                {id}: {id === 'Fracturability' ? value / scale : value}
+                                {id}: {id === 'Fracturability' ? Math.round((value / scale) * 100) / 100 : Math.round(value)}
                             </strong>
                         </div>
                         

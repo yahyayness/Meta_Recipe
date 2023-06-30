@@ -10,9 +10,11 @@ export const useChartsData = () => {
     const [project, setProject] = useState<ProjectType|null>(null);
     const [duration, setDuration] = useState<number>(0);
     const [panelists, setPanelists] = useState<number>(0);
+    const [selectedProtocols, setSelectedProtocols] = useState<string[]>([]);
     const [chartData, setChartData] = useState<any[]>([]);
     const [emouthData, setEmouthData] = useState<any[]>([]);
     const [processData, setProcessData] = useState<any[]>([]);
+    const [recipeData, setRecipeData] = useState<any[]>([]);
 
     /**
      * fetch all project and protocols data from backend
@@ -45,16 +47,16 @@ export const useChartsData = () => {
         const processes: any = [{
             process: "Preheat Oven (°C)"
         }, {
-            process: "Bake (minutes)"
+            process: "Baking (minutes)"
         }];
+        let recipeAnalysis: any = [];
         let pIndex = 0;
 
-        console.log('PROJECt', project);
-
-        //TODO: key chart keys from here
+        console.log('PROJECT', project);
 
         let {protocols}: any = project;
         protocols = protocols.slice(0, 3);
+        setSelectedProtocols(protocols.map((p: any) => p.name));
 
         let _panelists = 0;
         if (project.sensory_panels) {
@@ -63,8 +65,6 @@ export const useChartsData = () => {
 
         for (let protocol of protocols) {
             const {sensory_panel}:any = protocol.extra;
-
-            
 
             if (!sensory_panel) continue;
             /**
@@ -98,6 +98,26 @@ export const useChartsData = () => {
                 }
             }
 
+            /**
+             * recipe analysis data
+             * 
+             */
+            const ingredients = protocol.ingredients;
+            for (let ing of ingredients) {
+                let index = recipeAnalysis.findIndex((data: any) => data["id"] === ing.ingredient_id)
+
+                if (index > -1) {
+                    recipeAnalysis[index]['p' + (pIndex + 1)] = ing.quantity;
+                    recipeAnalysis[index].total = recipeAnalysis[index].total + ing.quantity;
+                } else {
+                    recipeAnalysis.push({
+                        name: ing.name,
+                        id: ing.ingredient_id,
+                        ['p' + (pIndex + 1)]: ing.quantity,
+                        total: ing.quantity
+                    });
+                }
+            }
 
             /**
              * processes data
@@ -105,32 +125,48 @@ export const useChartsData = () => {
              */
             const _processes = protocol.processes;
             for (let process of _processes) {
-                let index = process.name === 'preheat_oven' ? 0 : process.name === 'bake' ? 1 : -1; 
+                let index = process.name === 'Preheat Oven' ? 0 : process.name === 'Baking' ? 1 : -1; 
 
                 if (index < 0) continue;
-                if (process.name === 'preheat_oven') {
+                if (process.name === 'Preheat Oven') {
                     processes[0]['p' + (pIndex + 1)] = process.arguments.temperature.value;
                 }
 
-                if (process.name === 'bake') {
+                if (process.name === 'Baking') {
                     processes[1]['p' + (pIndex + 1)] = process.arguments.duration.value;
                 }
             }
 
-            if (!_processes.some((p: any) => p.name === 'bake')) {
+            if (!_processes.some((p: any) => p.name === 'Baking')) {
                 processes[1]['p' + (pIndex + 1)] = 'N/A';
             }
 
-            if (!_processes.some((p: any) => p.name === 'preheat_oven')) {
+            if (!_processes.some((p: any) => p.name === 'Preheat Oven')) {
                 processes[0]['p' + (pIndex + 1)] = 'N/A';
             }
 
             pIndex++;
         }
+
+        let _recipeData = recipeAnalysis.sort((acc: any, cur: any) => cur.total - acc.total).slice(0, 5)
+                .map((item: any) => ({ 
+                    id: item.name, 
+                    markers: [0],
+                    measures: [0],
+                    ranges: [ 
+                        item.p1, 
+                        item.p1 + item.p2, 
+                        item.p1 + item.p2 + item.p3, 
+                        0, 
+                        item.total 
+                    ]
+                }));
+
         setChartData(data);
         setEmouthData(emouth);
         setPanelists(_panelists);
         setProcessData(processes);
+        setRecipeData(_recipeData);
     }
 
     useEffect(() => {
@@ -139,11 +175,13 @@ export const useChartsData = () => {
 
     return {
         project,
+        selectedProtocols,
         duration,
         panelists,
         chartData,
         emouthData,
-        processData
+        processData,
+        recipeData
     }
 }
 

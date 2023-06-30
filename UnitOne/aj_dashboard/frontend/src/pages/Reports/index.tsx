@@ -241,20 +241,22 @@ const colors = [
 
 const Report: React.FC = () => {
 
-    const { project, duration, panelists, chartData, emouthData, processData } = useChartsData();
+    const { 
+        project, 
+        selectedProtocols,
+        duration, 
+        panelists, 
+        chartData, 
+        emouthData, 
+        processData, 
+        recipeData 
+    } = useChartsData();
 
     const [expanded, setExpanded] = React.useState(false);
-    const [selectedProtocols, setSelectedProtocols] = useState<string[]>([]);
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
-
-    useEffect(() => {
-        if (project) {
-            setSelectedProtocols(project?.protocols.map((p: any) => p.name));
-        }
-    }, [project])
 
     /**
      * set the breadcrumbs of the current page
@@ -271,9 +273,23 @@ const Report: React.FC = () => {
         <Box>
             {!!project ? (
                 <>
-                    <ReportStatistics selectedProject={project} selectedProtocols={selectedProtocols} duration={duration} panelists={panelists} colors={colors} />
-                    <ReportCharts chartData={chartData} keys={selectedProtocols} emouthData={emouthData} colors={colors} />
-                    <ProductProcess processData={processData} />
+                    <ReportStatistics 
+                        selectedProject={project} 
+                        selectedProtocols={selectedProtocols} 
+                        duration={duration} 
+                        panelists={panelists} 
+                        colors={colors} 
+                        />
+                    <ReportCharts 
+                        chartData={chartData} 
+                        keys={selectedProtocols} 
+                        emouthData={emouthData} 
+                        recipeData={recipeData}
+                        colors={colors} 
+                        />
+                    <ProductProcess 
+                        processData={processData} 
+                        />
                 </>
             ) : (
                 <p>Loading...</p>

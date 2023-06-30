@@ -31,7 +31,7 @@ const ReportStatistics = ({
                         <Typography variant="subtitle1" color="textSecondary">
                             <div className='legend-container'>
                                 {selectedProtocols.map((protocol, index) => (
-                                    <div className='legend-item-container'>
+                                    <div key={index} className='legend-item-container'>
                                         <div><TimelineDot className='legend' style={{backgroundColor: colors[index]}} /></div>
                                         <div>{protocol}</div>
                                     </div>

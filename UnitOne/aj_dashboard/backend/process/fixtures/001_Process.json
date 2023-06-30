@@ -19,5 +19,12 @@
       "name": "Boil",
       "type": "time"
     }
+  },
+  {
+    "model": "process.Process",
+    "fields": {
+      "name": "Bake",
+      "type": "time"
+    }
   }
 ]

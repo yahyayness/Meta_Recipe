@@ -18,6 +18,8 @@ const ReportStatistics = ({
     colors: string[]
 })=>{
 
+    selectedProtocols = selectedProtocols.map((p: any, index: number) => 'P' + (index + 1) + ': ' +  p)
+
     return (
         <Grid container spacing={2}>
             <Grid item xs={12}>

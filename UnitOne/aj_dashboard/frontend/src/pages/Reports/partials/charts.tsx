@@ -42,7 +42,11 @@ export const useChartsData = () => {
     const formChartData = (project: ProjectType) => {
         const data: any = [];
         const emouth: any = [];
-        const processes: any = [];
+        const processes: any = [{
+            process: "Preheat Oven (°C)"
+        }, {
+            process: "Bake (minutes)"
+        }];
         let pIndex = 0;
 
         console.log('PROJECt', project);
@@ -101,42 +105,28 @@ export const useChartsData = () => {
              */
             const _processes = protocol.processes;
             for (let process of _processes) {
-                let index = processes.findIndex((p: any) => p["process"] === process.name)
+                let index = process.name === 'preheat_oven' ? 0 : process.name === 'bake' ? 1 : -1; 
 
-                if (index > -1) {
-                    if (process.name === 'preheat_oven') {
-                        processes[index]['p' + (pIndex + 1)] = process.arguments.temperature.value;
-                    }
+                if (index < 0) continue;
+                if (process.name === 'preheat_oven') {
+                    processes[0]['p' + (pIndex + 1)] = process.arguments.temperature.value;
+                }
 
-                    if (process.name === 'bake') {
-                        processes[index]['p' + (pIndex + 1)] = process.arguments.duration.value;
-                    }
-                    
-                } else {
-                    if (process.name === 'preheat_oven') {
-                        processes.push({
-                            "process":process.name,
-                            ['p' + (pIndex + 1)]: process.arguments.temperature.value
-                        });
-                    }
-
-                    if (process.name === 'bake') {
-                        processes.push({
-                            "process":process.name,
-                            ['p' + (pIndex + 1)]: process.arguments.duration.value
-                        });
-                    }
-                    
+                if (process.name === 'bake') {
+                    processes[1]['p' + (pIndex + 1)] = process.arguments.duration.value;
                 }
             }
 
+            if (!_processes.some((p: any) => p.name === 'bake')) {
+                processes[1]['p' + (pIndex + 1)] = 'N/A';
+            }
 
-
-
+            if (!_processes.some((p: any) => p.name === 'preheat_oven')) {
+                processes[0]['p' + (pIndex + 1)] = 'N/A';
+            }
 
             pIndex++;
         }
-
         setChartData(data);
         setEmouthData(emouth);
         setPanelists(_panelists);

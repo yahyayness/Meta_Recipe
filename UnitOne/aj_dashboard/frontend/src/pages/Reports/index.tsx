@@ -267,8 +267,6 @@ const Report: React.FC = () => {
         }
     ]);
 
-    console.log('PROCESS', processData);
-
     return (
         <Box>
             {!!project ? (

@@ -49,7 +49,7 @@ const PersonalSensory:React.FC<any> = ({data, keys, colors})=>{
                             {
                                 anchor: 'bottom-left',
                                 direction: 'column',
-                                translateX: -20,
+                                translateX: -40,
                                 translateY: -40,
                                 itemWidth: 80,
                                 itemHeight: 20,

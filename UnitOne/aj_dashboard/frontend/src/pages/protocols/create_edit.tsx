@@ -22,6 +22,9 @@ import {TabContext, TabList} from "@mui/lab";
 import TabPanel from '@mui/lab/TabPanel';
 import AppTabs from "../../components/tabs";
 import AddTab from "./components/tabs/Add";
+import Design from "./components/tabs/design";
+import Generate from "./components/tabs/generate";
+import Charts from "./components/tabs/charts";
 
 const rfStyle = {
     backgroundColor: 'trasparent',
@@ -153,6 +156,41 @@ const CreateEditProtocol: React.FC = () => {
                                 props : {
                                     handleFormChanges: handleFormChanges,
                                     addProtocol : addProtocol
+                                },
+                                tabProps : {
+                                    style: {padding : 0}
+                                }
+                            },
+                            {
+                                label : "Design",
+                                component : Design,
+                                props : {
+                                    handleFormChanges: handleFormChanges,
+                                    tasteIntesity : "addProtocol",
+                                    aromaIntensity : "Sada"
+                                },
+                                tabProps : {
+                                    style: {padding : 0}
+                                }
+                            },
+                            {
+                                label : "Generate",
+                                component : Generate,
+                                props : {
+                                    handleFormChanges: handleFormChanges,
+                                    tasteIntesity : "addProtocol",
+                                    aromaIntensity : "Sada"
+                                },
+                                tabProps : {
+                                    style: {padding : 0}
+                                }
+                            },
+                            {
+                                label : "Charts",
+                                component : Charts,
+                                props : {
+                                    tasteData:{},
+                                    aromaData:{}
                                 },
                                 tabProps : {
                                     style: {padding : 0}

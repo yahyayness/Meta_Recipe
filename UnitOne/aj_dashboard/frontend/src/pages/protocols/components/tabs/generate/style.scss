@@ -1,0 +1,37 @@
+.generate-taste-items{
+   border: 1px solid #F1C40E;
+   padding: 0px;
+   height: 33px;
+}
+.generate-taste-bg{
+  height: 100%;
+  min-width: 0px;
+}
+
+.generate-arrow{
+  background-color: #FBEEBC;
+  visibility:hidden ;
+  color: #F1C40E;
+}
+.generate-taste-new-value{
+  padding: 3px;
+  text-align: right;
+}
+.generate-taste-name{
+  padding: 3px;
+ }
+ 
+.justify-center{
+  justify-content: center;
+}
+
+.generate-taste-items:hover  .generate-arrow {
+  visibility:visible ;
+}
+
+.generate-new-title{
+  text-align: right;
+  color: #FFA629;
+}
+
+ 

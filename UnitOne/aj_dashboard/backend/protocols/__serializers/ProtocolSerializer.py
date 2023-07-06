@@ -40,5 +40,6 @@ class SimilarProtocolSerializer(serializers.ModelSerializer):
     class Meta:
         model = Protocol
         fields = ['id', 'description', 'reference_author', 'aliquot_date', 'reagent', 'name', 'processes',
-                  'ingredients', 'flow', 'created_at', 'updated_at', 'project', 'extra',
+                  'ingredients', 'flow', 'created_at', 'updated_at', 'project', 'extra', 'protocol_ingredient',
+                  'custom_sensory_panels',
                   'taste_intensity', 'aroma_intensity', 'nutrition_info', 'texture_metrics', 'is_draft']

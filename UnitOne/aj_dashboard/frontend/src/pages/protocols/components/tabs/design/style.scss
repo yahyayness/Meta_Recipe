@@ -1,16 +1,42 @@
-.taste-items{
-   border: 1px solid #E3EDFC;
-   padding: 0px;
-   
+.design-taste-items{
+  border: 1px solid #A7C4F0;
+  padding: 0px;
+  height: 33px;
+  border-radius: 5px;
 }
-.taste-bg{
-  background-color: #F5F8FD;
-  height: 100%;
-  padding: 6px;
-  min-width: 0px;
+.design-taste-bg{
+ height: 100%;
+ min-width: 0px;
 }
+
+.design-arrow{
+ background-color: #F2F3F3;
+ visibility:hidden ;
+ color: #92979D;
+}
+.design-taste-new-value{
+ padding: 3px;
+ text-align: right;
+}
+.design-taste-name{
+ padding: 3px 0px;
  
+}
+
 .justify-center{
-  justify-content: center;
+ justify-content: center;
 }
- 
+
+.design-taste-items:hover  .design-arrow {
+ visibility:visible ;
+}
+
+.design-new-title{
+ text-align: right;
+ color: #FFA629;
+}
+.design-org-title{
+ text-align: center;
+ color: #4285F4;
+}
+

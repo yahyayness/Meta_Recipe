@@ -25,6 +25,7 @@ import AddTab from "./components/tabs/Add";
 import Design from "./components/tabs/design";
 import Generate from "./components/tabs/generate";
 import Charts from "./components/tabs/charts";
+import Projects from "./components/tabs/projects";
 
 const rfStyle = {
     backgroundColor: 'trasparent',
@@ -166,8 +167,11 @@ const CreateEditProtocol: React.FC = () => {
                                 component : Design,
                                 props : {
                                     handleFormChanges: handleFormChanges,
-                                    tasteIntesity : "addProtocol",
-                                    aromaIntensity : "Sada"
+                                    protocol_id:id,
+                                    sensory:extra,
+                                    setSensory:setExtra,
+                                    afterSave:saveSensory,
+                                    onSave:onSave
                                 },
                                 tabProps : {
                                     style: {padding : 0}
@@ -178,8 +182,10 @@ const CreateEditProtocol: React.FC = () => {
                                 component : Generate,
                                 props : {
                                     handleFormChanges: handleFormChanges,
-                                    tasteIntesity : "addProtocol",
-                                    aromaIntensity : "Sada"
+                                    protocol_id:id,
+                                    sensory:extra,
+                                    setSensory:setExtra,
+                                    afterSave:saveSensory,
                                 },
                                 tabProps : {
                                     style: {padding : 0}
@@ -188,6 +194,17 @@ const CreateEditProtocol: React.FC = () => {
                             {
                                 label : "Charts",
                                 component : Charts,
+                                props : {
+                                    tasteData:{},
+                                    aromaData:{}
+                                },
+                                tabProps : {
+                                    style: {padding : 0}
+                                }
+                            },
+                            {
+                                label : "Projects",
+                                component : Projects,
                                 props : {
                                     tasteData:{},
                                     aromaData:{}

@@ -8,6 +8,7 @@ import {ExpandLess, ExpandMore} from "@mui/icons-material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import React, {useState} from "react";
 import SensoryChart from "./sensory";
+import './style.scss'
 
 const Charts:React.FC<any> = ({tasteData,aromaData})=>{
      

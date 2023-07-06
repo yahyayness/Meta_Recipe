@@ -68,6 +68,10 @@ class ProtocolView(GenericViewSet):
         else:
             flow = request.data
 
+        if 'custom_sensory_panels' in data:
+            for panel in data['custom_sensory_panels']:
+                ProtocolSensoryPanel.objects.filter(id=panel['id']).update(value=panel['value'])
+
         if obj.project_id:
             project = Projects.objects.get(id=obj.project_id)
             project_sensory_panels = project.sensory_panels.all()
@@ -86,6 +90,11 @@ class ProtocolView(GenericViewSet):
         # protocol = Protocol.objects.get(id=pk)
         result = {}
         protocol = Protocol.objects.annotate(num_protocol_meta_recipes=models.Count('protocol_meta_recipes')).get(id=pk)
+
+        if 'custom_sensory_panels' in request.data:
+            for panel in request.data['custom_sensory_panels']:
+                ProtocolSensoryPanel.objects.filter(id=panel['id']).update(value=panel['value'])
+
         if not protocol.num_protocol_meta_recipes:
             serializer = ProtocolSerializer(instance=protocol, data=request.data, partial=True)
             serializer.is_valid(raise_exception=True)

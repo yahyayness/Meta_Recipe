@@ -8,21 +8,27 @@ import ViewItme from "./view-item";
 import ArrowLeftOutlinedIcon from '@mui/icons-material/ArrowLeftOutlined';
 import ArrowRightOutlinedIcon from '@mui/icons-material/ArrowRightOutlined';
 
-const ListSensory: React.FC<any> = ({ items, name, newTitle,orgTitle, sensory,handleSensory }) => {
+const ExtraList: React.FC<any> = ({ items, name, newTitle,orgTitle, setitems }) => {
     const [copy, setCopy] = useState<boolean>(true)
-    const [orgSensory, setOrgSensory] = useState<Array<any>>([]);
-    const handelIncresing = (value:number,name:string,id:number)=>{
-        value <= 10 && handleSensory(value,name,id)
-         
+    const [orgItems, setOrgItems] = useState<any>({});
+    const handelItems = (value:number,name:string)=>{
+        setitems({...items,[name]:value})
     }
-    const handelDecresing = (value:number,name:string,id:number)=>{
-        value >= 0 && handleSensory(value,name,id)
+
+    const handelIncresing = (value:number,name:string)=>{
+        value <= 10 && handelItems(value,name)
+    }
+
+   
+
+    const handelDecresing = (value:number,name:string)=>{
+        value >= 0 && handelItems(value,name)
     }
 
     useEffect(() => {
-        copy && setOrgSensory([...sensory])
+        copy && setOrgItems({...items})
         setCopy(false)
-      }, [sensory])
+      }, [items])
 
     return (
         <>
@@ -30,7 +36,7 @@ const ListSensory: React.FC<any> = ({ items, name, newTitle,orgTitle, sensory,ha
             
             <List sx={{ maxHeight: 350, position: 'relative', overflow: 'auto', }}>
                 <Grid container spacing={2} m={1}>
-                    <Grid xs={12}>
+                    <Grid xs={10}>
                         <Box >
                             <Grid container>
                                 <Grid xs={8} >
@@ -42,38 +48,37 @@ const ListSensory: React.FC<any> = ({ items, name, newTitle,orgTitle, sensory,ha
                             </Grid>
                         </Box>
                     </Grid>
-                    {/* <Grid xs={2} className="design-org-title">
+                    <Grid xs={2} className="design-org-title">
                          {orgTitle}
-                    </Grid> */}
+                    </Grid>
                 </Grid>
                 {
-                    items.map((item: any)=>{
-                        let sValue= sensory?.length ? sensory?.find((s:any)=> s?.variable == item.name) : {}
-                        let orgValue= orgSensory?.length ? orgSensory?.find((s:any)=> s?.variable == item.name) : {}
-                        console.log("sValue",sValue)
+                    Object.keys(items).map((key)=>{
+                        var nValue : number = Number(items[key]);
+                        var oValue : number = Number(orgItems[key]);
                         return(
                             <Grid container spacing={2} m={1}>
-                            <Grid xs={12} className="design-taste-items" style={{ background: `linear-gradient(90deg, rgba(49, 114, 220, 0.1) ${sValue.value*10}%, #FFF 0%)` }}>
+                            <Grid xs={10} className="design-taste-items" style={{ background: `linear-gradient(90deg, rgba(49, 114, 220, 0.1) ${nValue*10}%, #FFF 0%)` }}>
                                 <Box className="design-taste-bg">
                                     <Grid container>
-                                        <Grid xs={1} onClick={() => handelDecresing(sValue?.value-.5, item.name,sValue?.id)} className="design-arrow">
+                                        <Grid xs={1} onClick={() => handelDecresing(nValue-.5, key)} className="design-arrow">
                                         <ArrowLeftOutlinedIcon />
                                         </Grid>
                                         <Grid xs={7} className="design-taste-name">
-                                            {item.name}
+                                            {key}
                                         </Grid>
                                         <Grid xs={3} className="design-taste-new-value">
-                                            {sValue.value}
+                                            {nValue}
                                         </Grid>
-                                        <Grid xs={1} onClick={() =>handelIncresing(sValue?.value+.5, item.name,sValue?.id)} className="design-arrow">
+                                        <Grid xs={1} onClick={() =>handelIncresing(nValue+.5, key)} className="design-arrow">
                                         <ArrowRightOutlinedIcon />
                                         </Grid>
                                     </Grid>
                                 </Box>
                             </Grid>
-                            {/* <Grid xs={2}>
-                                {orgValue.value}
-                            </Grid> */}
+                            <Grid xs={2}>
+                                {oValue}
+                            </Grid>
                         </Grid>
                         )
                         
@@ -87,4 +92,4 @@ const ListSensory: React.FC<any> = ({ items, name, newTitle,orgTitle, sensory,ha
     );
 }
 
-export default ListSensory;
+export default ExtraList;

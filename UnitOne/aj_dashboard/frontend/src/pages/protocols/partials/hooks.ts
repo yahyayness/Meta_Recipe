@@ -318,10 +318,14 @@ const useProcess = (nodes: Array<Node>, setNodes: (nodes: any) => any, onChildCh
 
 const useProtocol = () => {
 
-
     const [nodes, setNodes] = useState<Array<Node>>([]);
     const [edges, setEdges] = useState<Array<Edge>>([]);
     const [extra, setExtra] = useState<any>([]);
+    const [tasteIntensity, setTasteIntensity] = useState<any>([]);
+    const [aromaIntensity, setAromaIntensity] = useState<any>([]);
+    const [nutritionInfo, setNutritionInfo] = useState<any>([]);
+    const [textureMetrics, setTextureMetrics] = useState<any>([]);
+    const [isDraft, setIsDraft] = useState<number>(0);
     /* const [sensory , setSensory] = useState<any>({ }); */
     const [name, setName] = useState("");
     const [project, setProject] = useState<number>();
@@ -349,6 +353,7 @@ const useProtocol = () => {
     const handleOpenModel = (value:boolean) => setOpenModel(value);
     const [rTabsValue, setRTabsValue] = useState(0);
     const [openSaveAsRicpeModel, setOpenSaveAsRicpeModel] = useState(false);
+    const [saveAsDraf, setSaveAsDraf] = useState<number>(0);
    
 
 
@@ -408,6 +413,8 @@ const useProtocol = () => {
 
     }
 
+   
+
 
     const addChild = (type: string) => {
         const actions: any = {
@@ -440,19 +447,7 @@ const useProtocol = () => {
      * @author Amr
      */
     useEffect(() => {
-        if (id) {
-            http<ResponseType<ProtocolType>>(addParamsToEndpoint(getEndpoint('find_protocol'), {id})).then(response => {
-                setForm(response.data.payload);
-                setNodes(bindActions(response.data.payload.flow.nodes))
-                setEdges(response.data.payload.flow.edges)
-                console.log(response.data.payload.custom_sensory_panels)
-                setExtra([...response.data.payload.custom_sensory_panels])
-                setName(response.data.payload.name)
-                setProject(response.data.payload.project)
-                setMetaRecipesCount(response.data.payload?.meta_recipes_count)
-            })
-  
-        }
+        fetchProtocol()
     }, [id])
 
     /**
@@ -474,21 +469,89 @@ const useProtocol = () => {
         saveProtocol()
         setOpenSaveAsRicpeModel(false)
     }
+    /**
+     * fetch protocol Data
+     * @author Bilal
+     */
+    const fetchProtocol = () => {
+        if (id) {
+            http<ResponseType<ProtocolType>>(addParamsToEndpoint(getEndpoint('find_protocol'), {id})).then(response => {
+                setForm(response.data.payload);
+                setNodes(bindActions(response.data.payload.flow.nodes))
+                setEdges(response.data.payload.flow.edges)
+                setExtra([...response.data.payload.custom_sensory_panels])
+                setTasteIntensity({...response.data.payload.taste_intensity})
+                setAromaIntensity({...response.data.payload.aroma_intensity})
+                setNutritionInfo({...response.data.payload.nutrition_info})
+                setTextureMetrics({...response.data.payload.texture_metrics})
+                setName(response.data.payload.name)
+                setProject(response.data.payload.project)
+                setMetaRecipesCount(response.data.payload?.meta_recipes_count)
+                setIsDraft(response.data.payload?.is_draft)
+            })
+        }
+    }
+
+
+    /**
+     * revert Protocol
+     * @author Bilal
+     */
+    const revertProtocol =   () => {
+        if (id) {
+            http<ResponseType<ProtocolType>>(addParamsToEndpoint(getEndpoint('find_protocol'), {id})).then(response => {
+                setForm(response.data.payload);
+                setNodes(bindActions(response.data.payload.flow.nodes))
+                setEdges(response.data.payload.flow.edges)
+                setExtra([...response.data.payload.custom_sensory_panels])
+                setTasteIntensity({...response.data.payload.taste_intensity})
+                setAromaIntensity({...response.data.payload.aroma_intensity})
+                setNutritionInfo({...response.data.payload.nutrition_info})
+                setTextureMetrics({...response.data.payload.texture_metrics})
+                setName(response.data.payload.name)
+                setProject(response.data.payload.project)
+                setMetaRecipesCount(response.data.payload?.meta_recipes_count)
+                setIsDraft(response.data.payload?.is_draft)
+                setCounter((counter:number) => counter + 1)
+            })
+        }
+      
+    }
+
+
 
     /**
      * on save protocol check if save As Recipe  (show message )or as protocol  
      * @author Bilal
      */
     const onSave = () => {
-
+        
         if(metaRecipesCount){
             setOpenSaveAsRicpeModel(true)
             
         }else{
-            saveProtocol()
+            setIsDraft(0)
+            setSaveAsDraf(saveAsDraf+1)
+           /*  saveProtocol() */
         }
         
     }
+    /**
+     * on save protocol  as Draft
+     * @author Bilal
+     */
+    const onDraftSave = () => {
+        setIsDraft(1)
+        setSaveAsDraf(saveAsDraf+1)
+    }
+
+    useEffect(() => {
+        if(saveAsDraf != 0){
+            saveProtocol()
+        }
+    }, [saveAsDraf])
+
+
 
     /**
      * save protocol   
@@ -503,7 +566,13 @@ const useProtocol = () => {
             flow : {
                 nodes: nodes,
                 edges: edges
-            }
+            },
+            taste_intensity:tasteIntensity,
+            aroma_intensity:aromaIntensity,
+            nutrition_info:nutritionInfo,
+            texture_metrics:textureMetrics,
+            custom_sensory_panels:extra,
+            is_draft:isDraft,
         }
         console.log('form', _form, JSON.stringify(_form))
         // change the endpoint according to the isEdit flag
@@ -605,8 +674,10 @@ const useProtocol = () => {
   
 
     return {onSave, onDuplicate, nodes, edges, onNodesChange, onEdgesChange, onConnect, addProtocol,
-        counter,openModel,ExtraAmountModal , saveSensory ,handleOpenModel,id,extra,setExtra , setForm,name,
-        setName,project,setProject,projects,rTabsValue,setRTabsValue,openSaveAsRicpeModel,setOpenSaveAsRicpeModel,saveAsRecipe   , form , handleFormChanges , isEdit}
+        counter,openModel , saveSensory ,handleOpenModel,id,extra,setExtra , setForm,projects
+        ,openSaveAsRicpeModel,setOpenSaveAsRicpeModel,saveAsRecipe , form , handleFormChanges , isEdit,
+        tasteIntensity,setTasteIntensity,aromaIntensity,setAromaIntensity,nutritionInfo,setNutritionInfo,textureMetrics, setTextureMetrics
+        ,isDraft, onDraftSave,revertProtocol}
 
 }
 

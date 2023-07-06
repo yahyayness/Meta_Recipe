@@ -58,9 +58,10 @@ const CreateEditProtocol: React.FC = () => {
 
 
     const { onSave, onDuplicate, nodes, edges, onNodesChange, onEdgesChange, onConnect, addProtocol,
-        counter, openModel, handleOpenModel, ExtraAmountModal, saveSensory, id, extra, setExtra, setForm,
-         name, setName, project, setProject, projects, rTabsValue,setRTabsValue,openSaveAsRicpeModel,
-         setOpenSaveAsRicpeModel  , form ,saveAsRecipe, handleFormChanges , isEdit}
+        counter, openModel, handleOpenModel,  saveSensory, id, extra, setExtra, setForm,
+          projects,openSaveAsRicpeModel,setOpenSaveAsRicpeModel  , form ,saveAsRecipe, handleFormChanges , isEdit,
+          tasteIntensity,setTasteIntensity,aromaIntensity,setAromaIntensity,nutritionInfo,setNutritionInfo,textureMetrics, setTextureMetrics,
+          isDraft, onDraftSave,revertProtocol}
 
         = useProtocol();
 
@@ -171,7 +172,19 @@ const CreateEditProtocol: React.FC = () => {
                                     sensory:extra,
                                     setSensory:setExtra,
                                     afterSave:saveSensory,
-                                    onSave:onSave
+                                    onSave:onSave,
+                                    revertProtocol:revertProtocol,
+                                    tasteIntensity:tasteIntensity,
+                                    setTasteIntensity:setTasteIntensity,
+                                    aromaIntensity:aromaIntensity,
+                                    setAromaIntensity:setAromaIntensity,
+                                    nutritionInfo:nutritionInfo,
+                                    setNutritionInfo:setNutritionInfo,
+                                    textureMetrics:textureMetrics,
+                                    setTextureMetrics:setTextureMetrics,
+                                    isDraft:isDraft,
+                                    onDraftSave:onDraftSave,
+                                    onDuplicate:onDuplicate
                                 },
                                 tabProps : {
                                     style: {padding : 0}
@@ -186,6 +199,14 @@ const CreateEditProtocol: React.FC = () => {
                                     sensory:extra,
                                     setSensory:setExtra,
                                     afterSave:saveSensory,
+                                    tasteIntensity:tasteIntensity,
+                                    setTasteIntensity:setTasteIntensity,
+                                    aromaIntensity:aromaIntensity,
+                                    setAromaIntensity:setAromaIntensity,
+                                    nutritionInfo:nutritionInfo,
+                                    setNutritionInfo:setNutritionInfo,
+                                    textureMetrics:textureMetrics,
+                                     setTextureMetrics:setTextureMetrics
                                 },
                                 tabProps : {
                                     style: {padding : 0}
@@ -195,8 +216,7 @@ const CreateEditProtocol: React.FC = () => {
                                 label : "Charts",
                                 component : Charts,
                                 props : {
-                                    tasteData:{},
-                                    aromaData:{}
+                                    protocol_id:id
                                 },
                                 tabProps : {
                                     style: {padding : 0}

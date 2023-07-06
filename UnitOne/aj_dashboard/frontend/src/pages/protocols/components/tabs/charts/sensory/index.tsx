@@ -4,7 +4,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {ResponsiveRadar} from "@nivo/radar";
 import React from "react";
 
-const SensoryChart:React.FC<any> = ({data, title})=>{
+const SensoryChart:React.FC<any> = ({data, title,keys})=>{
     return (
         <Grid item xs={3}>
             <Card className='chart-card'>
@@ -22,7 +22,7 @@ const SensoryChart:React.FC<any> = ({data, title})=>{
                     <ResponsiveRadar
 
                         data={data}
-                        keys={['p1', 'p2', 'p3']}
+                        keys={keys}
                         indexBy="taste"
                         valueFormat=" >-.2f"
                         margin={{top: 10, right: 10, bottom: 5, left: 10}}

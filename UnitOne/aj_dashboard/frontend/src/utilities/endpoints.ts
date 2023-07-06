@@ -53,6 +53,10 @@ export default {
         url : 'protocols/bulk_destroy',
         method: HttpMethodTypes.POST
     },
+    similar_protocols:{
+        url : 'protocols/:id/similar',
+        method: HttpMethodTypes.GET
+    },
     find_protocol:{
         url : 'protocols/:id',
         method: HttpMethodTypes.GET

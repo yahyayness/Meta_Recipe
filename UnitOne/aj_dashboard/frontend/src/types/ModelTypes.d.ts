@@ -47,8 +47,13 @@ interface ProtocolType extends ResponseType {
     flow: ProtocolFlowType,
     extra: object,
     custom_sensory_panels: array,
+    taste_intensity: object,
+    aroma_intensity: object,
+    nutrition_info: object,
+    texture_metrics: object,
     project: number
     meta_recipes_count: number
+    is_draft: number
 }
 
 interface IngredientType {

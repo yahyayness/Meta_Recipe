@@ -32,6 +32,7 @@ class Protocol(SoftDeleteModel):
     aroma_intensity = models.JSONField(null=True, default=default_aroma_intensity)
     nutrition_info = models.JSONField(null=True, default=dict)
     texture_metrics = models.JSONField(null=True, default=dict)
+    is_draft = models.SmallIntegerField(default=0)
 
     class Meta:
         db_table = 'protocols'

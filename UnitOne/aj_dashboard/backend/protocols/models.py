@@ -6,8 +6,11 @@ from ingredients.models import Ingredients
 from process.models import Process
 from projects.models import Projects
 
-
 # Create your models here.
+default_taste_intensity = {'Sweet': 0, 'Salty': 0, 'Sour': 0, 'Bitter': 0, 'Umami': 0, 'Fat': 0}
+default_aroma_intensity = {'Sweet': 0, 'Sulfidic': 0, 'Smokey': 0, 'Woody': 0, 'Fruity': 0, 'Floral': 0, 'Citrus': 0,
+                           'Mint': 0, 'Medicinal': 0, 'Decayed': 0, 'Uncategorized': 0}
+
 
 class Protocol(SoftDeleteModel):
     description = models.CharField(max_length=225, null=True)
@@ -25,6 +28,10 @@ class Protocol(SoftDeleteModel):
     extra = models.JSONField(null=True, blank=False, default=dict)
     ingredients_list = models.ManyToManyField(Ingredients, through='ProtocolIngredient',
                                               related_name='ingredients_list', blank=True)
+    taste_intensity = models.JSONField(null=True, default=default_taste_intensity)
+    aroma_intensity = models.JSONField(null=True, default=default_aroma_intensity)
+    nutrition_info = models.JSONField(null=True, default=dict)
+    texture_metrics = models.JSONField(null=True, default=dict)
 
     class Meta:
         db_table = 'protocols'

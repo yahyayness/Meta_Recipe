@@ -28,7 +28,7 @@ from ingredients.serializers import IngredientsSerilizer
 from meta_recipe.models import MetaRecipe
 from process.models import Process
 from projects.models import Projects
-from protocols.__serializers.ProtocolSerializer import ProtocolSerializer, SimilarProtocolSerializer
+from protocols.__serializers.ProtocolSerializer import ProtocolSerializer
 from protocols.models import Protocol, ProtocolNode, ProtocolEdge, ProtocolIngredient, ProtocolProcess, \
     ProtocolSensoryPanel
 from recipe.__views import RecipeFlowView
@@ -406,6 +406,6 @@ class ProtocolView(GenericViewSet):
         protocol = Protocol.objects.get(id=pk)
         protocols = Protocol.objects.filter(project_id=protocol.project_id)
         return Response(
-            {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': SimilarProtocolSerializer(protocols, many=True).data},
+            {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': ProtocolSerializer(protocols, many=True).data},
             status=status.HTTP_200_OK
         )

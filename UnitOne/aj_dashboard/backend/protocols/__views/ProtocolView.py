@@ -6,10 +6,11 @@ from operator import or_
 
 import jsonpickle
 from django.core import serializers
+from django.core.serializers import serialize
 from django.db import transaction, models
 from django.db.models import Q, Count
 from django.forms import model_to_dict
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from rest_framework import status
 from rest_framework.decorators import action, api_view
 from rest_framework.exceptions import ValidationError
@@ -27,7 +28,7 @@ from ingredients.serializers import IngredientsSerilizer
 from meta_recipe.models import MetaRecipe
 from process.models import Process
 from projects.models import Projects
-from protocols.__serializers.ProtocolSerializer import ProtocolSerializer
+from protocols.__serializers.ProtocolSerializer import ProtocolSerializer, SimilarProtocolSerializer
 from protocols.models import Protocol, ProtocolNode, ProtocolEdge, ProtocolIngredient, ProtocolProcess, \
     ProtocolSensoryPanel
 from recipe.__views import RecipeFlowView
@@ -399,3 +400,12 @@ class ProtocolView(GenericViewSet):
         # }
         result = ml.predict(saved_state=saved, changed_state=changed)
         return Response(result)
+
+    @action(detail=True, methods=['GET'], url_path='similar')
+    def get_similar_protocols(self, request, pk=None):
+        protocol = Protocol.objects.get(id=pk)
+        protocols = Protocol.objects.filter(project_id=protocol.project_id)
+        return Response(
+            {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': SimilarProtocolSerializer(protocols, many=True).data},
+            status=status.HTTP_200_OK
+        )

@@ -8,7 +8,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import {ResponsiveLine} from "@nivo/line";
 
-const Emouth:React.FC<any> = ({data})=> {
+const Emouth:React.FC<any> = ({data, colors})=> {
     return (
         <Grid item xs={6}>
             <Card className='chart-card'>
@@ -28,26 +28,23 @@ const Emouth:React.FC<any> = ({data})=> {
                 <CardContent  className='chart-card-content'>
                     <ResponsiveLine
                         data={data}
-                        margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+                        margin={{ top: 10, right: 30, bottom: 110, left: 30 }}
                         xScale={{ type: 'point' }}
                         yScale={{
                             type: 'linear',
                             min: 'auto',
                             max: 'auto',
-                            stacked: true,
+                            stacked: false,
                             reverse: false
                         }}
-                        yFormat=" >-.2f"
+                        // yFormat=" >-.2f"
                         axisTop={null}
                         axisRight={null}
-                        // axisBottom={{
-                        //     tickSize: 5,
-                        //     tickPadding: 5,
-                        //     tickRotation: 0,
-                        //     legend: 'transportation',
-                        //     legendOffset: 36,
-                        //     legendPosition: 'middle'
-                        // }}
+                        axisBottom={{
+                            tickSize: 5,
+                            tickPadding: 5,
+                            tickRotation: 45,
+                        }}
                         // axisLeft={{
                         //     tickSize: 5,
                         //     tickPadding: 5,
@@ -60,18 +57,21 @@ const Emouth:React.FC<any> = ({data})=> {
                         pointColor={{ theme: 'background' }}
                         pointBorderWidth={1}
                         pointBorderColor={{ from: 'serieColor' }}
-                        pointLabelYOffset={-12}
+                        // pointLabelYOffset={-12}
                         useMesh={true}
+                        colors={{
+                            datum: 'color'
+                        }}
                         legends={[
                             {
-                                anchor: 'bottom',
-                                direction: 'row',
+                                anchor: 'bottom-right',
+                                direction: 'column',
                                 justify: false,
-                                translateX: 20,
-                                translateY: 50,
+                                translateX: -100,
+                                translateY: 110,
                                 itemsSpacing: 0,
                                 itemDirection: 'left-to-right',
-                                itemWidth: 80,
+                                itemWidth: 100,
                                 itemHeight: 20,
                                 itemOpacity: 0.75,
                                 symbolSize: 12,

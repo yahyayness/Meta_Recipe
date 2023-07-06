@@ -11,7 +11,7 @@ import {getRoute} from "../../../../routes/list";
 
 const items: MenuItem[] = [
     {
-        label: 'Dashboards',
+        label: 'Home',
         key: 1,
         icon: Dashboard,
         route: getRoute('dashboard')

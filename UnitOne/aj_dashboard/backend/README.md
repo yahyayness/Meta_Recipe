@@ -10,4 +10,5 @@
 ### py manage.py makemigrations
 ### python manage.py migrate
 ### python manage.py loaddata 001_Process.json
+### python manage.py loaddata 001_AbstractSensoryPanel.json
 ### python manage.py createsuperuser

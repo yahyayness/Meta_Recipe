@@ -28,7 +28,7 @@ const Charts: React.FC<any> = ({ protocol_id }) => {
     useEffect(() => {
         if (protocol_id) {
             http<ListType<ProtocolType>>(addParamsToEndpoint(getEndpoint('similar_protocols'), { id: protocol_id })).then(response => {
-                console.log("response>>>>>>", response)
+               // console.log("response>>>>>>", response)
 
                 buildChartData([...response.data.payload])
             })
@@ -36,31 +36,34 @@ const Charts: React.FC<any> = ({ protocol_id }) => {
     }, [protocol_id])
 
     const buildChartData = async (protocols: any) => {
-        let data: any = [];
+        let dataSensoryPanel: any = [];
         let dataTasteIntensity: any = [];
+        let dataAromaIntensity: any = [];
+        let dataNutritionInfo: any = [];
+        let dataTextureMetrics: any = [];
+        let  pKeys: any = []
         if (protocols.length) {
-            for (const protocol of protocols) {
-             
-                setProtocolsKeys([...protocolsKeys,protocol.name])
+            for (let protocol of protocols) {
+                 pKeys.push(protocol.name);  
                 let protocolSensoryPanel = protocol?.custom_sensory_panels
                 let protocolTasteIntensity = protocol?.taste_intensity
                 let protocolAromaIntensity = protocol?.aroma_intensity
                 let protocolNutritionInfo = protocol?.nutrition_info
                 let protocolTextureMetrics = protocol?.texture_metrics
+
+                //genarate sensoryPanel chart opject for Chart
                 for (const sensoryPanel of protocolSensoryPanel){
-                 
-                    console.log("sensoryPanel",sensoryPanel)
-                    let index = data.findIndex((data: any) => data["taste"] == sensoryPanel.variable)
+                    let index = dataSensoryPanel.findIndex((dataSensoryPanel: any) => dataSensoryPanel["taste"] == sensoryPanel.variable)
                     if (index > -1) {
-                        data[index][protocol.name] = sensoryPanel.value;
+                        dataSensoryPanel[index][protocol.name] = sensoryPanel.value;
                     } else {
-                        data.push({
+                        dataSensoryPanel.push({
                             "taste": sensoryPanel.variable,
                             [protocol.name]: sensoryPanel.value
                         });
                     }
                 }
-                 
+                //genarate Taste Intensity chart opject for Chart
                 Object.keys(protocolTasteIntensity).map((key,index)=>{
                     var nValue : number = Number(protocolTasteIntensity[key]);
                     let indexm = dataTasteIntensity.findIndex((dataTasteIntensity: any) => dataTasteIntensity["taste"] == key)
@@ -74,15 +77,60 @@ const Charts: React.FC<any> = ({ protocol_id }) => {
                     }
 
                 })
+                //genarate Aroma Intensity chart opject for Chart
+               Object.keys(protocolAromaIntensity).map((key,index)=>{
+                    var nValue : number = Number(protocolAromaIntensity[key]);
+                    let indexm = dataNutritionInfo.findIndex((dataNutritionInfo: any) => dataNutritionInfo["taste"] == key)
+                    if (indexm > -1) {
+                        dataNutritionInfo[index][protocol.name] = nValue;
+                    } else {
+                        dataNutritionInfo.push({
+                            "taste": key,
+                            [protocol.name]: nValue
+                        });
+                    }
 
-                setFinsh(finsh+1)
+                })
+
+                //genarate Nutrition Info chart opject for Chart
+               Object.keys(protocolNutritionInfo).map((key,index)=>{
+                    var nValue : number = Number(protocolNutritionInfo[key]);
+                    let indexm = dataNutritionInfo.findIndex((dataNutritionInfo: any) => dataNutritionInfo["taste"] == key)
+                    if (indexm > -1) {
+                        dataNutritionInfo[index][protocol.name] = nValue;
+                    } else {
+                        dataNutritionInfo.push({
+                            "taste": key,
+                            [protocol.name]: nValue
+                        });
+                    }
+
+                })
+
+                //genarate  Texture Metrics chart opject for Chart
+               Object.keys(protocolTextureMetrics).map((key,index)=>{
+                    var nValue : number = Number(protocolTextureMetrics[key]);
+                    let indexm = dataTextureMetrics.findIndex((dataTextureMetrics: any) => dataTextureMetrics["taste"] == key)
+                    if (indexm > -1) {
+                        dataTextureMetrics[index][protocol.name] = nValue;
+                    } else {
+                        dataTextureMetrics.push({
+                            "taste": key,
+                            [protocol.name]: nValue
+                        });
+                    }
+
+                })
+                
             }
-
-            
-            setSensoryPanelChart(data)
+            setProtocolsKeys(pKeys)
+            setSensoryPanelChart(dataSensoryPanel)
             setTasteIntensityChart(dataTasteIntensity)
+            setAromaIntensityChart(dataAromaIntensity)
+            setNutritionInfoChart(dataNutritionInfo)
+            setTextureMetricsChart(dataTextureMetrics)
             
-            console.log(data)
+            
         }
 
     }
@@ -90,8 +138,8 @@ const Charts: React.FC<any> = ({ protocol_id }) => {
         console.log("tasteIntensityChart>>>>>>>>>", tasteIntensityChart)
     }, [tasteIntensityChart]) */
 
-    console.log("sensoryPanelChart>>>>>>>>>", sensoryPanelChart)
-    console.log("protocolsKeys>>>>>>>>>", protocolsKeys)
+    //console.log("sensoryPanelChart>>>>>>>>>", sensoryPanelChart)
+    //console.log("protocolsKeys>>>>>>>>>", protocolsKeys)
 
     const data = [
         {
@@ -126,11 +174,15 @@ const Charts: React.FC<any> = ({ protocol_id }) => {
         }
     ]
 
+    
+
     return (
         <List>
-
-            {sensoryPanelChart.length > 0 && <SensoryChart title="Taste" keys={protocolsKeys} data={sensoryPanelChart} />}
-            {tasteIntensityChart.length > 0  && <SensoryChart title="Aroma Intensity" keys={protocolsKeys}  data={tasteIntensityChart} />}
+            {sensoryPanelChart.length > 0 && <SensoryChart title="Sensory Panel" keys={protocolsKeys} data={sensoryPanelChart} />}
+            {tasteIntensityChart.length > 0  && <SensoryChart title="Taste" keys={protocolsKeys}  data={tasteIntensityChart} />}
+            {aromaIntensityChart.length > 0  && <SensoryChart title="Aroma Intensity" keys={protocolsKeys}  data={aromaIntensityChart} />}
+            {nutritionInfoChart.length > 0  && <SensoryChart title="Nutrition Info" keys={protocolsKeys}  data={nutritionInfoChart} />}
+            {textureMetricsChart.length > 0  && <SensoryChart title="TextureMetrics" keys={protocolsKeys}  data={textureMetricsChart} />}
         </List>
     );
 }

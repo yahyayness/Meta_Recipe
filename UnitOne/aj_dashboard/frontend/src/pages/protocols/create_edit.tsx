@@ -61,7 +61,7 @@ const CreateEditProtocol: React.FC = () => {
         counter, openModel, handleOpenModel,  saveSensory, id, extra, setExtra, setForm,
           projects,openSaveAsRicpeModel,setOpenSaveAsRicpeModel  , form ,saveAsRecipe, handleFormChanges , isEdit,
           tasteIntensity,setTasteIntensity,aromaIntensity,setAromaIntensity,nutritionInfo,setNutritionInfo,textureMetrics, setTextureMetrics,
-          isDraft, onDraftSave,revertProtocol}
+          isDraft, onDraftSave,revertProtocol,onUploda}
 
         = useProtocol();
 
@@ -106,8 +106,21 @@ const CreateEditProtocol: React.FC = () => {
                     <Stack spacing={2} direction="row" justifyContent="right" className="list-master-actions" width="100%">
                         <Button variant="text" color="info" onClick={onDuplicate}>Duplicate</Button>
                         <Button variant="text" color="primary" className='primary' onClick={onSave}>Save</Button>
-                        {isEdit && <Button variant="text" color="info" onClick={() => handleOpenModel(true)}>Predict</Button>}
+                        {/*{isEdit && <Button variant="text" color="info" onClick={() => handleOpenModel(true)}>Predict</Button>} */}
                         {/*  <DropdownMenu menuList={menuList}/> */}
+                        <label htmlFor="upload-photo">
+                            <input
+                                style={{ display: 'none' }}
+                                id="upload-photo"
+                                name="upload-photo"
+                                type="file"
+                                onChange={(e)=>onUploda(e)}
+                            />
+
+                            <Button color="info" variant="text" className='upload_protocol_button' component="span">
+                                Upload 
+                            </Button>
+                        </label>
                     </Stack>
                     <ReactFlow
                         nodes={nodes}
@@ -226,8 +239,7 @@ const CreateEditProtocol: React.FC = () => {
                                 label : "Projects",
                                 component : Projects,
                                 props : {
-                                    tasteData:{},
-                                    aromaData:{}
+                                    protocol_id:id
                                 },
                                 tabProps : {
                                     style: {padding : 0}

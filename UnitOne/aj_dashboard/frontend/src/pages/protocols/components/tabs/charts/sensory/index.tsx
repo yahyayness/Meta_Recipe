@@ -3,6 +3,7 @@ import {Card, CardContent, CardHeader, IconButton} from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {ResponsiveRadar} from "@nivo/radar";
 import React from "react";
+import { kMaxLength } from "buffer";
 
 const SensoryChart:React.FC<any> = ({data, title,keys})=>{
     return (
@@ -25,7 +26,7 @@ const SensoryChart:React.FC<any> = ({data, title,keys})=>{
                         keys={keys}
                         indexBy="taste"
                         valueFormat=" >-.2f"
-                        margin={{top: 10, right: 10, bottom: 5, left: 10}}
+                        margin={{top: 10, right: 45, bottom: 50, left: 45}}
                         borderColor={{from: 'color'}}
                         gridLevels={7}
                         gridShape="linear"

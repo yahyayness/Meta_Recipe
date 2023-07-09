@@ -627,6 +627,14 @@ const useProtocol = () => {
         })
     }
 
+       /**
+     * save sensory   
+     * @author Bilal
+     */
+    const onUploda = (e:any) => {
+        
+    }
+
 
        /**
      * save sensory   
@@ -700,7 +708,7 @@ const useProtocol = () => {
         counter,openModel , saveSensory ,handleOpenModel,id,extra,setExtra , setForm,projects
         ,openSaveAsRicpeModel,setOpenSaveAsRicpeModel,saveAsRecipe , form , handleFormChanges , isEdit,
         tasteIntensity,setTasteIntensity,aromaIntensity,setAromaIntensity,nutritionInfo,setNutritionInfo,textureMetrics, setTextureMetrics
-        ,isDraft, onDraftSave,revertProtocol}
+        ,isDraft, onDraftSave,revertProtocol,onUploda}
 
 }
 

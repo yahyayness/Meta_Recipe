@@ -13,13 +13,13 @@ import { ClassNames } from "@emotion/react";
 import ListProjects from "./component/list";
 
 
-const Projects: React.FC<any> = ({ tasteIntesity, aromaIntensity }) => {
+const Projects: React.FC<any> = ({ protocol_id }) => {
     const [open, setOpen] = useState<boolean>(false)
 
 
     return (
         <List  >
-            <ListProjects name="Taste intesity" title="Gen. Match" items={aromaIntensity} listTitle="Projects" />
+            <ListProjects name="Taste intesity" title="Status"  protocol_id={protocol_id} listTitle="Protocols" />
         </List>
     );
 }

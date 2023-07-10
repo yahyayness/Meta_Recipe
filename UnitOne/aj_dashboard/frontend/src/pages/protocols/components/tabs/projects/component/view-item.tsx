@@ -20,11 +20,11 @@ const ViewItme: React.FC<any> = ({ name, value,protocol_id,isCheckd }) => {
             <Grid xs={1}>
                  {isCheckd && <CheckIcon/>}
             </Grid>
-            <Grid xs={8}   >
+            <Grid xs={7}   >
                {name} 
             </Grid>
-            <Grid xs={3}>
-              {/*   {value}  */}
+            <Grid xs={4}>
+                {value}   
             </Grid>
         </Grid>
     );

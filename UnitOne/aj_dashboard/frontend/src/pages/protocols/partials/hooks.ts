@@ -609,7 +609,27 @@ const useProtocol = () => {
      * @author Bilal
      */
     const onUploda = (e:any) => {
-        
+        const fileReader = new FileReader();
+        fileReader.readAsText(e.target.files[0], "UTF-8");
+        fileReader.onload = e => {
+          /* console.log("e.target.result", e?.target?.result); */
+        if (!e?.target?.result) return;
+        const Newprotocole: any = JSON.parse(e.target.result as string)
+        console.log("Newprotocole", Newprotocole);
+        setForm(Newprotocole);
+        setNodes(bindActions(Newprotocole?.flow.nodes))
+        setEdges(Newprotocole?.flow?.edges)
+        setExtra([...Newprotocole?.custom_sensory_panels])
+        setTasteIntensity({...Newprotocole?.taste_intensity})
+        setAromaIntensity({...Newprotocole?.aroma_intensity})
+        setNutritionInfo({...Newprotocole?.nutrition_info})
+        setTextureMetrics({...Newprotocole?.texture_metrics})
+        setName(Newprotocole?.name)
+        setProject(Newprotocole?.project)
+        setMetaRecipesCount(Newprotocole?.meta_recipes_count)
+        setIsDraft(Newprotocole?.is_draft)
+        setCounter((counter:number) => counter + 1)
+        }; 
     }
 
 

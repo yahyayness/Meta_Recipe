@@ -18,7 +18,7 @@ import {ResponsiveBullet} from '@nivo/bullet'
 import ReportCharts from "./components/charts";
 import ProductProcess from "./components/product-process";
 import useBreadcrumb from "../../common/hooks/breadcrumbs";
-
+import ReportSensors from './components/sensors'
 
 const data = [
     {
@@ -253,6 +253,7 @@ const Report: React.FC = () => {
         <Box>
             <ReportStatistics/>
             <ReportCharts/>
+            <ReportSensors/>
             <ProductProcess/>
 
         </Box>

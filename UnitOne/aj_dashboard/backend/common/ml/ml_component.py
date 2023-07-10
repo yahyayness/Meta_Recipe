@@ -1,6 +1,6 @@
-"""AJX EIT MVP TasteTuner ML component v0.2.1.
+"""AJX EIT MVP TasteTuner ML component v0.2.2.
 
-Updated 23.06.2023.
+Updated 30.06.2023: Converting changed ingredients back to original unit. 
 
 Only the `predict` function and the files it loads need to be ported. 
 The variables `saved_state` and `changed_state` are included to demonstrate and verify 
@@ -34,6 +34,8 @@ and output updated_state should be (pprint omitted from code below):
 import json
 import os
 
+from pprint import pprint
+
 saved_state = {
     "ingredients": [
         {"name": "frozen strawberries", "quantity": 250, "unit": "g"},
@@ -61,19 +63,19 @@ changed_state = {
     "ingredients": [
         {"name": "frozen strawberries", "quantity": 250, "unit": "g"},
         {"name": "frozen blueberries", "quantity": 250, "unit": "g"},
-        {"name": "walnuts", "quantity": 50, "unit": "g"},
+        {"name": "frozen raspberries", "quantity": 250, "unit": "g"},
         {"name": "milk", "quantity": 250, "unit": "g"},
         {"name": "honey", "quantity": 115, "unit": "g"},
         {"name": "banana", "quantity": 250, "unit": "g"}],
     "sensory_panel": [
-        {"variable": "Fruity", "value": 9.5},
+        {"variable": "Fruity", "value": 8.5},
         {"variable": "Cacao / Chocolate", "value": 1.5},
         {"variable": "Soft", "value": 7.5},
         {"variable": "Salty", "value": 2.0},
         {"variable": "Hard", "value": 4.0},
         {"variable": "Nutty", "value": 1.5},
         {"variable": "Cereal", "value": 1.0},
-        {"variable": "Fatty", "value": 4.5},
+        {"variable": "Fatty", "value": 0.5},
         {"variable": "Sticky", "value": 6.5},
         {"variable": "Dry", "value": 0.5},
         {"variable": "Crunchy", "value": 2.5},
@@ -113,7 +115,7 @@ def predict(saved_state, changed_state):
     if saved_ings != changed_ings:
         # Difference on the X side, thus forward prediction
         forward = True
-        # print("Predicting forward")
+        #print("Predicting forward")
     saved_panel = saved_state['sensory_panel']
     changed_panel = changed_state['sensory_panel']
 
@@ -139,12 +141,12 @@ def predict(saved_state, changed_state):
 
     if saved_panel != changed_panel:
         backward = True
-        # print("Predicting backward")
+        #print("Predicting backward")
     if not forward and not backward:
-        # Do not generate anything new if there is no delta between input states.
+        #print("Do not generate anything new if there is no delta between input states.")
         return updated_state
     if len(saved_ings) != len(changed_ings):
-        # For MVP we only consider unchanged number of ingredients.
+        #print("For MVP we only consider unchanged number of ingredients.")
         return updated_state
 
     # Assume all ingredients are on the whitelist, else ignore
@@ -165,6 +167,8 @@ def predict(saved_state, changed_state):
             found_unit = False
             for unit_name, unit_dict in known_units.items():
                 if ing['unit'] == unit_name or ing['unit'] in unit_dict['abbreviation']:
+                    new_ing['original_unit'] = ing['unit']
+                    new_ing['equivalentInGrams'] = unit_dict['equivalentInGrams']
                     new_ing['quantity'] = ing['quantity'] * unit_dict['equivalentInGrams']
                     new_ing['unit'] = "g"
                     raw_quant.append(new_ing['quantity'])
@@ -209,8 +213,12 @@ def predict(saved_state, changed_state):
         for updated_ing in updated_ings:
             new_ing = {}
             new_ing["name"] = updated_ing["name"]
-            new_ing["quantity"] = updated_ing["quantity"]
-            new_ing["unit"] = updated_ing["unit"]
+            if "original_unit" in updated_ing:
+                new_ing["quantity"] = updated_ing["quantity"]/updated_ing["equivalentInGrams"]
+                new_ing["unit"] = updated_ing["original_unit"]
+            else:
+                new_ing["quantity"] = updated_ing["quantity"]
+                new_ing["unit"] = updated_ing["unit"]
             new_updated_ings.append(new_ing)
         return new_updated_ings
 
@@ -244,8 +252,9 @@ def predict(saved_state, changed_state):
                 component_names.append(cing["name"])
                 component_vecs.append(cing["normalized_quantity"] * ing_node_vecs[cing["name"]])
         A = np.stack(component_vecs).T
-        x, residuals, rank, s = np.linalg.lstsq(A, b_update)
+        x, residuals, rank, s = np.linalg.lstsq(A, b_update, rcond=None)
         for xi, name in zip(x, component_names):
+            #print(f"Backward ingredient coeffs - {name}: {xi}")
             if name not in component_solved_coeffs:
                 component_solved_coeffs[name] = [xi]
             else:
@@ -258,15 +267,32 @@ def predict(saved_state, changed_state):
                     xi = component_solved_coeffs[cing["name"]].pop(0)
                     updated_ing['quantity'] = round(0.2 * cing['quantity'] * np.abs(xi)) / 0.2
                     updated_ing['unit'] = "g"
+                    if 'original_unit' in cing:
+                        updated_ing['original_unit'] = cing['original_unit']
+                        updated_ing['equivalentInGrams'] = cing['equivalentInGrams']
                 else:
                     updated_ing = cing
                 updated_ings.append(updated_ing)
         else:
-            pass
+            twice_updated_ings = []
+            for uing in updated_ings:
+                if uing["name"] in component_solved_coeffs:
+                    updated_ing = {}
+                    updated_ing["name"] = uing["name"]
+                    xi = component_solved_coeffs[uing["name"]].pop(0)
+                    updated_ing['quantity'] = round(0.2 * uing['quantity'] * np.abs(xi)) / 0.2
+                    updated_ing['unit'] = "g"
+                    if 'original_unit' in uing:
+                        updated_ing['original_unit'] = uing['original_unit']
+                        updated_ing['equivalentInGrams'] = uing['equivalentInGrams']
+                else:
+                    updated_ing = uing
+                twice_updated_ings.append(updated_ing)
+            updated_ings = twice_updated_ings
         updated_state['ingredients'] = remove_nq(updated_ings)
         updated_state['sensory_panel'] = listify_panel_dict(vec_panel(middle_panel_vec))
     return updated_state
 
 
 if __name__ == "__main__":
-    predict(saved_state, changed_state)
+    pprint(predict(saved_state, changed_state))

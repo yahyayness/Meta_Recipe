@@ -71,6 +71,22 @@ export default [
                     }
                 ]
             },
+            {
+                label: 'Bake',
+                protocol: 'process',
+                inputs: [
+                    {
+                        type: 'TimePicker',
+                        props : {
+                            format:'hh:mm',
+                            style : {
+                                height: '45px'
+                            }
+
+                        }
+                    },
+                ]
+            },
         ]
     },
     {

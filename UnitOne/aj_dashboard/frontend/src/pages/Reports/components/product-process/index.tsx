@@ -52,24 +52,25 @@ const rows = [
     createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
 
-const ProductProcess: React.FC = () => {
+const ProductProcess: React.FC<any> = ({ processData, nutritionData }) => {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         console.log('value' , value)
         setValue(newValue);
     };
+
     return (
         <Grid container spacing={3} mt={1}>
-            <Grid item xs={8}>
+            <Grid item xs={7}>
                 <Card>
 
                     <CardContent className='chart-card-content product-card'>
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                             <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                                <Tab label="Product by taste " />
-                                <Tab label="Product by smell"  />
-                                <Tab label="Product by sensor" />
+                                <Tab label="Nutritional Info" />
+                                {/* <Tab label="Product by smell"  />
+                                <Tab label="Product by sensor" /> */}
                             </Tabs>
                         </Box>
                         <div
@@ -82,10 +83,10 @@ const ProductProcess: React.FC = () => {
                             {value === 0 && (
                                 <Box>
 
-                                    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                                    <Table aria-label="customized table">
                                         <TableHead>
                                             <TableRow>
-                                                <StyledTableCell>Dessert (100g serving)</StyledTableCell>
+                                                <StyledTableCell>per 100g serving</StyledTableCell>
                                                 <StyledTableCell align="right">Calories</StyledTableCell>
                                                 <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
                                                 <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
@@ -93,7 +94,7 @@ const ProductProcess: React.FC = () => {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {rows.map((row) => (
+                                            {nutritionData.map((row: any) => (
                                                 <StyledTableRow key={row.name}>
                                                     <StyledTableCell component="th" scope="row">
                                                         {row.name}
@@ -256,8 +257,8 @@ const ProductProcess: React.FC = () => {
                     </CardContent>
                 </Card>
             </Grid>
-            <Grid item xs={4}>
-                <Card className='chart-card  report-process-table'>
+            <Grid item xs={5}>
+                <Card className='chart-card  report-process-table' >
 
                     <CardContent className='chart-card-content report-process-table'>
                         <AppTable columns={ [
@@ -271,6 +272,10 @@ const ProductProcess: React.FC = () => {
                                 value: 'process',
                             },
                             {
+                                label: 'Parameter',
+                                value: 'parameter',
+                            },
+                            {
                                 label: 'P1',
                                 value: 'p1',
                             },
@@ -282,14 +287,7 @@ const ProductProcess: React.FC = () => {
                                 label: 'P3',
                                 value: 'p3',
                             }
-                        ] as Array<TableColumns>} rows={[
-                            {
-                                process : 'Baking temperature (C)',
-                                p1: '200',
-                                p2: '180',
-                                p3: '200'
-                            }
-                        ]} actions={[]} pagination={{}} showStaticColumn={false} />
+                        ] as Array<TableColumns>} rows={processData} actions={[]} pagination={{}} showStaticColumn={false} />
                     </CardContent>
                 </Card>
             </Grid>

@@ -46,42 +46,50 @@ class ProtocolView(GenericViewSet):
     queryset = Protocol.objects.all()
 
     def create(self, request):
-        data = request.data
-        if 'name' not in data:
-            data['name'] = 'Protocol-0'
-            if Protocol.objects.filter().count():
-                last_id = Protocol.objects.latest('id')
-                if last_id:
-                    data['name'] = f"Protocol-{last_id.id + 1}"
-        serializer = self.get_serializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        obj = serializer.save()
-        try:
-            last_id = MetaRecipe.objects.latest('id')
-            meta_name = f"Meta-{last_id.id + 1}"
-        except MetaRecipe.DoesNotExist:
-            meta_name = 'Meta-0'
-        obj.protocol_meta_recipes.create(name=meta_name)
+        result = {}
         flow = {}
-        if 'flow' in request.data:
-            flow = request.data['flow']
+        if request.FILES.get('file'):
+            data = json.loads(request.FILES.get('file').read())
+            serializer = ProtocolSerializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            obj = serializer.save()
+            if 'flow' in data:
+                result = self.create_flow(flow=data['flow'], protocol_id=obj.id)
         else:
-            flow = request.data
+            data = request.data
+            if 'name' not in data:
+                data['name'] = 'Protocol-0'
+                if Protocol.objects.filter().count():
+                    last_id = Protocol.objects.latest('id')
+                    if last_id:
+                        data['name'] = f"Protocol-{last_id.id + 1}"
+            serializer = self.get_serializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            obj = serializer.save()
+            try:
+                last_id = MetaRecipe.objects.latest('id')
+                meta_name = f"Meta-{last_id.id + 1}"
+            except MetaRecipe.DoesNotExist:
+                meta_name = 'Meta-0'
+            obj.protocol_meta_recipes.create(name=meta_name)
 
-        if 'custom_sensory_panels' in data:
-            for panel in data['custom_sensory_panels']:
-                ProtocolSensoryPanel.objects.filter(id=panel['id']).update(value=panel['value'])
+            if 'custom_sensory_panels' in data:
+                for panel in data['custom_sensory_panels']:
+                    ProtocolSensoryPanel.objects.filter(id=panel['id']).update(value=panel['value'])
 
-        if obj.project_id:
-            project = Projects.objects.get(id=obj.project_id)
-            project_sensory_panels = project.sensory_panels.all()
-            if len(list(project_sensory_panels)):
-                for panel in project_sensory_panels:
-                    obj.custom_sensory_panels.create(
-                        variable=panel.panel_variable,
-                        value=panel.panel_value)
+            if obj.project_id:
+                project = Projects.objects.get(id=obj.project_id)
+                project_sensory_panels = project.sensory_panels.all()
+                if len(list(project_sensory_panels)):
+                    for panel in project_sensory_panels:
+                        obj.custom_sensory_panels.create(
+                            variable=panel.panel_variable,
+                            value=panel.panel_value)
 
-        result = self.create_flow(flow=flow, protocol_id=obj.id)
+            if 'flow' in request.data:
+                flow = request.data['flow']
+
+            result = self.create_flow(flow=flow, protocol_id=obj.id)
         return Response(
             {'status': 'success', 'code': status.HTTP_200_OK, 'message': 'success', 'payload': result},
             status=status.HTTP_200_OK)

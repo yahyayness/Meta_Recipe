@@ -79,7 +79,7 @@ const ProductAddEdit: React.FC = () => {
                         type="date"
                         value={formik.values.date }
                         onChange={formik.handleChange}
-                        error={formik.touched.date && Boolean(formik.errors.date)}
+                        error={formik?.touched?.date && Boolean(formik?.errors?.date)}
                         helperText={formik?.touched?.date && formik?.errors?.date}
                         InputLabelProps={{
                             style: {fontSize: '13.45px'},
@@ -102,7 +102,7 @@ const ProductAddEdit: React.FC = () => {
                         }}
                         value={formik.values.description}
                         onChange={formik.handleChange}
-                        error={formik.touched.description && Boolean(formik.errors.description)}
+                        error={formik?.touched?.description && Boolean(formik?.errors?.description)}
                         helperText={formik?.touched?.description && formik?.errors?.description}
                         InputProps={{
                             style: {fontSize: '13.45px'}

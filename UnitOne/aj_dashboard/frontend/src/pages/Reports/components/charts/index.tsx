@@ -5,13 +5,14 @@ import {ResponsiveRadar} from "@nivo/radar";
 import Typography from "@mui/material/Typography";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
-import React from "react";
+import React, { useEffect } from "react";
 import PersonalSensory from "./panel-sensory";
 import Emouth from "./Emouth";
 import Enose from "./Enose";
 import {ResponsiveBullet} from "@nivo/bullet";
 import RecipeAnalysis from "./recipe-analysis";
 import ChemicalAnalysis from "./chemical-analysis";
+import { useChartsData } from "../../partials/charts";
 
 const data = [
     {
@@ -496,17 +497,33 @@ const emouthData = [
     }
 ]
 
-const ReportCharts: React.FC = () => {
+const ReportCharts = ({ 
+    chartData, 
+    emouthData, 
+    recipeData,
+    textureData,
+    textureScale,
+    keys, 
+    colors 
+}: { 
+    chartData: any[], 
+    emouthData: any[], 
+    recipeData: any[],
+    textureData: any[],
+    textureScale: number,
+    keys: string[], 
+    colors: string[]
+}) => {
     return (
         <>
             <Grid container spacing={3} className='chart-container' mt={1}>
-                <PersonalSensory data={data}/>
-                <Enose data={secondData}/>
-                <Emouth data={emouthData}/>
+                <PersonalSensory data={chartData} keys={keys} colors={colors} />
+                <Enose data={chartData} keys={keys} colors={colors} />
+                <Emouth data={emouthData} colors={colors} />
             </Grid>
             <Grid container spacing={2} mt={1}>
-                <RecipeAnalysis data={barData}/>
-                <ChemicalAnalysis/>
+                <RecipeAnalysis data={recipeData} />
+                <ChemicalAnalysis data={textureData} scale={textureScale} />
             </Grid>
         </>
 

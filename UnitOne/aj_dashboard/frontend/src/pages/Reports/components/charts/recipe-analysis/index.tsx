@@ -5,9 +5,10 @@ import {ResponsiveBullet} from "@nivo/bullet";
 import React from "react";
 
 const RecipeAnalysis:React.FC<any> = ({data})=> {
+
     return (
         <Grid item xs={7}>
-            <Card className='chart-card'>
+            <Card className='chart-card' >
                 <CardHeader
                     className='chart-card-header'
                     action={
@@ -22,16 +23,15 @@ const RecipeAnalysis:React.FC<any> = ({data})=> {
                     <ResponsiveBullet
                         data={data}
                         minValue={1}
-                        margin={{top: 50, right: 90, bottom: 50, left: 90}}
+                        margin={{top: 50, right: 30, bottom: 50, left: 100}}
                         spacing={42}
                         titleAlign="start"
-                        titleOffsetX={-70}
+                        titleOffsetX={-100}
                         rangeBorderColor={{from: 'color', modifiers: []}}
                         measureBorderColor={{from: 'color', modifiers: []}}
                         measureSize={1}
                         markerSize={0}
                         measureColors="seq:blue_green"
-
                         motionConfig={{
                             mass: 1,
                             tension: 170,
